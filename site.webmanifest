@@ -1,0 +1,13 @@
+{
+  "name": "Darshangiri Goswami — Compliance · Monitoring · Responsible AI",
+  "short_name": "DG Portfolio",
+  "description": "Portfolio of Darshangiri Goswami — Business Management & Cybersecurity MSc specialising in Global Compliance, Monitoring & Investigations, and Responsible AI.",
+  "start_url": ".",
+  "scope": ".",
+  "display": "standalone",
+  "background_color": "#060a14",
+  "theme_color": "#060a14",
+  "icons": [
+    { "src": "assets/favicon.svg", "sizes": "any", "type": "image/svg+xml", "purpose": "any" }
+  ]
+}

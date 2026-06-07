@@ -1,57 +1,62 @@
 # Darshangiri Goswami — 3D Cybersecurity Portfolio
 
-An ultra-realistic, single-file 3D portfolio website built with **Three.js** (WebGL +
-bloom postprocessing) and an **"Ask my AI twin"** chat assistant powered by the
-**Claude API**. Theme: professional *compliance & trust* — deep navy, teal + gold,
-a 3D animated data-shield, an orbiting monitoring-network graph, and a particle field.
+An ultra-realistic 3D portfolio built with **Three.js** (WebGL + bloom) and an
+**"Ask my AI twin"** chat assistant that can run on the **Claude API**. Theme:
+professional *compliance & trust* — deep navy, teal + gold, an animated 3D data-shield,
+an orbiting monitoring-network graph, and a particle field.
 
 ## Files
 
 | File | What it is |
 |------|------------|
-| `index.html` | **The website.** Self-contained — open it directly in a browser. Photos are embedded as base64. |
-| `index.template.html` | Editable source (photos are placeholders). Edit this, then re-run `build.py`. |
-| `build.py` | Embeds the two photos into `index.template.html` → writes `index.html`. |
-| `ai-twin-server.py` | Local Claude backend that powers the live chat (keeps your API key server-side). |
-| `requirements.txt` | Python deps for the backend. |
+| `index.html` | **The website** — edit this directly. References external assets (no base64). |
+| `assets/portrait.jpg` · `assets/portrait.webp` | Shared portrait used by hero + about (one download, served twice). |
+| `assets/og-image.jpg` | 1200×630 social-share card. |
+| `assets/favicon.svg` | SVG favicon (the shield mark). |
+| `site.webmanifest` | PWA manifest. |
+| `.well-known/security.txt` | Security contact (RFC 9116). |
+| `generate_assets.py` | Regenerates `portrait.*` and `og-image.jpg` from the source photo. |
+| `ai-twin-server.py` | Optional Claude backend that powers live chat (keeps the API key server-side). |
+| `requirements.txt` | Python deps for the backend / asset generator. |
 | `Darshangiri-Goswami-CV.pdf` | Linked by the "Download CV" buttons. |
 
-## 1. View the site
+## View the site
 
-Just **double-click `index.html`** (or drag it into Chrome/Edge/Firefox).
-- The 3D scene loads Three.js from a CDN, so you need an internet connection the first time.
-- The "Ask my AI twin" chat works in **offline mode** out of the box (keyword answers from the CV).
+Open `index.html` in a browser (Three.js loads from a CDN, so the first load needs
+internet). The AI twin works in **offline mode** out of the box — answers come from a
+built-in summary of the CV, with no network calls and no API key.
 
-## 2. Enable the live Claude AI twin (optional but recommended)
+## Regenerate the images
 
 ```powershell
-cd L:\Claude\portfolio
 pip install -r requirements.txt
-$env:ANTHROPIC_API_KEY = "sk-ant-..."        # your key from console.anthropic.com
-python ai-twin-server.py
+python generate_assets.py
 ```
+Edit the source photo paths at the top of `generate_assets.py` to swap the portrait.
 
-Leave that running, then refresh `index.html`. The chat header switches from
-**"Offline mode"** to **"Online · Claude"** and answers stream live from
-`claude-opus-4-8`, grounded entirely in your CV (no hallucinated facts).
+## Enable the live Claude AI twin (optional)
 
-> The key lives only in the Python process. The browser talks to `http://localhost:8787`
-> and never sees it.
+1. Deploy `ai-twin-server.py` (locally or on Render/Railway/Fly.io):
+   ```powershell
+   pip install -r requirements.txt
+   $env:ANTHROPIC_API_KEY = "sk-ant-..."
+   python ai-twin-server.py
+   ```
+2. In `index.html`, set the one config constant to your backend's HTTPS URL:
+   ```js
+   const AI_ENDPOINT = 'https://your-backend.example.com/chat';
+   ```
+   Leave it `''` (default) for offline mode. **Never put an API key in `index.html`.**
 
-## 3. Update your content or photos
+When `AI_ENDPOINT` is set, the chat header shows **"Online · Claude"** and answers
+stream live from `claude-opus-4-8`, grounded in the CV. When empty, it stays offline
+and the footer does not claim the live API is in use.
 
-- **Text** (experience, skills, etc.): edit `index.template.html`, then run `python build.py`.
-- **Photos**: change the two paths near the top of `build.py`, then run `python build.py`.
-- **AI answers**: the CV the assistant uses lives in the `CV` string in `ai-twin-server.py`
-  (and the offline fallback `KB` array in `index.template.html`). Keep them in sync.
+## Publish
 
-## 4. Publish it (free)
-
-`index.html` + `Darshangiri-Goswami-CV.pdf` are all you need for static hosting:
-- **GitHub Pages**, **Netlify drop**, or **Cloudflare Pages** — drag the folder in.
-- For the live AI twin in production, deploy `ai-twin-server.py` to a host (Render,
-  Railway, Fly.io…) and update `AI_ENDPOINT` in `index.template.html` to its URL,
-  then rebuild. Without that, the published site uses the offline fallback.
+`index.html`, `assets/`, `site.webmanifest`, `.well-known/`, and the CV are static —
+host on GitHub Pages / Netlify / Cloudflare Pages. Live URL:
+**https://darshan2209.github.io/darshangiri-goswami/**
 
 ---
 Built with Three.js & the Claude API.
