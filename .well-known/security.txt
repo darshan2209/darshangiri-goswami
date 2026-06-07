@@ -1,0 +1,7 @@
+# Security contact for darshan2209.github.io/darshangiri-goswami
+# Note: this is a GitHub Pages project site; per RFC 9116 a domain-root
+# /.well-known/security.txt is preferred where the domain root is controlled.
+Contact: mailto:darshangoswami22922@gmail.com
+Expires: 2027-06-07T00:00:00.000Z
+Preferred-Languages: en
+Canonical: https://darshan2209.github.io/darshangiri-goswami/.well-known/security.txt
