@@ -481,9 +481,48 @@ footer a{color:var(--muted)}
 .reveal.in{opacity:1;transform:none}
 .reveal.d1{transition-delay:.08s}.reveal.d2{transition-delay:.16s}.reveal.d3{transition-delay:.24s}.reveal.d4{transition-delay:.32s}
 
+/* ============================================================= HOVER SETUP (base) */
+/* button shine sweep */
+.btn{position:relative;overflow:hidden}
+.btn::after{content:"";position:absolute;top:0;left:-130%;width:55%;height:100%;pointer-events:none;
+  background:linear-gradient(100deg,transparent,rgba(255,255,255,.35),transparent);transform:skewX(-18deg)}
+@keyframes shine{from{left:-130%}to{left:160%}}
+/* nav link sliding underline */
+nav.links a{position:relative}
+nav.links a::after{content:"";position:absolute;left:14px;right:14px;bottom:7px;height:2px;border-radius:2px;
+  background:linear-gradient(90deg,var(--teal),var(--gold));transform:scaleX(0);transform-origin:left;transition:transform .28s var(--ease)}
+/* text-link underline grow */
+.hero-meta a,.contact-links a,.proj-more a.doclink,footer a{
+  background-image:linear-gradient(var(--teal),var(--teal));background-repeat:no-repeat;
+  background-position:0 100%;background-size:0% 1.5px;transition:color .2s,background-size .28s var(--ease)}
+/* card spotlight + tilt */
+.skill-card,.proj{transform-style:preserve-3d;will-change:transform;
+  transition:transform .3s var(--ease),border-color .3s var(--ease),box-shadow .3s var(--ease)}
+.skill-card::after,.proj::after{content:"";position:absolute;inset:0;border-radius:inherit;pointer-events:none;
+  opacity:0;transition:opacity .3s var(--ease);
+  background:radial-gradient(200px circle at var(--mx,50%) var(--my,50%),rgba(45,212,191,.16),transparent 62%)}
+/* framework badge */
+.fw{transition:.25s var(--ease)}
+/* photo zoom + sheen */
+.portrait img,.about-photo img{transition:transform .55s var(--ease)}
+.portrait::before,.about-photo::before{content:"";position:absolute;inset:0;z-index:2;pointer-events:none;
+  background:linear-gradient(105deg,transparent 32%,rgba(255,255,255,.18) 46%,transparent 60%);
+  transform:translateX(-130%);transition:transform .8s var(--ease)}
+@media (prefers-reduced-motion:reduce){
+  .btn::after,.portrait::before,.about-photo::before{display:none}
+}
+
 /* ============================================================= HOVER (pointer devices only) */
 @media (hover:hover) and (pointer:fine){
   nav.links a:hover{color:var(--text);background:rgba(255,255,255,.04)}
+  nav.links a:hover::after{transform:scaleX(1)}
+  .hero-meta a:hover,.contact-links a:hover,.proj-more a.doclink:hover,footer a:hover{background-size:100% 1.5px}
+  .btn:hover::after{animation:shine .85s var(--ease)}
+  .skill-card:hover::after,.proj:hover::after{opacity:1}
+  .fw:hover{border-color:var(--teal);color:#fff;transform:translateY(-2px);
+    box-shadow:0 0 0 3px rgba(45,212,191,.08),0 10px 24px -12px rgba(45,212,191,.55)}
+  .portrait:hover img,.about-photo:hover img{transform:scale(1.05)}
+  .portrait:hover::before,.about-photo:hover::before{transform:translateX(130%)}
   .nav-cta:hover{background:rgba(45,212,191,.12);box-shadow:0 0 0 4px rgba(45,212,191,.06)}
   .btn-primary:hover{transform:translateY(-2px);box-shadow:0 18px 40px -14px rgba(45,212,191,.7)}
   .btn-ghost:hover{border-color:var(--border-bright);background:rgba(45,212,191,.06)}
@@ -964,6 +1003,7 @@ const TEAL = 0x2dd4bf, GOLD = 0xe6b94f, NAVY = 0x0b1426;
 let renderer, scene, camera, composer, shieldGroup, netGroup, particles, clock;
 const pointer = { x: 0, y: 0, tx: 0, ty: 0 };
 let scrollN = 0;
+let heroHover = 0, heroHoverTarget = 0;
 
 function init(){
   scene = new THREE.Scene();
@@ -997,6 +1037,12 @@ function init(){
     pointer.ty = (e.clientY/innerHeight - 0.5);
   }, { passive:true });
   addEventListener('scroll', () => { scrollN = Math.min(1, window.scrollY / innerHeight); }, { passive:true });
+
+  const heroEl = document.getElementById('hero');
+  if (heroEl){
+    heroEl.addEventListener('pointerenter', () => { heroHoverTarget = 1; });
+    heroEl.addEventListener('pointerleave', () => { heroHoverTarget = 0; });
+  }
 
   if (reduce){ renderOnce(); } else { renderer.setAnimationLoop(animate); }
 }
@@ -1066,10 +1112,12 @@ function animate(){
   if (document.hidden) return;
   const t = clock.getElapsedTime();
   pointer.x += (pointer.tx - pointer.x)*0.05; pointer.y += (pointer.ty - pointer.y)*0.05;
+  heroHover += (heroHoverTarget - heroHover)*0.06;
   if (shieldGroup){
-    shieldGroup.rotation.y = -0.25 + Math.sin(t*0.35)*0.32 + pointer.x*0.5 + scrollN*0.6;
+    shieldGroup.rotation.y = -0.25 + Math.sin(t*0.35)*0.32 + pointer.x*0.5 + scrollN*0.6 + heroHover*0.28;
     shieldGroup.rotation.x = Math.sin(t*0.5)*0.06 + pointer.y*0.25;
     shieldGroup.position.y = 0.1 + Math.sin(t*0.7)*0.07 - scrollN*0.4;
+    shieldGroup.scale.setScalar(1 + heroHover*0.08);
   }
   if (netGroup){ netGroup.rotation.y = t*0.04; netGroup.rotation.x = Math.sin(t*0.2)*0.1; }
   if (particles){ particles.rotation.y = t*0.012; }
@@ -1244,6 +1292,22 @@ async function send(text){
 
 form.addEventListener('submit', e => { e.preventDefault(); send(input.value); });
 suggestEl.querySelectorAll('button').forEach(b => b.addEventListener('click', () => send(b.textContent)));
+
+/* card 3D tilt + pointer-tracking spotlight (mouse/trackpad only, motion-safe) */
+if (matchMedia('(hover:hover) and (pointer:fine)').matches &&
+    !matchMedia('(prefers-reduced-motion: reduce)').matches){
+  document.querySelectorAll('.skill-card, .proj').forEach(el => {
+    el.addEventListener('pointermove', e => {
+      const r = el.getBoundingClientRect();
+      const px = (e.clientX - r.left) / r.width, py = (e.clientY - r.top) / r.height;
+      el.style.setProperty('--mx', (px*100).toFixed(1) + '%');
+      el.style.setProperty('--my', (py*100).toFixed(1) + '%');
+      const rx = (0.5 - py) * 5, ry = (px - 0.5) * 5;
+      el.style.transform = `translateY(-4px) perspective(900px) rotateX(${rx.toFixed(2)}deg) rotateY(${ry.toFixed(2)}deg)`;
+    });
+    el.addEventListener('pointerleave', () => { el.style.transform = ''; });
+  });
+}
 </script>
 
 </body>
