@@ -25,9 +25,9 @@ PORT = 8787
 
 # --- The grounding: Darshan's CV, given to Claude as a cached system prompt -----
 CV = """\
-Darshangiri Goswami — Working Student candidate: Global Compliance | Monitoring & Investigations | Responsible AI.
-Location: Berlin, Germany (open to relocating to Frankfurt). Available immediately, up to 40 hrs/week.
-Contact: +49 155 1083 7720 | darshangoswami22922@gmail.com | linkedin.com/in/darshangiri-goswami-033283213
+Darshangiri Goswami — Working Student candidate: Governance, Risk & Compliance (GRC) | Identity & Access Management (IAM) | Monitoring & Investigations | AI in Cybersecurity.
+Location: Berlin, Germany (open to relocation). Available immediately, up to 40 hrs/week.
+Contact: +49 155 1083 7720 | darshangoswami22922@gmail.com | linkedin.com/in/darshangiri-goswami-033283213 | credly.com/users/darshan-goswami.e4c6c92c
 
 SUMMARY
 Business Management & Cybersecurity master's student with hands-on experience in compliance and regulatory
@@ -39,18 +39,20 @@ projects and digitalisation, and keen to build financial-services and securities
 ethics compliance team.
 
 SKILLS
-- Compliance, Governance & Ethics: policy & procedure documentation, Code of Conduct / acceptable-use training,
-  controls monitoring, audit support, regulatory & compliance training; frameworks GDPR, DORA, NIS2, ISO 27001, NIST CSF.
+- Governance, Risk & Compliance (GRC): policy & procedure documentation, Code of Conduct / acceptable-use training,
+  controls monitoring, risk assessment & registers, audit support, regulatory & compliance training; frameworks GDPR, DORA, NIS2, ISO 27001, NIST CSF.
+- Identity & Access Management (IAM): access control & access reviews, Joiner-Mover-Leaver, least-privilege / RBAC,
+  Microsoft Entra ID (SC-300), conditional access, identity governance.
 - Monitoring & Investigations: reviewing system flags and alerts, checks and assessments, anomaly detection,
-  case documentation, remediation tracking, follow-up communication.
-- Process Automation & Responsible AI: Python, PowerShell, workflow automation, AI-driven alert triage and risk
-  scoring, Microsoft Copilot; awareness of the EU AI Act and ethical / responsible AI practices.
+  SIEM & log analysis (Wazuh), case documentation, remediation tracking, follow-up communication.
+- AI in Cybersecurity & Automation: Python, PowerShell, workflow automation, AI-driven alert triage and risk
+  scoring, anomaly detection, Microsoft Copilot; awareness of the EU AI Act and ethical / responsible AI practices.
 - Tools: MS Excel, MS PowerPoint, MS Office, SQL.
 - Strengths: discretion with sensitive information, attention to detail, clear written and verbal communication.
 
 EXPERIENCE
 1) Cybersecurity Trainer — NIIT Foundation — Ahmedabad, India — Apr 2025 to Oct 2025
-   - Delivered compliance and policy training to 150+ staff on acceptable-use and access-control requirements,
+   - Delivered compliance and policy training to 4500+ students on acceptable-use and access-control requirements,
      with 95% achieving certification, building day-to-day adherence to governance and Code-of-Conduct policies.
    - Maintained policy, training and controls documentation in the LMS, keeping records current and audit-ready.
    - Created awareness content mapped to ISO 27001 and NIST CSF for non-specialist staff.
