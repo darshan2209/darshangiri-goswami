@@ -1,0 +1,145 @@
+"""
+Darshan's AI Twin — a tiny local backend that powers the chat widget in index.html.
+
+It proxies the browser to the Claude API so your API key NEVER ships to the client,
+and streams Claude's answer back token-by-token. The whole CV is sent as a cached
+system prompt, so the assistant only answers from real, grounded information.
+
+SETUP (Windows PowerShell):
+    pip install -r requirements.txt
+    $env:ANTHROPIC_API_KEY = "sk-ant-..."
+    python ai-twin-server.py
+
+Then open index.html — the chat header will switch to "Online · Claude".
+
+Model: claude-opus-4-8 (the default from the Claude API skill).
+"""
+import os
+from flask import Flask, request, Response, stream_with_context
+import anthropic
+
+app = Flask(__name__)
+client = anthropic.Anthropic()          # reads ANTHROPIC_API_KEY from the environment
+MODEL = "claude-opus-4-8"
+PORT = 8787
+
+# --- The grounding: Darshan's CV, given to Claude as a cached system prompt -----
+CV = """\
+Darshangiri Goswami — Working Student candidate: Global Compliance | Monitoring & Investigations | Responsible AI.
+Location: Berlin, Germany (open to relocating to Frankfurt). Available immediately, up to 40 hrs/week.
+Contact: +49 155 1083 7720 | darshangoswami22922@gmail.com | linkedin.com/in/darshangiri-goswami-033283213
+
+SUMMARY
+Business Management & Cybersecurity master's student with hands-on experience in compliance and regulatory
+training, policy and controls documentation, and monitoring flagged activity through checks and assessments of
+system alerts. Particular strength in process automation and AI-driven workflows, applied with a focus on ethical
+and responsible AI. Fluent in English (C1), conversational German (A2). Confident with Microsoft tools incl.
+Copilot, Excel and PowerPoint. Seeking a Working Student role in Global Compliance to support monitoring, ongoing
+projects and digitalisation, and keen to build financial-services and securities knowledge within a conduct-and-
+ethics compliance team.
+
+SKILLS
+- Compliance, Governance & Ethics: policy & procedure documentation, Code of Conduct / acceptable-use training,
+  controls monitoring, audit support, regulatory & compliance training; frameworks GDPR, DORA, NIS2, ISO 27001, NIST CSF.
+- Monitoring & Investigations: reviewing system flags and alerts, checks and assessments, anomaly detection,
+  case documentation, remediation tracking, follow-up communication.
+- Process Automation & Responsible AI: Python, PowerShell, workflow automation, AI-driven alert triage and risk
+  scoring, Microsoft Copilot; awareness of the EU AI Act and ethical / responsible AI practices.
+- Tools: MS Excel, MS PowerPoint, MS Office, SQL.
+- Strengths: discretion with sensitive information, attention to detail, clear written and verbal communication.
+
+EXPERIENCE
+1) Cybersecurity Trainer — NIIT Foundation — Ahmedabad, India — Apr 2025 to Oct 2025
+   - Delivered compliance and policy training to 150+ staff on acceptable-use and access-control requirements,
+     with 95% achieving certification, building day-to-day adherence to governance and Code-of-Conduct policies.
+   - Maintained policy, training and controls documentation in the LMS, keeping records current and audit-ready.
+   - Created awareness content mapped to ISO 27001 and NIST CSF for non-specialist staff.
+2) Cybersecurity Research Analyst — The CyberDiplomat — Bengaluru, India — Jul 2023 to Mar 2024
+   - Monitored activity across 50+ platforms, performing checks and assessments of flags and alerts and escalating
+     policy and access exceptions for review.
+   - Tracked each remediation item to closure on schedule and documented outcomes and follow-up communication.
+   - Supported case documentation and ongoing team projects, and tested new tools to improve efficiency/digitalisation.
+
+PROJECTS
+1) AI-Assisted Monitoring & Automation (Python, AI Platform API, REST API): an AI-assisted workflow that monitored
+   simulated activity and flagged exceptions with a Python anomaly-detection script; integrated an AI platform via
+   API to triage flags, score risk and map cases to playbook logic, producing response recommendations as a working
+   model for responsible, AI-driven process enhancement.
+2) Monitoring & Detection Homelab (Wazuh, Ubuntu, Windows): deployed a centralised monitoring platform and onboarded
+   a host for log collection and real-time alerting; configured file-integrity monitoring to detect 100+ unauthorised
+   changes, worked from a central dashboard.
+
+EDUCATION
+- MSc, Business Management & Cybersecurity — GISMA University of Applied Sciences, Potsdam, Germany — Sep 2025 to expected Oct 2026.
+- B.Tech, Information Technology — Swarnim Startup and Innovation University, Gandhinagar, India — Aug 2020 to Jun 2024 — GPA 8.76/10 (German equivalent 1.6).
+
+CERTIFICATIONS
+Microsoft SC-900; ISO/IEC 27001 Information Security Associate; Google Cybersecurity Certificate; Cisco CyberOps
+Associate; Certified GRC & Threat Intelligence Analyst; Microsoft SC-300 (in progress); CompTIA Security+ SY0-701 (in progress).
+
+LANGUAGES: English (C1), German (A2).
+"""
+
+SYSTEM = f"""You are "Darshan's AI twin", a friendly, professional assistant on Darshangiri Goswami's portfolio website. \
+Visitors are usually recruiters or hiring managers. Answer their questions about Darshan using ONLY the CV below.
+
+Rules:
+- Be concise and conversational (1-3 short paragraphs max). This is a chat widget, not an essay.
+- Speak about Darshan in the third person ("Darshan has...", "He worked...").
+- Ground every claim in the CV. Do NOT invent employers, dates, numbers, tools, or skills.
+- If something isn't covered, say so plainly and point them to darshangoswami22922@gmail.com — never guess.
+- Stay warm and recruiter-friendly; you may gently highlight his fit for compliance / monitoring / responsible-AI roles.
+- Respond only with your final answer — no internal reasoning or meta-commentary.
+
+--- CV ---
+{CV}
+--- END CV ---"""
+
+
+def cors(resp: Response) -> Response:
+    resp.headers["Access-Control-Allow-Origin"] = "*"
+    resp.headers["Access-Control-Allow-Headers"] = "Content-Type"
+    resp.headers["Access-Control-Allow-Methods"] = "POST, OPTIONS"
+    return resp
+
+
+@app.route("/chat", methods=["POST", "OPTIONS"])
+def chat():
+    if request.method == "OPTIONS":
+        return cors(Response(status=204))
+
+    data = request.get_json(silent=True) or {}
+    messages = [m for m in data.get("messages", []) if m.get("content")]
+
+    # connectivity ping from the widget — answer cheaply without calling the API
+    if len(messages) == 1 and messages[0].get("content") == "__ping__":
+        return cors(Response("ok", mimetype="text/plain"))
+
+    if not messages:
+        return cors(Response("Ask me something about Darshan!", mimetype="text/plain"))
+
+    def generate():
+        with client.messages.stream(
+            model=MODEL,
+            max_tokens=1024,
+            system=[{"type": "text", "text": SYSTEM, "cache_control": {"type": "ephemeral"}}],
+            messages=messages,
+            thinking={"type": "disabled"},          # snappy chat replies
+        ) as stream:
+            for text in stream.text_stream:
+                yield text
+
+    resp = Response(stream_with_context(generate()), mimetype="text/plain")
+    return cors(resp)
+
+
+@app.route("/", methods=["GET"])
+def root():
+    return cors(Response("Darshan's AI twin is running. POST to /chat.", mimetype="text/plain"))
+
+
+if __name__ == "__main__":
+    if not os.environ.get("ANTHROPIC_API_KEY"):
+        print("!! Set ANTHROPIC_API_KEY first:  $env:ANTHROPIC_API_KEY = 'sk-ant-...'")
+    print(f">> Darshan's AI twin on http://localhost:{PORT}  (model: {MODEL})")
+    app.run(port=PORT, threaded=True)
