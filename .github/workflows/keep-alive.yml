@@ -1,0 +1,17 @@
+name: keep-alive
+
+# Pings the Render backend every ~10 minutes so the free instance never cold-starts.
+# Render free tier sleeps after ~15 min idle; this keeps it warm.
+on:
+  schedule:
+    - cron: "*/10 * * * *"
+  workflow_dispatch: {}   # allows manual "Run workflow" from the Actions tab
+
+jobs:
+  ping:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Ping /health
+        run: |
+          echo "Pinging backend at $(date -u)"
+          curl -fsS --max-time 30 https://darshangiri-goswami.onrender.com/health && echo " — OK" || echo " — ping failed (non-fatal)"
