@@ -1305,6 +1305,15 @@ function offlineAnswer(q){
   return best ? best.a : "I can speak to Darshan's compliance experience, frameworks (GDPR, DORA, NIS2, ISO 27001, NIST CSF), projects, certifications, education and availability. For anything else, email <a href='mailto:darshangoswami22922@gmail.com'>darshangoswami22922@gmail.com</a>.";
 }
 
+/* minimal, XSS-safe markdown for live answers (escape first, then limited formatting) */
+function mdToHtml(s){
+  s = s.replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');
+  s = s.replace(/\*\*([^*]+)\*\*/g,'<strong>$1</strong>');
+  s = s.replace(/`([^`]+)`/g,'<code>$1</code>');
+  s = s.replace(/^[ \t]*[-*][ \t]+(.*)$/gm,'• $1');
+  return s.replace(/\n/g,'<br>');
+}
+
 async function send(text){
   text = text.trim(); if (!text) return;
   addMsg('user', text.replace(/</g,'&lt;'));
@@ -1326,7 +1335,7 @@ async function send(text){
     while(true){
       const { value, done } = await reader.read();
       if (done) break;
-      acc += dec.decode(value, { stream:true }); out.textContent = acc; msgsEl.scrollTop = msgsEl.scrollHeight;
+      acc += dec.decode(value, { stream:true }); out.innerHTML = mdToHtml(acc); msgsEl.scrollTop = msgsEl.scrollHeight;
     }
     history.push({ role:'assistant', content: acc });
   } catch(err){
