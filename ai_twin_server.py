@@ -22,7 +22,7 @@ import anthropic
 
 app = Flask(__name__)
 client = anthropic.Anthropic()                 # reads ANTHROPIC_API_KEY from the environment
-MODEL = os.environ.get("AI_TWIN_MODEL", "claude-opus-4-8")
+MODEL = os.environ.get("AI_TWIN_MODEL", "claude-haiku-4-5-20251001")  # cheap & fast; override via env
 PORT = int(os.environ.get("PORT", "8787"))
 
 # --- Abuse protection ----------------------------------------------------------
@@ -166,34 +166,6 @@ def chat():
             yield "Sorry — I'm having trouble reaching the AI right now. Please email darshangoswami22922@gmail.com."
 
     return cors(Response(stream_with_context(generate()), mimetype="text/plain"))
-
-
-@app.route("/diag", methods=["GET"])
-def diag():
-    """TEMPORARY: surface why the live call fails (no secrets). Remove after debugging."""
-    import json as _json
-    info = {"model": MODEL, "key_present": bool(os.environ.get("ANTHROPIC_API_KEY"))}
-    try:
-        r = client.messages.create(model=MODEL, max_tokens=8,
-                                    messages=[{"role": "user", "content": "ping"}])
-        info["ok"] = True
-        info["reply"] = r.content[0].text if r.content else ""
-    except Exception as e:
-        info["ok"] = False
-        info["error_type"] = type(e).__name__
-        info["error"] = str(e)[:400]
-    return cors(Response(_json.dumps(info), mimetype="application/json"))
-
-
-@app.route("/models", methods=["GET"])
-def models():
-    """TEMPORARY: list model IDs available to this account. Remove after debugging."""
-    import json as _json
-    try:
-        ids = [m.id for m in client.models.list(limit=100).data]
-        return cors(Response(_json.dumps({"ok": True, "models": ids}), mimetype="application/json"))
-    except Exception as e:
-        return cors(Response(_json.dumps({"ok": False, "error": str(e)[:300]}), mimetype="application/json"))
 
 
 @app.route("/", methods=["GET"])
