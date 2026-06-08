@@ -185,6 +185,17 @@ def diag():
     return cors(Response(_json.dumps(info), mimetype="application/json"))
 
 
+@app.route("/models", methods=["GET"])
+def models():
+    """TEMPORARY: list model IDs available to this account. Remove after debugging."""
+    import json as _json
+    try:
+        ids = [m.id for m in client.models.list(limit=100).data]
+        return cors(Response(_json.dumps({"ok": True, "models": ids}), mimetype="application/json"))
+    except Exception as e:
+        return cors(Response(_json.dumps({"ok": False, "error": str(e)[:300]}), mimetype="application/json"))
+
+
 @app.route("/", methods=["GET"])
 @app.route("/health", methods=["GET"])
 def health():
