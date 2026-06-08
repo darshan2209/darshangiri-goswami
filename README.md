@@ -16,7 +16,8 @@ an orbiting monitoring-network graph, and a particle field.
 | `site.webmanifest` | PWA manifest. |
 | `.well-known/security.txt` | Security contact (RFC 9116). |
 | `generate_assets.py` | Regenerates `portrait.*` and `og-image.jpg` from the source photo. |
-| `ai-twin-server.py` | Optional Claude backend that powers live chat (keeps the API key server-side). |
+| `ai_twin_server.py` | Claude backend that powers live chat (keeps the API key server-side). |
+| `Procfile` · `render.yaml` | Deploy config for hosting the backend (Render/Railway/Heroku-style). |
 | `requirements.txt` | Python deps for the backend / asset generator. |
 | `Darshangiri-Goswami-CV.pdf` | Linked by the "Download CV" buttons. |
 
@@ -34,23 +35,39 @@ python generate_assets.py
 ```
 Edit the source photo paths at the top of `generate_assets.py` to swap the portrait.
 
-## Enable the live Claude AI twin (optional)
+## Enable the live Claude AI twin
 
-1. Deploy `ai-twin-server.py` (locally or on Render/Railway/Fly.io):
-   ```powershell
-   pip install -r requirements.txt
-   $env:ANTHROPIC_API_KEY = "sk-ant-..."
-   python ai-twin-server.py
-   ```
-2. In `index.html`, set the one config constant to your backend's HTTPS URL:
+### Run locally
+```powershell
+pip install -r requirements.txt
+$env:ANTHROPIC_API_KEY = "sk-ant-..."
+python ai_twin_server.py            # http://localhost:8787
+```
+
+### Deploy to Render (free)
+1. Push this repo to GitHub (already done).
+2. On [render.com](https://render.com) → **New → Web Service** → connect this repo.
+   `render.yaml` is detected automatically (gunicorn start command, health check).
+3. Add an environment variable **`ANTHROPIC_API_KEY`** = your key from
+   [console.anthropic.com](https://console.anthropic.com). Never commit the key.
+4. Deploy → copy the service URL, e.g. `https://darshan-ai-twin.onrender.com`.
+5. In `index.html`, set the one config constant to that URL **+ `/chat`**:
    ```js
-   const AI_ENDPOINT = 'https://your-backend.example.com/chat';
+   const AI_ENDPOINT = 'https://darshan-ai-twin.onrender.com/chat';
    ```
-   Leave it `''` (default) for offline mode. **Never put an API key in `index.html`.**
+   Then rebuild assets aren't needed — just commit & push `index.html`.
 
-When `AI_ENDPOINT` is set, the chat header shows **"Online · Claude"** and answers
-stream live from `claude-opus-4-8`, grounded in the CV. When empty, it stays offline
-and the footer does not claim the live API is in use.
+Leave `AI_ENDPOINT = ''` for offline mode. **Never put an API key in `index.html`.**
+When set, the chat header shows **"Online · Claude"** and answers stream live from
+`claude-opus-4-8` (override with the `AI_TWIN_MODEL` env var), grounded in the CV.
+
+### Built-in safeguards (public endpoint)
+- CORS locked to the portfolio origin · per-IP rate limit (20 req/min)
+- Message-length cap (2000 chars) and history cap (12 turns) to bound token spend
+- The API key lives only in the host's environment, never in the browser
+
+> Render's free tier sleeps after ~15 min idle, so the first message after a pause
+> takes a few seconds to wake the service. Upgrade the plan to keep it always-on.
 
 ## Publish
 

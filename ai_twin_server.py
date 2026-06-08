@@ -1,42 +1,60 @@
 """
-Darshan's AI Twin — a tiny local backend that powers the chat widget in index.html.
+Darshan's AI Twin — production backend for the portfolio chat widget.
 
 It proxies the browser to the Claude API so your API key NEVER ships to the client,
-and streams Claude's answer back token-by-token. The whole CV is sent as a cached
-system prompt, so the assistant only answers from real, grounded information.
+streams Claude's answer back token-by-token, and is grounded in the CV below so it
+only answers from real information.
 
-SETUP (Windows PowerShell):
+LOCAL RUN (Windows PowerShell):
     pip install -r requirements.txt
     $env:ANTHROPIC_API_KEY = "sk-ant-..."
-    python ai-twin-server.py
+    python ai_twin_server.py
 
-Then open index.html — the chat header will switch to "Online · Claude".
+PRODUCTION (Render/Railway/Fly) uses gunicorn (see Procfile / render.yaml):
+    gunicorn ai_twin_server:app --worker-class gthread --threads 4 --timeout 120 --bind 0.0.0.0:$PORT
 
-Model: claude-opus-4-8 (the default from the Claude API skill).
+Abuse protection (this endpoint is public): per-IP rate limit, message-length and
+history caps, and CORS locked to the portfolio origin.
 """
-import os
+import os, time, collections
 from flask import Flask, request, Response, stream_with_context
 import anthropic
 
 app = Flask(__name__)
-client = anthropic.Anthropic()          # reads ANTHROPIC_API_KEY from the environment
-MODEL = "claude-opus-4-8"
-PORT = 8787
+client = anthropic.Anthropic()                 # reads ANTHROPIC_API_KEY from the environment
+MODEL = os.environ.get("AI_TWIN_MODEL", "claude-opus-4-8")
+PORT = int(os.environ.get("PORT", "8787"))
 
-# --- The grounding: Darshan's CV, given to Claude as a cached system prompt -----
+# --- Abuse protection ----------------------------------------------------------
+ALLOWED_ORIGINS = {
+    "https://darshan2209.github.io",           # the live site
+    "http://localhost:8090", "http://127.0.0.1:8090",  # local preview
+}
+MAX_MSG_CHARS = 2000          # max length of a single user message
+MAX_HISTORY   = 12            # only the most recent N turns are forwarded
+RATE_MAX, RATE_WINDOW = 20, 60        # max requests per IP per 60s
+_hits = collections.defaultdict(collections.deque)
+
+def rate_limited(ip):
+    now = time.time(); dq = _hits[ip]
+    while dq and now - dq[0] > RATE_WINDOW:
+        dq.popleft()
+    if len(dq) >= RATE_MAX:
+        return True
+    dq.append(now); return False
+
+# --- Grounding: Darshan's CV, given to Claude as a cached system prompt ---------
 CV = """\
 Darshangiri Goswami — Working Student candidate: Governance, Risk & Compliance (GRC) | Identity & Access Management (IAM) | Monitoring & Investigations | AI in Cybersecurity.
 Location: Berlin, Germany (open to relocation). Available immediately, up to 40 hrs/week.
 Contact: +49 155 1083 7720 | darshangoswami22922@gmail.com | linkedin.com/in/darshangiri-goswami-033283213 | credly.com/users/darshan-goswami.e4c6c92c
 
 SUMMARY
-Business Management & Cybersecurity master's student with hands-on experience in compliance and regulatory
-training, policy and controls documentation, and monitoring flagged activity through checks and assessments of
-system alerts. Particular strength in process automation and AI-driven workflows, applied with a focus on ethical
-and responsible AI. Fluent in English (C1), conversational German (A2). Confident with Microsoft tools incl.
-Copilot, Excel and PowerPoint. Seeking a Working Student role in Global Compliance to support monitoring, ongoing
-projects and digitalisation, and keen to build financial-services and securities knowledge within a conduct-and-
-ethics compliance team.
+Business Management & Cybersecurity master's student focused on Governance, Risk & Compliance (GRC), Identity &
+Access Management (IAM) and AI in cybersecurity, with hands-on experience in compliance and regulatory training,
+policy and controls documentation, and monitoring flagged activity through checks and assessments of system alerts.
+Particular strength in process automation and AI-driven workflows, applied with a focus on ethical and responsible
+AI. Fluent in English (C1), conversational German (A2). Seeking a Working Student role in GRC, IAM or compliance.
 
 SKILLS
 - Governance, Risk & Compliance (GRC): policy & procedure documentation, Code of Conduct / acceptable-use training,
@@ -90,7 +108,7 @@ Rules:
 - Speak about Darshan in the third person ("Darshan has...", "He worked...").
 - Ground every claim in the CV. Do NOT invent employers, dates, numbers, tools, or skills.
 - If something isn't covered, say so plainly and point them to darshangoswami22922@gmail.com — never guess.
-- Stay warm and recruiter-friendly; you may gently highlight his fit for compliance / monitoring / responsible-AI roles.
+- Stay warm and recruiter-friendly; you may gently highlight his fit for GRC, IAM, monitoring or responsible-AI roles.
 - Respond only with your final answer — no internal reasoning or meta-commentary.
 
 --- CV ---
@@ -99,7 +117,9 @@ Rules:
 
 
 def cors(resp: Response) -> Response:
-    resp.headers["Access-Control-Allow-Origin"] = "*"
+    origin = request.headers.get("Origin", "")
+    resp.headers["Access-Control-Allow-Origin"] = origin if origin in ALLOWED_ORIGINS else "https://darshan2209.github.io"
+    resp.headers["Vary"] = "Origin"
     resp.headers["Access-Control-Allow-Headers"] = "Content-Type"
     resp.headers["Access-Control-Allow-Methods"] = "POST, OPTIONS"
     return resp
@@ -110,33 +130,47 @@ def chat():
     if request.method == "OPTIONS":
         return cors(Response(status=204))
 
+    ip = (request.headers.get("X-Forwarded-For", request.remote_addr or "")).split(",")[0].strip()
+    if rate_limited(ip):
+        return cors(Response("You're sending messages too quickly — please wait a moment.", status=429, mimetype="text/plain"))
+
     data = request.get_json(silent=True) or {}
-    messages = [m for m in data.get("messages", []) if m.get("content")]
+    raw = data.get("messages", [])
 
     # connectivity ping from the widget — answer cheaply without calling the API
-    if len(messages) == 1 and messages[0].get("content") == "__ping__":
+    if len(raw) == 1 and raw[0].get("content") == "__ping__":
         return cors(Response("ok", mimetype="text/plain"))
 
+    # sanitise + cap inputs
+    messages = []
+    for m in raw[-MAX_HISTORY:]:
+        role, content = m.get("role"), (m.get("content") or "")
+        if role in ("user", "assistant") and content:
+            messages.append({"role": role, "content": content[:MAX_MSG_CHARS]})
     if not messages:
         return cors(Response("Ask me something about Darshan!", mimetype="text/plain"))
 
     def generate():
-        with client.messages.stream(
-            model=MODEL,
-            max_tokens=1024,
-            system=[{"type": "text", "text": SYSTEM, "cache_control": {"type": "ephemeral"}}],
-            messages=messages,
-            thinking={"type": "disabled"},          # snappy chat replies
-        ) as stream:
-            for text in stream.text_stream:
-                yield text
+        try:
+            with client.messages.stream(
+                model=MODEL,
+                max_tokens=1024,
+                system=[{"type": "text", "text": SYSTEM, "cache_control": {"type": "ephemeral"}}],
+                messages=messages,
+                thinking={"type": "disabled"},
+            ) as stream:
+                for text in stream.text_stream:
+                    yield text
+        except Exception as e:                       # never leak internals to the client
+            print("Claude API error:", repr(e))
+            yield "Sorry — I'm having trouble reaching the AI right now. Please email darshangoswami22922@gmail.com."
 
-    resp = Response(stream_with_context(generate()), mimetype="text/plain")
-    return cors(resp)
+    return cors(Response(stream_with_context(generate()), mimetype="text/plain"))
 
 
 @app.route("/", methods=["GET"])
-def root():
+@app.route("/health", methods=["GET"])
+def health():
     return cors(Response("Darshan's AI twin is running. POST to /chat.", mimetype="text/plain"))
 
 
