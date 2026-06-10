@@ -165,6 +165,9 @@ h1,h2,h3,h4{font-family:var(--font-display);line-height:1.12;font-weight:600;let
 /* ============================================================= LAYOUT */
 .wrap{max-width:var(--maxw);margin:0 auto;padding:0 clamp(20px,5vw,48px)}
 section{padding:var(--space-2xl) 0;position:relative}
+/* below-fold sections: skip layout/paint until they approach the viewport */
+#skills,#experience,#projects,#certifications,#contact{content-visibility:auto;contain-intrinsic-size:auto 900px}
+@media print{ #skills,#experience,#projects,#certifications,#contact{content-visibility:visible} }
 .section-head{margin-bottom:var(--space-lg);max-width:62ch}
 .section-head h2{font-size:var(--step-3);margin:.5rem 0 .8rem;position:relative;display:inline-block}
 .section-head h2::after{content:"";position:absolute;left:0;bottom:-9px;width:64px;height:3px;border-radius:3px;
@@ -181,7 +184,7 @@ header.nav{
   border-bottom:1px solid transparent;
 }
 header.nav.scrolled{
-  background:rgba(7,11,22,.72);backdrop-filter:blur(14px) saturate(140%);
+  background:rgba(7,11,22,.86);backdrop-filter:blur(8px) saturate(130%);
   border-bottom:1px solid var(--border);
 }
 .nav-inner{max-width:var(--maxw);margin:0 auto;
@@ -316,7 +319,7 @@ nav.links a{
 .skill-card{
   container-type:inline-size;container-name:scard;
   border:1px solid var(--border);border-radius:var(--r);padding:24px 24px 22px;
-  background:var(--surface-glass);backdrop-filter:blur(6px);position:relative;overflow:hidden;
+  background:rgba(13,22,40,.8);position:relative;overflow:hidden;
   transition:.3s var(--ease);
 }
 .skill-card::before{content:"";position:absolute;inset:0;border-radius:inherit;padding:1px;
@@ -537,12 +540,12 @@ footer a{color:var(--muted)}
 /* ============================================================= AMBIENCE */
 /* drifting aurora glows behind the 3D for depth */
 .aurora{position:fixed;inset:0;z-index:0;pointer-events:none;overflow:hidden}
-.aurora b{position:absolute;display:block;border-radius:50%;filter:blur(90px);will-change:transform}
-.aurora .a1{width:44vmax;height:44vmax;left:-10vw;top:-10vh;opacity:.20;
+.aurora b{position:absolute;display:block;border-radius:50%;filter:blur(64px);will-change:transform;transform:translateZ(0)}
+.aurora .a1{width:44vmax;height:44vmax;left:-10vw;top:-10vh;opacity:.17;
   background:radial-gradient(circle,#2dd4bf,transparent 70%);animation:drift1 28s ease-in-out infinite}
-.aurora .a2{width:38vmax;height:38vmax;right:-8vw;top:14vh;opacity:.14;
+.aurora .a2{width:38vmax;height:38vmax;right:-8vw;top:14vh;opacity:.12;
   background:radial-gradient(circle,#e6b94f,transparent 70%);animation:drift2 34s ease-in-out infinite}
-.aurora .a3{width:48vmax;height:48vmax;left:18vw;bottom:-16vh;opacity:.12;
+.aurora .a3{width:48vmax;height:48vmax;left:18vw;bottom:-16vh;opacity:.10;
   background:radial-gradient(circle,#5b8def,transparent 70%);animation:drift3 40s ease-in-out infinite}
 @keyframes drift1{0%,100%{transform:translate(0,0)}50%{transform:translate(6vw,5vh)}}
 @keyframes drift2{0%,100%{transform:translate(0,0)}50%{transform:translate(-5vw,7vh)}}
@@ -1164,9 +1167,9 @@ function init(){
   camera = new THREE.PerspectiveCamera(46, innerWidth/innerHeight, 0.1, 100);
   camera.position.set(0, 0.3, 6.4);
 
-  renderer = new THREE.WebGLRenderer({ canvas, antialias:true, alpha:true });
+  renderer = new THREE.WebGLRenderer({ canvas, antialias:false, alpha:true, powerPreference:'high-performance' });
   renderer.setSize(innerWidth, innerHeight);
-  renderer.setPixelRatio(Math.min(devicePixelRatio, 2));
+  renderer.setPixelRatio(Math.min(devicePixelRatio, 1.5));
   renderer.toneMapping = THREE.ACESFilmicToneMapping;
   renderer.toneMappingExposure = 1.05;
 
@@ -1197,6 +1200,19 @@ function init(){
   }
 
   if (reduce){ renderOnce(); } else { renderer.setAnimationLoop(animate); }
+
+  // pause the GPU loop entirely once the hero is well off-screen (canvas is ~invisible there)
+  if (!reduce){
+    let running = true;
+    const setRunning = on => {
+      if (on === running) return;
+      running = on;
+      renderer.setAnimationLoop(on ? animate : null);
+    };
+    const check = () => setRunning(!document.hidden && window.scrollY < innerHeight * 1.6);
+    addEventListener('scroll', check, { passive:true });
+    document.addEventListener('visibilitychange', check);
+  }
 }
 
 function shieldShape(){
@@ -1248,7 +1264,7 @@ function buildNetwork(){
   netGroup.position.set(1.4, 0.1, -0.5); scene.add(netGroup);
 }
 function buildParticles(){
-  const C = 2600, pos = new Float32Array(C*3);
+  const C = innerWidth < 700 ? 1500 : 2600, pos = new Float32Array(C*3);
   for (let i=0;i<C;i++){
     const r = 6 + Math.random()*14, t = Math.random()*Math.PI*2, p = Math.acos(2*Math.random()-1);
     pos[i*3]=r*Math.sin(p)*Math.cos(t); pos[i*3+1]=r*Math.cos(p)*0.6; pos[i*3+2]=r*Math.sin(p)*Math.sin(t);
@@ -1264,7 +1280,7 @@ function buildGrid(){
 function onResize(){
   camera.aspect = innerWidth/innerHeight; camera.updateProjectionMatrix();
   renderer.setSize(innerWidth, innerHeight); composer.setSize(innerWidth, innerHeight);
-  renderer.setPixelRatio(Math.min(devicePixelRatio, 2));
+  renderer.setPixelRatio(Math.min(devicePixelRatio, 1.5));
 }
 function renderOnce(){ composer.render(); }
 function animate(){
@@ -1513,15 +1529,22 @@ suggestEl.querySelectorAll('button').forEach(b => b.addEventListener('click', ()
 if (matchMedia('(hover:hover) and (pointer:fine)').matches &&
     !matchMedia('(prefers-reduced-motion: reduce)').matches){
   document.querySelectorAll('.skill-card, .proj').forEach(el => {
+    let pending = null;
     el.addEventListener('pointermove', e => {
-      const r = el.getBoundingClientRect();
-      const px = (e.clientX - r.left) / r.width, py = (e.clientY - r.top) / r.height;
-      el.style.setProperty('--mx', (px*100).toFixed(1) + '%');
-      el.style.setProperty('--my', (py*100).toFixed(1) + '%');
-      const rx = (0.5 - py) * 5, ry = (px - 0.5) * 5;
-      el.style.transform = `translateY(-4px) perspective(900px) rotateX(${rx.toFixed(2)}deg) rotateY(${ry.toFixed(2)}deg)`;
-    });
-    el.addEventListener('pointerleave', () => { el.style.transform = ''; });
+      pending = e;
+      if (el._raf) return;
+      el._raf = requestAnimationFrame(() => {
+        el._raf = 0;
+        if (!pending) return;
+        const r = el.getBoundingClientRect();
+        const px = (pending.clientX - r.left) / r.width, py = (pending.clientY - r.top) / r.height;
+        el.style.setProperty('--mx', (px*100).toFixed(1) + '%');
+        el.style.setProperty('--my', (py*100).toFixed(1) + '%');
+        const rx = (0.5 - py) * 5, ry = (px - 0.5) * 5;
+        el.style.transform = `translateY(-4px) perspective(900px) rotateX(${rx.toFixed(2)}deg) rotateY(${ry.toFixed(2)}deg)`;
+      });
+    }, { passive:true });
+    el.addEventListener('pointerleave', () => { pending = null; el.style.transform = ''; });
   });
 }
 
@@ -1630,20 +1653,23 @@ if (matchMedia('(hover:hover) and (pointer:fine)').matches && !reducedMotion){
   const ring = document.createElement('div');
   ring.className = 'cursor-ring'; ring.setAttribute('aria-hidden','true');
   document.body.appendChild(ring);
-  let cx = -100, cy = -100, tx = -100, ty = -100, shown = false;
+  let cx = -100, cy = -100, tx = -100, ty = -100, shown = false, rafOn = false, lastMove = 0;
+  function follow(){
+    cx += (tx - cx) * 0.2; cy += (ty - cy) * 0.2;
+    ring.style.transform = 'translate(' + cx + 'px,' + cy + 'px) translate(-50%,-50%)';
+    // park the loop once the ring has settled and the mouse is idle
+    if (performance.now() - lastMove > 1200 && Math.abs(tx - cx) < 0.5 && Math.abs(ty - cy) < 0.5){ rafOn = false; return; }
+    requestAnimationFrame(follow);
+  }
   addEventListener('pointermove', e => {
-    tx = e.clientX; ty = e.clientY;
+    tx = e.clientX; ty = e.clientY; lastMove = performance.now();
     if (!shown){ shown = true; cx = tx; cy = ty; ring.style.opacity = '1'; }
+    if (!rafOn){ rafOn = true; requestAnimationFrame(follow); }
   }, { passive:true });
   document.addEventListener('pointerover', e => {
     ring.classList.toggle('hot', !!(e.target.closest && e.target.closest('a,button,input,summary,[data-tip]')));
   });
   document.documentElement.addEventListener('pointerleave', () => { ring.style.opacity = '0'; shown = false; });
-  (function follow(){
-    cx += (tx - cx) * 0.2; cy += (ty - cy) * 0.2;
-    ring.style.transform = 'translate(' + cx + 'px,' + cy + 'px) translate(-50%,-50%)';
-    requestAnimationFrame(follow);
-  })();
 }
 </script>
 
