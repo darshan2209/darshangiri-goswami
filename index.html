@@ -493,6 +493,47 @@ footer a{color:var(--muted)}
 .tip.show{opacity:1;transform:none}
 @media print{ .tip{display:none} }
 
+/* ============================================================= BOOT INTRO */
+.boot{position:fixed;inset:0;z-index:300;background:#04070f;display:none;align-items:center;justify-content:center;cursor:pointer}
+.boot.on{display:flex}
+.boot.done{opacity:0;visibility:hidden;transition:opacity .5s var(--ease),visibility .5s}
+.boot-box{font-family:var(--font-mono);font-size:clamp(.78rem,2.6vw,.95rem);line-height:2;min-width:min(460px,86vw)}
+.boot .bl{min-height:2em;white-space:pre;color:var(--muted)}
+.boot .bl.grant{color:var(--gold);font-weight:600;letter-spacing:.3em;margin-top:10px;text-shadow:0 0 22px rgba(230,185,79,.55)}
+.boot .hint{position:absolute;bottom:18px;right:22px;font-family:var(--font-mono);font-size:.66rem;
+  letter-spacing:.18em;text-transform:uppercase;color:var(--faint);opacity:.7}
+.boot::before{content:"";position:absolute;inset:0;pointer-events:none;opacity:.5;
+  background:repeating-linear-gradient(0deg,transparent 0 3px,rgba(45,212,191,.025) 3px 4px)}
+
+/* ============================================================= HOLOGRAM PORTRAIT */
+.p-cyber{position:absolute;inset:0;z-index:1;width:100%;height:100%;object-fit:cover;object-position:center 18%;
+  pointer-events:none;opacity:.95;
+  clip-path:inset(2% 0 84% 0);
+  filter:drop-shadow(1.5px 0 0 rgba(255,60,120,.25)) drop-shadow(-1.5px 0 0 rgba(60,200,255,.3));
+  animation:cybersweep 4.5s var(--ease) infinite}
+@keyframes cybersweep{0%{clip-path:inset(2% 0 84% 0)}50%{clip-path:inset(84% 0 2% 0)}100%{clip-path:inset(2% 0 84% 0)}}
+@media (hover:hover) and (pointer:fine){
+  .portrait:hover .p-cyber{animation:cyberglitch .8s steps(2) infinite;opacity:.92}
+}
+@keyframes cyberglitch{
+  0%,100%{clip-path:inset(0 0 0 0);transform:none}
+  20%{clip-path:inset(4% 0 0 0);transform:translateX(2px)}
+  45%{clip-path:inset(0 0 7% 0);transform:translateX(-2px)}
+  70%{clip-path:inset(9% 0 3% 0);transform:translateX(1px)}
+}
+@media (prefers-reduced-motion:reduce){ .p-cyber{display:none} }
+@media print{ .boot,.p-cyber{display:none !important} }
+
+/* ============================================================= CURSOR RING */
+.cursor-ring{position:fixed;left:0;top:0;width:34px;height:34px;border-radius:50%;
+  border:1.5px solid rgba(45,212,191,.55);box-shadow:0 0 16px -3px rgba(45,212,191,.5);
+  pointer-events:none;z-index:95;opacity:0;
+  transition:opacity .3s,width .22s var(--ease),height .22s var(--ease),border-color .22s}
+.cursor-ring::after{content:"";position:absolute;left:50%;top:50%;width:4px;height:4px;border-radius:50%;
+  background:var(--teal);transform:translate(-50%,-50%)}
+.cursor-ring.hot{width:50px;height:50px;border-color:rgba(230,185,79,.85)}
+@media print{ .cursor-ring{display:none} }
+
 /* ============================================================= AMBIENCE */
 /* drifting aurora glows behind the 3D for depth */
 .aurora{position:fixed;inset:0;z-index:0;pointer-events:none;overflow:hidden}
@@ -674,6 +715,17 @@ nav.links a::after{content:"";position:absolute;left:14px;right:14px;bottom:7px;
 
 <a class="skip" href="#main">Skip to main content</a>
 <div class="scroll-progress" id="progress" aria-hidden="true"></div>
+
+<div class="boot" id="boot" aria-hidden="true">
+  <div class="boot-box">
+    <div class="bl" data-t="&gt; initializing secure session ........."></div>
+    <div class="bl" data-t="&gt; verifying identity .............. [OK]"></div>
+    <div class="bl" data-t="&gt; loading GRC · IAM · AI modules .. [OK]"></div>
+    <div class="bl grant" data-t="ACCESS GRANTED"></div>
+  </div>
+  <span class="hint">Click to skip</span>
+</div>
+
 <div class="aurora" aria-hidden="true"><b class="a1"></b><b class="a2"></b><b class="a3"></b></div>
 
 <canvas id="bg" aria-hidden="true"></canvas>
@@ -748,6 +800,7 @@ nav.links a::after{content:"";position:absolute;left:14px;right:14px;bottom:7px;
             <source srcset="assets/portrait.webp" type="image/webp" />
             <img src="assets/portrait.jpg" width="513" height="1140" alt="Portrait of Darshangiri Goswami in a dark suit" fetchpriority="high" decoding="async" />
           </picture>
+          <img class="p-cyber" src="assets/portrait-cyber.webp" onerror="this.onerror=null;this.src='assets/portrait-cyber.jpg'" width="513" height="1140" alt="" aria-hidden="true" loading="lazy" decoding="async" />
           <div class="portrait-badge">
             <div>
               <div class="tag">Identity verified</div>
@@ -1099,7 +1152,7 @@ const saveData = (navigator.connection && navigator.connection.saveData) ||
 const canvas = document.getElementById('bg');
 const TEAL = 0x2dd4bf, GOLD = 0xe6b94f, NAVY = 0x0b1426;
 
-let renderer, scene, camera, composer, shieldGroup, netGroup, particles, clock;
+let renderer, scene, camera, composer, shieldGroup, netGroup, particles, clock, ring1, ring2;
 const pointer = { x: 0, y: 0, tx: 0, ty: 0 };
 let scrollN = 0;
 let heroHover = 0, heroHoverTarget = 0;
@@ -1169,6 +1222,13 @@ function buildShield(){
   check.position.z = 0.16; shieldGroup.add(check);
   const dotGeo = new THREE.SphereGeometry(0.022, 8, 8), dotMat = new THREE.MeshBasicMaterial({ color: 0x7af0e0 });
   for (let i=0;i<26;i++){ const d = new THREE.Mesh(dotGeo, dotMat); d.position.set((Math.random()-0.5)*1.3,(Math.random()-0.5)*2.0,0.17); shieldGroup.add(d); }
+  // gyroscope rings orbiting the shield
+  ring1 = new THREE.Mesh(new THREE.TorusGeometry(1.8, 0.012, 8, 120),
+    new THREE.MeshBasicMaterial({ color: TEAL, transparent:true, opacity:0.30 }));
+  ring2 = new THREE.Mesh(new THREE.TorusGeometry(2.08, 0.009, 8, 120),
+    new THREE.MeshBasicMaterial({ color: GOLD, transparent:true, opacity:0.20 }));
+  ring1.rotation.x = 1.2; ring2.rotation.x = 0.6; ring2.rotation.y = 0.8;
+  shieldGroup.add(ring1); shieldGroup.add(ring2);
   shieldGroup.position.set(1.55, 0.1, 0); shieldGroup.rotation.set(0, -0.25, 0); scene.add(shieldGroup);
 }
 function buildNetwork(){
@@ -1218,6 +1278,8 @@ function animate(){
     shieldGroup.position.y = 0.1 + Math.sin(t*0.7)*0.07 - scrollN*0.4;
     shieldGroup.scale.setScalar(1 + heroHover*0.08);
   }
+  if (ring1){ ring1.rotation.x = 1.2 + t*0.45; ring1.rotation.y = t*0.2; }
+  if (ring2){ ring2.rotation.x = 0.6 + Math.sin(t*0.3)*0.5; ring2.rotation.z = -t*0.32; }
   if (netGroup){ netGroup.rotation.y = t*0.04; netGroup.rotation.x = Math.sin(t*0.2)*0.1; }
   if (particles){ particles.rotation.y = t*0.012; }
   camera.position.x += ((pointer.x*0.8) - camera.position.x)*0.04;
@@ -1504,6 +1566,85 @@ if (matchMedia('(hover:hover) and (pointer:fine)').matches &&
   addEventListener('scroll', () => { if (current) hide(); }, { passive:true });
   addEventListener('keydown', e => { if (e.key === 'Escape' && current) hide(); });
 })();
+
+/* ============================================================= WOW LAYER */
+/* headline decrypt: hero title scrambles from cipher chars into place */
+let decodeRan = false;
+function startDecode(){
+  if (decodeRan) return; decodeRan = true;
+  if (reducedMotion) return;
+  const h = document.querySelector('#hero h1'); if (!h) return;
+  const CH = 'ABCDEF0123456789#$%@&<>/*+=';
+  const walker = document.createTreeWalker(h, NodeFilter.SHOW_TEXT);
+  const nodes = []; let n;
+  while ((n = walker.nextNode())) if (n.nodeValue.trim()) nodes.push({ node:n, orig:n.nodeValue });
+  const t0 = performance.now(), dur = 1000;
+  (function frame(now){
+    const p = Math.min(1, (now - t0) / dur);
+    for (const { node, orig } of nodes){
+      const reveal = Math.floor(orig.length * p);
+      let s = orig.slice(0, reveal);
+      for (let i = reveal; i < orig.length; i++)
+        s += orig[i] === ' ' ? ' ' : CH[(Math.random() * CH.length) | 0];
+      node.nodeValue = s;
+    }
+    if (p < 1) requestAnimationFrame(frame);
+    else nodes.forEach(({ node, orig }) => { node.nodeValue = orig; });
+  })(t0);
+}
+
+/* boot intro: terminal access sequence, once per session, skippable */
+(function(){
+  const boot = document.getElementById('boot'); if (!boot) return;
+  let seen = false;
+  try { seen = !!sessionStorage.getItem('booted'); } catch(_){}
+  if (reducedMotion || seen){ boot.remove(); startDecode(); return; }
+  try { sessionStorage.setItem('booted', '1'); } catch(_){}
+  boot.classList.add('on');
+  const lines = [...boot.querySelectorAll('.bl')];
+  let li = 0, finished = false;
+  function typeLine(){
+    if (finished) return;
+    if (li >= lines.length){ finish(); return; }
+    const el = lines[li], txt = el.dataset.t; let i = 0;
+    const iv = setInterval(() => {
+      if (finished){ clearInterval(iv); return; }
+      el.textContent = txt.slice(0, ++i);
+      if (i >= txt.length){ clearInterval(iv); li++; setTimeout(typeLine, li === lines.length ? 300 : 70); }
+    }, 7);
+  }
+  function finish(){
+    if (finished) return; finished = true;
+    lines.forEach(el => { el.textContent = el.dataset.t; });
+    boot.classList.add('done');
+    setTimeout(() => { boot.remove(); startDecode(); }, 520);
+  }
+  boot.addEventListener('click', finish);
+  addEventListener('keydown', function esc(e){ if (e.key === 'Escape'){ finish(); removeEventListener('keydown', esc); } });
+  setTimeout(finish, 4000);           // hard cap — never hold the page hostage
+  typeLine();
+})();
+
+/* cursor targeting ring (desktop pointers only) */
+if (matchMedia('(hover:hover) and (pointer:fine)').matches && !reducedMotion){
+  const ring = document.createElement('div');
+  ring.className = 'cursor-ring'; ring.setAttribute('aria-hidden','true');
+  document.body.appendChild(ring);
+  let cx = -100, cy = -100, tx = -100, ty = -100, shown = false;
+  addEventListener('pointermove', e => {
+    tx = e.clientX; ty = e.clientY;
+    if (!shown){ shown = true; cx = tx; cy = ty; ring.style.opacity = '1'; }
+  }, { passive:true });
+  document.addEventListener('pointerover', e => {
+    ring.classList.toggle('hot', !!(e.target.closest && e.target.closest('a,button,input,summary,[data-tip]')));
+  });
+  document.documentElement.addEventListener('pointerleave', () => { ring.style.opacity = '0'; shown = false; });
+  (function follow(){
+    cx += (tx - cx) * 0.2; cy += (ty - cy) * 0.2;
+    ring.style.transform = 'translate(' + cx + 'px,' + cy + 'px) translate(-50%,-50%)';
+    requestAnimationFrame(follow);
+  })();
+}
 </script>
 
 </body>

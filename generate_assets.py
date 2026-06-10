@@ -1,10 +1,12 @@
 """Generate optimized image assets for the portfolio.
 Run:  python generate_assets.py
-Produces: assets/portrait.jpg, assets/portrait.webp, assets/og-image.jpg
+Produces: assets/portrait.jpg, assets/portrait.webp, assets/portrait-cyber.jpg,
+          assets/portrait-cyber.webp, assets/og-image.jpg
 (favicon.svg, site.webmanifest, .well-known/security.txt are static, not generated here.)
 """
 import pathlib
-from PIL import Image, ImageDraw, ImageFont, ImageFilter
+import random
+from PIL import Image, ImageDraw, ImageFont, ImageFilter, ImageChops, ImageOps
 
 HERE = pathlib.Path(__file__).parent
 ASSETS = HERE / "assets"; ASSETS.mkdir(exist_ok=True)
@@ -30,6 +32,43 @@ def make_portrait():
     im.save(ASSETS / "portrait.webp", "WEBP", quality=80, method=6)
     print(f"  portrait.jpg / .webp  ({im.size[0]}x{im.size[1]})")
     return im.size
+
+def make_cyber_portrait():
+    """A 'digital twin' of the real portrait: teal duotone + edge glow + scanlines + glitch bands."""
+    im = Image.open(SRC).convert("L")
+    w, h = im.size
+    scale = min(1.0, 1140 / max(w, h))
+    if scale < 1.0:
+        im = im.resize((round(w*scale), round(h*scale)), Image.LANCZOS)
+    base = ImageOps.autocontrast(im.filter(ImageFilter.MedianFilter(3)), cutoff=1)
+
+    # inverted duotone: bright wall -> deep navy, dark subject -> glowing teal (hologram look)
+    inv = ImageOps.invert(base)
+    dark, light = (4, 10, 22), (52, 214, 196)
+    luts = [[int(dark[c] + (light[c]-dark[c]) * (i/255)) for i in range(256)] for c in range(3)]
+    duo = Image.merge("RGB", [inv.point(l) for l in luts])
+
+    # glowing edge lines (wireframe feel) — blur first so wall texture doesn't speckle
+    edges = base.filter(ImageFilter.GaussianBlur(1.4)).filter(ImageFilter.FIND_EDGES)
+    edges = edges.point(lambda x: 255 if x > 24 else 0).filter(ImageFilter.MaxFilter(3)).filter(ImageFilter.GaussianBlur(0.8))
+    edge_rgb = Image.merge("RGB", [edges.point(lambda x, c=c: int(x*c/255)) for c in (110, 232, 214)])
+    out = ImageChops.screen(duo, edge_rgb)
+
+    # scanlines: darken every 3rd row
+    sl = Image.new("L", (1, 3), 255); sl.putpixel((0, 2), 168)
+    out = ImageChops.multiply(out, Image.merge("RGB", [sl.resize(out.size)]*3))
+
+    # baked-in glitch bands (deterministic)
+    rng = random.Random(2209)
+    W, H = out.size
+    for _ in range(9):
+        y0 = rng.randint(0, H-18); hgt = rng.randint(4, 16); dx = rng.randint(-16, 16)
+        band = out.crop((0, y0, W, y0+hgt))
+        out.paste(band, (dx, y0))
+    out.save(ASSETS / "portrait-cyber.jpg", "JPEG", quality=84, optimize=True, progressive=True)
+    out.save(ASSETS / "portrait-cyber.webp", "WEBP", quality=80, method=6)
+    print(f"  portrait-cyber.jpg / .webp  ({W}x{H})")
+
 
 def circle_crop(im, d):
     w, h = im.size; s = min(w, h)
@@ -88,5 +127,6 @@ def make_og():
 
 if __name__ == "__main__":
     sz = make_portrait()
+    make_cyber_portrait()
     make_og()
     print(f"\n  HERO/ABOUT portrait intrinsic size for width/height attrs: {sz[0]}x{sz[1]}")
