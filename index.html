@@ -4,7 +4,7 @@
 <meta charset="UTF-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
 <title>Darshangiri Goswami — Compliance · Monitoring · Responsible AI</title>
-<meta name="description" content="Darshangiri Goswami — Business Management &amp; Cybersecurity MSc student specialising in Global Compliance, Monitoring &amp; Investigations, and Responsible AI." />
+<meta name="description" content="Darshangiri Goswami — Business Management &amp; Cybersecurity MSc student specialising in GRC, Security Operations (SecOps), Identity &amp; Access (IAM), Monitoring &amp; Investigations, and Responsible AI." />
 <meta name="theme-color" content="#060a14" />
 
 <!-- Canonical + SEO -->
@@ -48,7 +48,7 @@
       "email": "mailto:darshangoswami22922@gmail.com",
       "url": "https://darshan2209.github.io/darshangiri-goswami/",
       "image": "https://darshan2209.github.io/darshangiri-goswami/assets/portrait.jpg",
-      "knowsAbout": ["GDPR", "DORA", "NIS2", "ISO/IEC 27001", "NIST CSF", "EU AI Act", "Compliance monitoring", "Responsible AI", "SIEM", "Wazuh"],
+      "knowsAbout": ["GDPR", "DORA", "NIS2", "ISO/IEC 27001", "ISMS", "NIST CSF", "EU AI Act", "Compliance monitoring", "Responsible AI", "SecOps", "Security Operations Center (SOC)", "SIEM", "Wazuh", "Identity & Access Management", "Non-human identity"],
       "alumniOf": [
         { "@type": "CollegeOrUniversity", "name": "GISMA University of Applied Sciences" },
         { "@type": "CollegeOrUniversity", "name": "Swarnim Startup and Innovation University" }
@@ -166,8 +166,8 @@ h1,h2,h3,h4{font-family:var(--font-display);line-height:1.12;font-weight:600;let
 .wrap{max-width:var(--maxw);margin:0 auto;padding:0 clamp(20px,5vw,48px)}
 section{padding:var(--space-2xl) 0;position:relative}
 /* below-fold sections: skip layout/paint until they approach the viewport */
-#skills,#experience,#projects,#certifications,#contact{content-visibility:auto;contain-intrinsic-size:auto 900px}
-@media print{ #skills,#experience,#projects,#certifications,#contact{content-visibility:visible} }
+#skills,#experience,#projects,#writing,#certifications,#contact{content-visibility:auto;contain-intrinsic-size:auto 900px}
+@media print{ #skills,#experience,#projects,#writing,#certifications,#contact{content-visibility:visible} }
 .section-head{margin-bottom:var(--space-lg);max-width:62ch}
 .section-head h2{font-size:var(--step-3);margin:.5rem 0 .8rem;position:relative;display:inline-block}
 .section-head h2::after{content:"";position:absolute;left:0;bottom:-9px;width:64px;height:3px;border-radius:3px;
@@ -786,6 +786,26 @@ nav.links a::after{content:"";position:absolute;left:14px;right:14px;bottom:7px;
 @media print{
   #killchain,.kc-feed,.kc-scan,.kc-stamp{display:none !important}
 }
+
+/* ============================================================= WRITING / LINKEDIN */
+.writing-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(258px,1fr));gap:18px;margin-top:6px}
+.post{display:flex;flex-direction:column;gap:10px;border:1px solid var(--border);border-radius:var(--r);
+  background:var(--surface-glass);padding:22px 22px;color:inherit;position:relative;overflow:hidden;
+  transition:transform .3s var(--ease),border-color .3s var(--ease),box-shadow .3s var(--ease)}
+.post .pmeta{font-family:var(--font-mono);font-size:.68rem;letter-spacing:.08em;color:var(--teal);text-transform:uppercase}
+.post h3{font-size:1.06rem;line-height:1.3}
+.post p{color:var(--muted);font-size:.9rem;margin:0}
+.post .read{margin-top:auto;font-family:var(--font-mono);font-size:.78rem;color:var(--gold);
+  display:inline-flex;align-items:center;gap:7px;min-height:30px}
+.post .read svg{width:13px;height:13px}
+.writing-cta{display:flex;flex-wrap:wrap;gap:14px 22px;align-items:center;margin-top:24px}
+.writing-note{font-family:var(--font-mono);font-size:.8rem;color:var(--faint);display:inline-flex;align-items:center;gap:8px}
+.writing-note .dot{width:7px;height:7px;border-radius:50%;background:var(--teal);box-shadow:0 0 8px var(--teal)}
+@media (hover:hover) and (pointer:fine){
+  .post:hover{border-color:var(--border-bright);transform:translateY(-4px);box-shadow:var(--shadow)}
+  .post:hover .read{color:var(--teal-soft)}
+}
+@media print{ .post{background:#fff !important;border:1px solid #cfd6e0 !important;box-shadow:none !important;backdrop-filter:none !important} }
 </style>
 </head>
 <body>
@@ -817,13 +837,14 @@ nav.links a::after{content:"";position:absolute;left:14px;right:14px;bottom:7px;
       <span class="mark" aria-hidden="true">
         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2l8 3v6c0 5-3.5 8.5-8 11-4.5-2.5-8-6-8-11V5l8-3z"/><path d="M9 12l2 2 4-4"/></svg>
       </span>
-      <span style="line-height:1.1"><b>Darshangiri Goswami</b><span class="sub">GRC · IAM · AI Security</span></span>
+      <span style="line-height:1.1"><b>Darshangiri Goswami</b><span class="sub">GRC · SecOps · IAM · AI Security</span></span>
     </a>
     <nav class="links" id="navlinks">
       <a href="#about">About</a>
       <a href="#skills">Skills</a>
       <a href="#experience">Experience</a>
       <a href="#projects">Projects</a>
+      <a href="#writing">Writing</a>
       <a href="#certifications">Certifications</a>
       <a href="#contact" class="nav-cta">Get in touch</a>
     </nav>
@@ -843,6 +864,7 @@ nav.links a::after{content:"";position:absolute;left:14px;right:14px;bottom:7px;
         <div class="status-row reveal">
           <span class="chip"><span class="dot"></span> Available immediately · up to 40 hrs/week</span>
           <span class="chip"><span class="dot gold"></span> Berlin → open to relocation</span>
+          <a class="chip" href="https://linkedin.com/in/darshangiri-goswami-033283213" target="_blank" rel="noopener"><span class="dot"></span> 5,000+ LinkedIn followers</a>
         </div>
         <p class="eyebrow reveal d1">Business Management &amp; Cybersecurity · MSc</p>
         <h1 class="reveal d1">I keep systems <span class="grad">compliant,</span> monitored &amp; accountable.</h1>
@@ -907,7 +929,7 @@ nav.links a::after{content:"";position:absolute;left:14px;right:14px;bottom:7px;
         <p class="eyebrow">// About</p>
         <h2 style="font-size:var(--step-3);margin:.5rem 0 1rem">Compliance instinct, engineer's toolkit.</h2>
         <p>I'm a <strong>Business Management &amp; Cybersecurity master's student</strong> who works at the intersection of governance, identity and automation. My experience spans <strong>Governance, Risk &amp; Compliance (GRC)</strong> — regulatory training, policy and controls documentation — and monitoring flagged activity through structured checks and assessments of system alerts.</p>
-        <p>Where I add an edge is <strong>Identity &amp; Access Management (IAM)</strong> and <strong>AI in cybersecurity</strong> — building responsible, AI-driven workflows for alert triage and access governance. I'm seeking a Working Student role in GRC, IAM or compliance to support monitoring, ongoing projects and digitalisation, and to grow financial-services and securities knowledge inside a conduct-and-ethics team.</p>
+        <p>Where I add an edge is <strong>Identity &amp; Access Management (IAM)</strong> and <strong>AI in cybersecurity</strong> — building responsible, AI-driven workflows for alert triage and access governance. I also deliver <strong>security-awareness training</strong> and IT / cyber-law–aware guidance, turning regulations into something non-specialists can act on. I'm seeking a Working Student role in GRC, IAM or compliance to support monitoring, ongoing projects and digitalisation, and to grow financial-services and securities knowledge inside a conduct-and-ethics team.</p>
         <div class="about-langs">
           <div class="lang"><b>English</b> <span class="lvl mono">C1 · Fluent</span><div class="bar"><i style="width:90%"></i></div></div>
           <div class="lang"><b>German</b> <span class="lvl mono">A2 · Conversational</span><div class="bar"><i style="width:38%"></i></div></div>
@@ -935,7 +957,7 @@ nav.links a::after{content:"";position:absolute;left:14px;right:14px;bottom:7px;
     <div class="section-head reveal">
       <p class="eyebrow">// Capabilities</p>
       <h2>Skills &amp; frameworks</h2>
-      <p>GRC, IAM and AI in cybersecurity — anchored to the regulations and standards that matter in EU financial-services compliance. Hover or tap any item for a quick definition.</p>
+      <p>GRC, SecOps, IAM and AI in cybersecurity — anchored to the regulations and standards that matter in EU financial-services compliance. Hover or tap any item for a quick definition.</p>
     </div>
 
     <div class="framework-row reveal d1">
@@ -956,7 +978,9 @@ nav.links a::after{content:"";position:absolute;left:14px;right:14px;bottom:7px;
           <li data-tip="Training people on conduct and acceptable-use rules so policy becomes everyday practice.">Code of Conduct / acceptable-use training</li>
           <li data-tip="Checking that security and compliance controls are in place and actually working.">Controls monitoring</li>
           <li data-tip="Identifying, rating and tracking risks in a central register for treatment.">Risk assessment &amp; registers</li>
+          <li data-tip="Building and running an Information Security Management System aligned to ISO/IEC 27001.">ISMS implementation (ISO 27001)</li>
           <li data-tip="Preparing evidence and documentation so internal and external audits run smoothly.">Audit support</li>
+          <li data-tip="Awareness of IT, data-protection and cyber-law obligations that shape security and compliance work.">IT &amp; cyber-law awareness</li>
           <li data-tip="Helping teams understand and meet their regulatory obligations.">Regulatory &amp; compliance training</li>
         </ul>
       </div>
@@ -986,8 +1010,9 @@ nav.links a::after{content:"";position:absolute;left:14px;right:14px;bottom:7px;
       </div>
       <div class="skill-card reveal d2">
         <div class="ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="7"/><path d="M21 21l-4.3-4.3"/><path d="M11 8v3l2 1"/></svg></div>
-        <h3>Monitoring &amp; Investigations</h3>
+        <h3>SecOps · Monitoring &amp; Investigations</h3>
         <ul>
+          <li data-tip="Working alerts the way a Security Operations Center (SOC) does — triage, escalation and follow-up.">SOC-style alert triage &amp; escalation</li>
           <li data-tip="Triaging security alerts to separate real issues from noise.">Reviewing system flags &amp; alerts</li>
           <li data-tip="Structured reviews to confirm whether flagged activity is a genuine concern.">Checks &amp; assessments</li>
           <li data-tip="Centralised log collection and detection using a SIEM such as Wazuh.">SIEM &amp; log analysis (Wazuh)</li>
@@ -1033,6 +1058,7 @@ nav.links a::after{content:"";position:absolute;left:14px;right:14px;bottom:7px;
             <li>Delivered compliance and policy training to <b>4500+ students</b> on acceptable-use and access-control requirements, with <b>95% achieving certification</b>, building day-to-day adherence to governance and Code-of-Conduct-style policies.</li>
             <li>Maintained policy, training and controls documentation in the LMS, keeping records current and <b>audit-ready</b> for review.</li>
             <li>Created awareness content mapped to recognised standards (<b>ISO 27001, NIST CSF</b>), helping non-specialist staff understand and follow compliance requirements.</li>
+            <li>Reinforced <b>identity &amp; access fundamentals</b> — RBAC, least privilege and MFA — to reduce policy and access-control exceptions.</li>
           </ul>
         </div>
       </div>
@@ -1097,6 +1123,44 @@ nav.links a::after{content:"";position:absolute;left:14px;right:14px;bottom:7px;
   </div>
 </section>
 
+<!-- ===================== WRITING / LINKEDIN ===================== -->
+<section id="writing">
+  <div class="wrap">
+    <div class="section-head reveal">
+      <p class="eyebrow">// Writing</p>
+      <h2>Latest from LinkedIn</h2>
+      <p>I publish a short, practical security lesson most weekdays — currently a running series on <strong>non-human identity (NHI)</strong> and identity security, the same ground my GRC and IAM work lives on.</p>
+    </div>
+    <div class="writing-grid">
+      <a class="post reveal rl d1" href="https://linkedin.com/in/darshangiri-goswami-033283213/recent-activity/all/" target="_blank" rel="noopener">
+        <span class="pmeta">Identity security · Series</span>
+        <h3>Not every identity is a person</h3>
+        <p>Most identities on a modern network belong to software — and machines fail differently than humans do.</p>
+        <span class="read">Read on LinkedIn <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M7 17L17 7M9 7h8v8"/></svg></span>
+      </a>
+      <a class="post reveal d2" href="https://linkedin.com/in/darshangiri-goswami-033283213/recent-activity/all/" target="_blank" rel="noopener">
+        <span class="pmeta">Non-human identity</span>
+        <h3>What exactly is an NHI?</h3>
+        <p>Service accounts, API keys, OAuth tokens, certificates and CI/CD secrets — credentials with no manager and often no expiry.</p>
+        <span class="read">Read on LinkedIn <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M7 17L17 7M9 7h8v8"/></svg></span>
+      </a>
+      <a class="post reveal rr d3" href="https://linkedin.com/in/darshangiri-goswami-033283213/recent-activity/all/" target="_blank" rel="noopener">
+        <span class="pmeta">Identity hygiene</span>
+        <h3>The quietest risk: the orphaned credential</h3>
+        <p>Every credential should have an owner and a last-used date. If it has neither, it's a candidate for removal.</p>
+        <span class="read">Read on LinkedIn <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M7 17L17 7M9 7h8v8"/></svg></span>
+      </a>
+    </div>
+    <div class="writing-cta">
+      <a class="btn btn-ghost reveal d2" href="https://linkedin.com/in/darshangiri-goswami-033283213/recent-activity/all/" target="_blank" rel="noopener">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="18" height="18" rx="3"/><path d="M7 10v7M7 7v.01M11 17v-4a2 2 0 0 1 4 0v4"/></svg>
+        See all posts on LinkedIn
+      </a>
+      <span class="writing-note reveal d2"><span class="dot"></span> New post most weekdays · 5,000+ followers</span>
+    </div>
+  </div>
+</section>
+
 <!-- ===================== CERTS + EDU ===================== -->
 <section id="certifications">
   <div class="wrap">
@@ -1111,7 +1175,7 @@ nav.links a::after{content:"";position:absolute;left:14px;right:14px;bottom:7px;
           <a class="cert reveal d1" data-tip="Foundation in building and running an ISO/IEC 27001 information-security management system." href="https://www.credly.com/users/darshan-goswami.e4c6c92c" target="_blank" rel="noopener"><span class="badge"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><circle cx="12" cy="9" r="6"/><path d="M9 14l-2 7 5-3 5 3-2-7"/></svg></span><span><span class="nm">ISO/IEC 27001 Associate</span><span class="st">Information Security</span></span><span class="ext" aria-label="Verify"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M7 17L17 7M9 7h8v8"/></svg></span></a>
           <a class="cert reveal d2" data-tip="Professional certificate covering security fundamentals, SIEM, IDS and Python." href="https://www.credly.com/users/darshan-goswami.e4c6c92c" target="_blank" rel="noopener"><span class="badge"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><circle cx="12" cy="9" r="6"/><path d="M9 14l-2 7 5-3 5 3-2-7"/></svg></span><span><span class="nm">Google Cybersecurity</span><span class="st">Certificate</span></span><span class="ext" aria-label="Verify"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M7 17L17 7M9 7h8v8"/></svg></span></a>
           <a class="cert reveal d2" data-tip="SOC-analyst skills — security monitoring, detection and incident response." href="https://www.credly.com/users/darshan-goswami.e4c6c92c" target="_blank" rel="noopener"><span class="badge"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><circle cx="12" cy="9" r="6"/><path d="M9 14l-2 7 5-3 5 3-2-7"/></svg></span><span><span class="nm">Cisco CyberOps</span><span class="st">Associate</span></span><span class="ext" aria-label="Verify"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M7 17L17 7M9 7h8v8"/></svg></span></a>
-          <a class="cert reveal d3" data-tip="Governance, risk &amp; compliance practice combined with threat-intelligence analysis." href="https://www.credly.com/users/darshan-goswami.e4c6c92c" target="_blank" rel="noopener"><span class="badge"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><circle cx="12" cy="9" r="6"/><path d="M9 14l-2 7 5-3 5 3-2-7"/></svg></span><span><span class="nm">GRC &amp; Threat Intelligence</span><span class="st">Certified Analyst</span></span><span class="ext" aria-label="Verify"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M7 17L17 7M9 7h8v8"/></svg></span></a>
+          <a class="cert reveal d3" data-tip="Certified Threat Intelligence &amp; Governance Analyst (CTIGA), issued by Red Team Leaders — GRC practice combined with threat-intelligence analysis." href="https://www.credly.com/users/darshan-goswami.e4c6c92c" target="_blank" rel="noopener"><span class="badge"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><circle cx="12" cy="9" r="6"/><path d="M9 14l-2 7 5-3 5 3-2-7"/></svg></span><span><span class="nm">Threat Intelligence &amp; Governance</span><span class="st">CTIGA · Red Team Leaders</span></span><span class="ext" aria-label="Verify"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M7 17L17 7M9 7h8v8"/></svg></span></a>
           <a class="cert prog reveal d3" data-tip="Microsoft Identity &amp; Access Administrator — Entra ID, conditional access, identity governance." href="https://www.credly.com/users/darshan-goswami.e4c6c92c" target="_blank" rel="noopener"><span class="badge"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 2"/></svg></span><span><span class="nm">Microsoft SC-300</span><span class="st">In progress</span></span><span class="ext" aria-label="Verify"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M7 17L17 7M9 7h8v8"/></svg></span></a>
           <a class="cert prog reveal d4" style="grid-column:1/-1" data-tip="CompTIA's core security certification — threats, architecture, operations and risk." href="https://www.credly.com/users/darshan-goswami.e4c6c92c" target="_blank" rel="noopener"><span class="badge"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 2"/></svg></span><span><span class="nm">CompTIA Security+ SY0-701</span><span class="st">In progress</span></span><span class="ext" aria-label="Verify"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M7 17L17 7M9 7h8v8"/></svg></span></a>
         </div>
@@ -1134,6 +1198,7 @@ nav.links a::after{content:"";position:absolute;left:14px;right:14px;bottom:7px;
           <div class="deg">B.Tech, Information Technology</div>
           <div class="sch">Swarnim Startup &amp; Innovation University</div>
           <div class="meta"><span>Gandhinagar, India · GPA 8.76/10 (DE 1.6)</span><span>Aug 2020 — Jun 2024</span></div>
+          <div class="meta" style="margin-top:6px"><span>Student Satisfaction Unit Head · Student Council</span></div>
         </div>
         <div class="edu-item reveal d3" style="background:linear-gradient(150deg,rgba(45,212,191,.06),rgba(230,185,79,.04))">
           <div class="deg" style="font-size:1rem">Languages</div>
@@ -1422,7 +1487,7 @@ const spy = new IntersectionObserver(entries => {
     }
   });
 }, { rootMargin: '-45% 0px -50% 0px', threshold: 0 });
-['about','skills','experience','projects','certifications','contact'].forEach(id => { const s = document.getElementById(id); if (s) spy.observe(s); });
+['about','skills','experience','projects','writing','certifications','contact'].forEach(id => { const s = document.getElementById(id); if (s) spy.observe(s); });
 
 /* count-up stats when they scroll into view */
 function animateCount(el){
@@ -1453,7 +1518,7 @@ const io = new IntersectionObserver((entries) => {
 document.querySelectorAll('.reveal').forEach(el => io.observe(el));
 
 /* hero role typewriter */
-const roles = ['Governance, Risk & Compliance','Identity & Access (IAM)','AI in Cybersecurity','Monitoring & Investigations','Responsible AI'];
+const roles = ['Governance, Risk & Compliance','Security Operations (SecOps)','Identity & Access (IAM)','AI in Cybersecurity','Monitoring & Investigations','Responsible AI'];
 const roleEl = document.getElementById('role');
 (function typeLoop(){
   if (window.matchMedia('(prefers-reduced-motion: reduce)').matches){ roleEl.textContent = roles.join(' · '); return; }
@@ -1528,8 +1593,8 @@ async function checkBackend(){
 
 /* offline fallback — keyword answers drawn from the CV */
 const KB = [
-  { k:['compliance','governance','grc','risk','conduct','ethic','policy','controls','audit'],
-    a:"Darshan's GRC (Governance, Risk &amp; Compliance) work spans policy &amp; procedure documentation, Code-of-Conduct / acceptable-use training, controls monitoring, risk assessment, audit support and regulatory training. At NIIT Foundation he trained 4500+ students (95% certified) and kept controls documentation audit-ready in the LMS." },
+  { k:['compliance','governance','grc','risk','conduct','ethic','policy','controls','audit','ism','isms','law'],
+    a:"Darshan's GRC (Governance, Risk &amp; Compliance) work spans policy &amp; procedure documentation, Code-of-Conduct / acceptable-use training, controls monitoring, risk assessment, ISMS implementation (ISO 27001), audit support, IT &amp; cyber-law awareness and regulatory training. At NIIT Foundation he trained 4500+ students (95% certified) and kept controls documentation audit-ready in the LMS." },
   { k:['iam','identity','access','entra','sc-300','rbac','privilege','conditional','provision','joiner'],
     a:"On Identity &amp; Access Management (IAM): access control and access reviews, Joiner–Mover–Leaver, least-privilege / RBAC, conditional access and identity governance — building toward Microsoft SC-300 (Entra ID)." },
   { k:['framework','gdpr','dora','nis2','iso','nist','standard','regulation'],
@@ -1538,10 +1603,14 @@ const KB = [
     a:"On the automation side: Python, PowerShell and workflow automation, plus AI-driven alert triage and risk scoring with Microsoft Copilot — always framed around ethical, responsible AI and EU AI Act awareness. His flagship project integrates an AI platform via API to triage flags, score risk and map cases to playbook logic." },
   { k:['project','wazuh','homelab','siem','detection','monitor','anomaly'],
     a:"Two projects: (1) AI-Assisted Monitoring &amp; Automation — a Python anomaly-detection workflow with an AI platform API for risk scoring and playbook mapping; (2) a Monitoring &amp; Detection Homelab on Wazuh (Ubuntu/Windows) with file-integrity monitoring that caught 100+ unauthorised changes." },
+  { k:['secops','soc','operations','triage','alert','escalat','incident'],
+    a:"On Security Operations (SecOps): SOC-style alert triage and escalation, SIEM and log analysis (Wazuh), checks and assessments of flagged activity, case documentation and remediation tracking. At The CyberDiplomat he monitored 50+ platforms and worked flags/alerts to closure." },
+  { k:['post','writing','write','linkedin','content','article','nhi','non-human','follower','thought'],
+    a:"Darshan publishes a short, practical security lesson most weekdays on LinkedIn (5,000+ followers) — currently a series on non-human identity (NHI) and identity security. See the Writing section on this site or his LinkedIn activity for the latest." },
   { k:['experience','work','job','niit','cyberdiplomat','analyst','trainer','role'],
     a:"Experience: Cybersecurity Trainer at NIIT Foundation (Apr–Oct 2025) — trained 4500+ students, 95% certified; and Cybersecurity Research Analyst at The CyberDiplomat (Jul 2023–Mar 2024) — monitored 50+ platforms, triaged flags/alerts and tracked remediation to closure." },
-  { k:['cert','sc-900','sc-300','security+','google','cisco','cyberops','qualif'],
-    a:"Certifications: Microsoft SC-900, ISO/IEC 27001 Associate, Google Cybersecurity, Cisco CyberOps Associate, and Certified GRC &amp; Threat Intelligence Analyst — with Microsoft SC-300 and CompTIA Security+ SY0-701 in progress." },
+  { k:['cert','sc-900','sc-300','security+','google','cisco','cyberops','ctiga','qualif','credential'],
+    a:"Certifications: Microsoft SC-900, ISO/IEC 27001 (ISMS), Google Cybersecurity, Cisco CyberOps Associate, and the Certified Threat Intelligence &amp; Governance Analyst (CTIGA) from Red Team Leaders — with Microsoft SC-300 and CompTIA Security+ SY0-701 in progress. More are listed on his Credly and LinkedIn." },
   { k:['education','study','degree','msc','university','gisma','btech','student'],
     a:"He's an MSc student in Business Management &amp; Cybersecurity at GISMA University of Applied Sciences, Potsdam (Sep 2025 – expected Oct 2026), after a B.Tech in IT (GPA 8.76/10, German equivalent 1.6)." },
   { k:['available','availability','relocat','frankfurt','berlin','hours','start','location','contact','email','reach'],
@@ -1754,7 +1823,7 @@ KillChain = (() => {
 
   const CONTROL = {
     ABOUT:'ISO 27001 A.5', METRICS:'continuous monitoring', SKILLS:'NIST CSF PR.AC',
-    EXPERIENCE:'GDPR Art.32', PROJECTS:'Wazuh IDS rule', CERTIFICATIONS:'Microsoft SC-300', CONTACT:'MFA challenge'
+    EXPERIENCE:'GDPR Art.32', PROJECTS:'Wazuh IDS rule', WRITING:'ISO 27001 A.9', CERTIFICATIONS:'Microsoft SC-300', CONTACT:'MFA challenge'
   };
 
   // feed lives after this <script> in the DOM, so resolve it lazily (null at init time)
