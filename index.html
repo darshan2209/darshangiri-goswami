@@ -696,7 +696,7 @@ nav.links a::after{content:"";position:absolute;left:14px;right:14px;bottom:7px;
 
 /* ============================================================= PRINT */
 @media print{
-  canvas#bg, header.nav, .ai-fab, .ai-panel, .scroll-hint, .proj-glow, .scan,
+  canvas#bg, #killchain, .kc-feed, .kc-scan, .kc-stamp, header.nav, .ai-fab, .ai-panel, .scroll-hint, .proj-glow, .scan,
   .portrait-corner, .skip, body::after, #contact .panel::before, .skill-card::before{ display:none !important; }
   :root{ --bg:#fff; --text:#101418; --muted:#2c3340; --faint:#4a5360; --surface-glass:#fff; --border:#cfd6e0; --border-bright:#9fb0c8; }
   html,body{background:#fff !important;color:#101418}
@@ -711,6 +711,80 @@ nav.links a::after{content:"";position:absolute;left:14px;right:14px;bottom:7px;
   .portrait::after,.about-photo::after{display:none}
   a{color:#101418;text-decoration:underline}
   .eyebrow,.t-org,.sch,.fw{color:#0c6b60}
+}
+
+/* ============================================================= KILL-CHAIN ATTACK LAYER */
+#killchain{position:fixed;inset:0;z-index:1;pointer-events:none;display:block}
+
+/* corner threat feed */
+.kc-feed{position:fixed;z-index:4;pointer-events:none;
+  left:max(20px,env(safe-area-inset-left,0));bottom:84px;width:min(330px,46vw);
+  font-family:var(--font-mono);font-size:.66rem;line-height:1.55;color:var(--muted);
+  background:rgba(7,11,22,.92);border:1px solid var(--border);border-radius:10px;
+  padding:9px 11px 8px;
+  opacity:0;transform:translateY(8px);transition:opacity .4s var(--ease),transform .4s var(--ease)}
+.kc-feed.live{opacity:1;transform:none}
+.kc-feed-head{font-size:.6rem;letter-spacing:.18em;text-transform:uppercase;color:var(--teal);
+  display:flex;align-items:center;gap:7px;margin-bottom:6px;border-bottom:1px solid var(--border);padding-bottom:6px}
+.kc-led{width:6px;height:6px;border-radius:50%;background:var(--teal);box-shadow:0 0 8px var(--teal)}
+.kc-feed-body{display:flex;flex-direction:column;gap:2px}
+.kc-ln{white-space:nowrap;overflow:hidden;text-overflow:ellipsis;opacity:.5;transition:opacity .3s}
+.kc-ln.new{opacity:1}
+.kc-ln.ok{color:var(--teal)}
+.kc-ln.hit{color:#ff7a55}
+
+/* per-section attack scanline (red->teal sweep) */
+.kc-scan{position:absolute;left:0;right:0;top:-130px;height:130px;z-index:1;pointer-events:none;opacity:0;
+  background:linear-gradient(180deg,transparent,rgba(255,90,106,.20),transparent);
+  box-shadow:0 0 26px rgba(255,90,106,.30)}
+.kc-attack .kc-scan{animation:kcSweep .54s var(--ease) forwards}
+@keyframes kcSweep{
+  0%{top:-130px;opacity:0;background:linear-gradient(180deg,transparent,rgba(255,90,106,.26),transparent)}
+  16%{opacity:1}
+  60%{background:linear-gradient(180deg,transparent,rgba(255,90,106,.18),transparent)}
+  100%{top:100%;opacity:0;background:linear-gradient(180deg,transparent,rgba(45,212,191,.28),transparent)}
+}
+
+/* heading-only glitch: RGB split + small shake, scoped to the H2, never body copy */
+.kc-attack .kc-head-glitch{animation:kcShake .26s steps(2) 2}
+@keyframes kcShake{
+  0%,100%{transform:none;text-shadow:none}
+  25%{transform:translateX(-2px);text-shadow:2px 0 rgba(255,90,106,.55),-2px 0 rgba(91,141,239,.50)}
+  75%{transform:translateX(2px);text-shadow:-2px 0 rgba(255,90,106,.50),2px 0 rgba(45,212,191,.50)}
+}
+
+/* 'caught' reveal: delay the section's own .reveal entrance by one beat */
+.kc-hold .reveal{transition-delay:.26s}
+
+/* SECURED corner stamp */
+.kc-stamp{position:absolute;top:14px;right:clamp(18px,5vw,48px);z-index:2;pointer-events:none;
+  font-family:var(--font-mono);font-size:.6rem;letter-spacing:.16em;text-transform:uppercase;color:var(--teal);
+  display:inline-flex;align-items:center;gap:7px;padding:5px 11px;
+  border:1px solid var(--border-bright);border-radius:100px;background:rgba(45,212,191,.07);
+  opacity:0;transform:scale(.9)}
+.kc-stamp i{width:6px;height:6px;border-radius:50%;background:var(--teal);flex:0 0 auto}
+.kc-secured .kc-stamp{animation:kcStamp .5s var(--ease) forwards}
+.kc-secured .kc-stamp i{animation:pulse 2.4s 1}
+@keyframes kcStamp{0%{opacity:0;transform:scale(.9)}60%{opacity:1;transform:scale(1.04)}100%{opacity:1;transform:scale(1)}}
+
+@media (max-width:700px){
+  .kc-scan{display:none}
+  .kc-feed{width:min(220px,72vw);font-size:.6rem;bottom:80px}
+  .kc-feed-body .kc-ln:nth-last-child(n+4){display:none}
+}
+@media (prefers-reduced-motion:reduce){
+  #killchain{display:none !important}
+  .kc-scan,.kc-attack .kc-head-glitch{animation:none !important}
+  .kc-hold .reveal{transition-delay:0s !important}
+  .kc-secured .kc-stamp{animation:none;opacity:1;transform:none}
+  .kc-secured .kc-stamp i{animation:none}
+  .kc-ln{transition:none}
+}
+@media (prefers-reduced-data:reduce){
+  #killchain,.kc-feed,.kc-scan{display:none !important}
+}
+@media print{
+  #killchain,.kc-feed,.kc-scan,.kc-stamp{display:none !important}
 }
 </style>
 </head>
@@ -732,6 +806,7 @@ nav.links a::after{content:"";position:absolute;left:14px;right:14px;bottom:7px;
 <div class="aurora" aria-hidden="true"><b class="a1"></b><b class="a2"></b><b class="a3"></b></div>
 
 <canvas id="bg" aria-hidden="true"></canvas>
+<canvas id="killchain" aria-hidden="true"></canvas>
 
 <div class="shell">
 
@@ -843,7 +918,7 @@ nav.links a::after{content:"";position:absolute;left:14px;right:14px;bottom:7px;
 </section>
 
 <!-- ===================== STATS ===================== -->
-<section style="padding-top:0">
+<section id="metrics" style="padding-top:0">
   <div class="wrap">
     <div class="stats reveal">
       <div class="stat"><b data-count="4500">0<span class="u">+</span></b><span>Students trained</span></div>
@@ -1324,6 +1399,8 @@ const reducedMotion = matchMedia('(prefers-reduced-motion: reduce)').matches;
 const toTop = document.getElementById('toTop');
 if (toTop) toTop.addEventListener('click', () => window.scrollTo({ top: 0, behavior: reducedMotion ? 'auto' : 'smooth' }));
 let scrollTicking = false;
+let KillChain = null;            // assigned by the kill-chain IIFE later in this script
+let kcLastY = window.scrollY;
 function onScrollFrame(){
   const y = window.scrollY;
   nav.classList.toggle('scrolled', y > 30);
@@ -1334,6 +1411,7 @@ function onScrollFrame(){
   if (!reducedMotion && y < innerHeight * 1.3){
     for (const el of parallaxEls) el.style.transform = 'translateY(' + (y * parseFloat(el.dataset.parallax)).toFixed(1) + 'px)';
   }
+  if (KillChain){ KillChain.setIntensity(max > 0 ? Math.min(1, y / max) : 0); KillChain.addVelocity(Math.abs(y - kcLastY)); kcLastY = y; }
   scrollTicking = false;
 }
 addEventListener('scroll', () => { if (!scrollTicking){ scrollTicking = true; requestAnimationFrame(onScrollFrame); } }, { passive:true });
@@ -1376,7 +1454,7 @@ navlinks.querySelectorAll('a').forEach(a => a.addEventListener('click', () => se
 
 /* scroll reveal */
 const io = new IntersectionObserver((entries) => {
-  entries.forEach(e => { if (e.isIntersecting){ e.target.classList.add('in'); io.unobserve(e.target); } });
+  entries.forEach(e => { if (e.isIntersecting){ e.target.classList.add('in'); try { if (KillChain) KillChain.onSectionEnter(e.target); } catch(_){} io.unobserve(e.target); } });
 }, { threshold:0.12, rootMargin:'0px 0px -8% 0px' });
 document.querySelectorAll('.reveal').forEach(el => io.observe(el));
 
@@ -1671,7 +1749,212 @@ if (matchMedia('(hover:hover) and (pointer:fine)').matches && !reducedMotion){
   });
   document.documentElement.addEventListener('pointerleave', () => { ring.style.opacity = '0'; shown = false; });
 }
+
+/* ============================================================= NETWORK KILL-CHAIN */
+KillChain = (() => {
+  const reduce   = reducedMotion;
+  const saveData = (navigator.connection && navigator.connection.saveData) ||
+                   matchMedia('(prefers-reduced-data: reduce)').matches;
+  const MOBILE   = innerWidth < 700;
+  const CIPHER   = 'ABCDEF0123456789#$%@&<>/*+=';
+
+  const CONTROL = {
+    ABOUT:'ISO 27001 A.5', METRICS:'continuous monitoring', SKILLS:'NIST CSF PR.AC',
+    EXPERIENCE:'GDPR Art.32', PROJECTS:'Wazuh IDS rule', CERTIFICATIONS:'Microsoft SC-300', CONTACT:'MFA challenge'
+  };
+
+  // feed lives after this <script> in the DOM, so resolve it lazily (null at init time)
+  let feed = null, feedWrap = null, feedTried = false;
+  function getFeed(){ if (!feedTried){ feedTried = true; feed = document.getElementById('kcFeedBody'); feedWrap = document.getElementById('kc-feed'); } return feed; }
+  function line(txt, cls){
+    if (saveData) return;
+    const fb = getFeed(); if (!fb) return;
+    const d = document.createElement('div');
+    d.className = 'kc-ln new ' + (cls || '');
+    d.textContent = txt;
+    fb.appendChild(d);
+    if (feedWrap) feedWrap.classList.add('live');
+    while (fb.children.length > 12) fb.removeChild(fb.firstChild);
+    requestAnimationFrame(() => fb.querySelectorAll('.kc-ln.new').forEach(n => n.classList.remove('new')));
+  }
+
+  let cv, ctx, W, H, DPR = 1, base = null;
+  let nodes = [], edges = [], packets = [], rings = [];
+  let intensity = 0, velBoost = 0, running = false, lastChange = 0, last = 0, spawnAcc = 0;
+  const CAP = { pk: MOBILE ? 2 : 3, rg: MOBILE ? 2 : 4, trail: MOBILE ? 4 : 6, nodes: MOBILE ? 14 : 22 };
+
+  function init(){
+    if (reduce || saveData) return;
+    cv = document.getElementById('killchain');
+    if (!cv) return;
+    ctx = cv.getContext('2d');
+    size(); buildMesh(); bakeContinents();
+    addEventListener('resize', () => { clearTimeout(init._r); init._r = setTimeout(() => { size(); buildMesh(); bakeContinents(); }, 200); }, { passive:true });
+    document.addEventListener('visibilitychange', () => { if (!document.hidden) wake(); });
+  }
+  function size(){
+    DPR = Math.min(devicePixelRatio, 1.5);
+    W = cv.width  = Math.round(innerWidth  * DPR);
+    H = cv.height = Math.round(innerHeight * DPR);
+    cv.style.width = innerWidth + 'px'; cv.style.height = innerHeight + 'px';
+  }
+  function buildMesh(){
+    nodes = [];
+    const c = CAP.nodes, cols = Math.max(1, Math.ceil(Math.sqrt(c * W / H))), rows = Math.ceil(c / cols);
+    for (let i = 0; i < c; i++){
+      const r = (i / cols) | 0, k = i % cols;
+      nodes.push({ x: (k + .5 + (Math.random() - .5) * .6) / cols * W, y: (r + .5 + (Math.random() - .5) * .6) / rows * H, ph: Math.random() * 6.28 });
+    }
+    edges = [];
+    nodes.forEach((n, i) => {
+      nodes.map((m, j) => ({ j, d: (m.x - n.x) ** 2 + (m.y - n.y) ** 2 }))
+        .sort((a, b) => a.d - b.d).slice(1, 3).forEach(o => edges.push([i, o.j]));
+    });
+  }
+  function bakeContinents(){
+    const off = document.createElement('canvas'); off.width = W; off.height = H;
+    const c = off.getContext('2d'); const n = MOBILE ? 60 : 120;
+    c.fillStyle = 'rgba(120,150,200,.20)';
+    for (let i = 0; i < n; i++){ const x = Math.random() * W, y = H * .15 + Math.random() * H * .6; c.beginPath(); c.arc(x, y, 1.1 * DPR, 0, 7); c.fill(); }
+    base = off;
+  }
+
+  function setIntensity(v){ if (Math.abs(v - intensity) > .01){ intensity = v; lastChange = performance.now(); wake(); } }
+  function addVelocity(px){ const t = Math.min(.35, px / 90); if (t > velBoost){ velBoost = t; lastChange = performance.now(); wake(); } }
+  function eff(){ return Math.min(1, intensity + velBoost); }
+
+  function launch(ax, ay, hostile, onHit){
+    if (packets.length >= CAP.pk) packets.shift();
+    let best = 0, bd = 1e9;
+    nodes.forEach((n, i) => { const d = Math.hypot(n.x - ax, n.y - ay); if ((n.x < 70 || n.x > W - 70 || n.y < 70) && d < bd){ bd = d; best = i; } });
+    const s = nodes[best] || { x: 0, y: Math.random() * H };
+    packets.push({ x: s.x, y: s.y, tx: ax, ty: ay, host: hostile ? 1 : 0, trail: [], onHit: onHit || null });
+    wake();
+  }
+
+  function wake(){ if (ctx && !running && !document.hidden){ running = true; last = performance.now(); requestAnimationFrame(loop); } }
+  function loop(now){
+    if (document.hidden){ running = false; return; }
+    const dt = Math.min(.05, (now - last) / 1000 || 0); last = now;
+    const E = eff();
+    ctx.clearRect(0, 0, W, H);
+    if (base){ ctx.globalAlpha = .45 + E * .35; ctx.drawImage(base, 0, 0); ctx.globalAlpha = 1; }
+    ctx.lineWidth = 1; ctx.strokeStyle = 'rgba(45,212,191,' + (.05 + E * .07) + ')';
+    ctx.beginPath();
+    edges.forEach(([a, b]) => { ctx.moveTo(nodes[a].x, nodes[a].y); ctx.lineTo(nodes[b].x, nodes[b].y); });
+    ctx.stroke();
+    nodes.forEach(n => {
+      const p = .6 + Math.sin(now * .001 * (1 + E) + n.ph) * .4;
+      ctx.fillStyle = 'rgba(122,240,224,' + (.22 * p) + ')';
+      ctx.beginPath(); ctx.arc(n.x, n.y, 1.6 * DPR, 0, 6.28); ctx.fill();
+    });
+    spawnAcc += dt * (0.10 + E * 0.7);
+    if (spawnAcc > 1 && packets.length < CAP.pk){ spawnAcc = 0; launch(Math.random() * W, H * (.25 + Math.random() * .5), false, null); }
+    packets = packets.filter(p => {
+      p.x += (p.tx - p.x) * 0.16; p.y += (p.ty - p.y) * 0.16;
+      p.trail.push([p.x, p.y]); if (p.trail.length > CAP.trail) p.trail.shift();
+      const col = p.host ? '255,122,85' : '91,141,239';
+      p.trail.forEach((pt, i) => { const a = (i / p.trail.length) * (p.host ? .55 : .4); ctx.fillStyle = 'rgba(' + col + ',' + a + ')'; ctx.beginPath(); ctx.arc(pt[0], pt[1], 1.4 * DPR, 0, 6.28); ctx.fill(); });
+      ctx.fillStyle = p.host ? '#ff5d5d' : 'rgba(91,141,239,.8)';
+      ctx.beginPath(); ctx.arc(p.x, p.y, 2.2 * DPR, 0, 6.28); ctx.fill();
+      if (Math.hypot(p.tx - p.x, p.ty - p.y) < 6 * DPR){ p.onHit && p.onHit(); return false; }
+      return true;
+    });
+    rings = rings.filter(r => {
+      r.r += (r.max - r.r) * .08; r.a *= .94;
+      ctx.strokeStyle = 'rgba(45,212,191,' + r.a + ')'; ctx.lineWidth = 2 * DPR;
+      ctx.beginPath(); ctx.arc(r.x, r.y, r.r, 0, 6.28); ctx.stroke();
+      return r.a > .02;
+    });
+    velBoost *= 0.92; if (velBoost < .01) velBoost = 0;
+    // park ~1.5s after the user stops scrolling (last mesh frame stays drawn); wake() on next scroll
+    const idle = (now - lastChange > 1500) && !velBoost;
+    if (!packets.length && !rings.length && idle){ running = false; return; }
+    requestAnimationFrame(loop);
+  }
+
+  function decryptHead(h){
+    if (!h) return;
+    const walker = document.createTreeWalker(h, NodeFilter.SHOW_TEXT);
+    const ns = []; let n;
+    while ((n = walker.nextNode())) if (n.nodeValue.trim() && n.nodeValue.length <= 600) ns.push({ node: n, orig: n.nodeValue });
+    const t0 = performance.now(), dur = 360;
+    (function f(now){
+      if (document.hidden){ ns.forEach(o => o.node.nodeValue = o.orig); return; }
+      const p = Math.min(1, (now - t0) / dur);
+      for (const { node, orig } of ns){
+        const rv = Math.floor(orig.length * p); let s = orig.slice(0, rv);
+        for (let i = rv; i < orig.length; i++) s += orig[i] === ' ' ? ' ' : CIPHER[(Math.random() * CIPHER.length) | 0];
+        node.nodeValue = s;
+      }
+      if (p < 1) requestAnimationFrame(f);
+      else ns.forEach(({ node, orig }) => node.nodeValue = orig);
+    })(t0);
+  }
+
+  const done = new WeakSet();
+  function onSectionEnter(el){
+    if (!el) return;
+    const sec = el.closest('section');
+    if (!sec || sec.id === 'hero' || done.has(sec)) return;
+    done.add(sec); sec.dataset.kcDone = '1';
+    runSequence(sec);
+  }
+
+  function runSequence(sec){
+    const name = (sec.id || 'segment').toUpperCase();
+    const ctrl = CONTROL[name] || 'control verified';
+    { const fb = getFeed(); if (fb && fb.children.length === 0) line('[OK] baseline secure · 0 open incidents', 'ok'); }
+    if (!sec.querySelector('.kc-stamp')){
+      sec.insertAdjacentHTML('beforeend',
+        '<span class="kc-scan" aria-hidden="true"></span>' +
+        '<span class="kc-stamp" aria-hidden="true"><i></i>Threat neutralised · Secured</span>');
+    }
+    const h2 = sec.querySelector('h2');
+
+    if (reduce || saveData || !ctx){
+      sec.classList.add('kc-secured');
+      line('> ' + name + ' · SECURED [OK]', 'ok');
+      if (name === 'CONTACT') line('[OK] perimeter secure · all sections neutralised', 'ok');
+      return;
+    }
+
+    const r = sec.getBoundingClientRect();
+    const ax = Math.max(40, Math.min(innerWidth - 40, r.left + r.width * .5)) * DPR;
+    const ay = Math.max(50, Math.min(innerHeight - 40, r.top + Math.min(r.height * .35, 150))) * DPR;
+    sec.classList.add('kc-attack', 'kc-hold');
+    if (h2) h2.classList.add('kc-head-glitch');
+    line('> inbound ' + randIP() + ' ▸ ' + name + ' ···· DETECTED', 'hit');
+    launch(ax, ay, true, () => {
+      rings.push({ x: ax, y: ay, r: 0, max: 140 * DPR, a: .5 });
+      if (rings.length > CAP.rg) rings.shift();
+      line('   ▸ correlating · MITRE T1190 · CONTAINING…');
+    });
+
+    setTimeout(() => {
+      sec.classList.add('kc-secured');
+      sec.classList.remove('kc-hold');
+      if (h2) h2.classList.remove('kc-head-glitch');
+      decryptHead(h2);
+      line('   ▸ NEUTRALISED · ' + name + ' · control → ' + ctrl + ' [OK]', 'ok');
+      if (name === 'CONTACT') line('[OK] perimeter secure · all sections neutralised · MTTR 0.6s', 'ok');
+    }, 300);
+
+    setTimeout(() => sec.classList.remove('kc-attack'), 560);
+  }
+
+  function randIP(){ return (1 + Math.random() * 222 | 0) + '.' + (Math.random() * 255 | 0) + '.x.x'; }
+
+  init();
+  return { setIntensity, addVelocity, onSectionEnter };
+})();
 </script>
+
+<!-- SOC threat feed (bottom-left, above the back-to-top button) -->
+<div id="kc-feed" class="kc-feed" aria-hidden="true">
+  <div class="kc-feed-head"><span class="kc-led"></span> SOC · LIVE DEFENSE</div>
+  <div class="kc-feed-body" id="kcFeedBody"></div>
+</div>
 
 </body>
 </html>
