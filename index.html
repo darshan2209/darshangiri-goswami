@@ -1485,7 +1485,7 @@ let backendOnline = AI_ENDPOINT ? null : false;  // offline by default when no e
 let greeted = false;
 
 /* footer credit reflects reality: only claim the live Claude API when an endpoint is set */
-document.getElementById('aiCredit').textContent = AI_ENDPOINT ? ' · live AI via the Claude API' : '';
+document.getElementById('aiCredit').textContent = '';
 
 function openPanel(){
   panel.classList.add('open'); fab.style.display='none';
@@ -1521,7 +1521,7 @@ async function checkBackend(){
     });
     backendOnline = r.ok;
   } catch(_) { backendOnline = false; }
-  if (backendOnline){ statusEl.textContent = 'Online · Claude'; dotEl.classList.remove('off'); }
+  if (backendOnline){ statusEl.textContent = 'Online'; dotEl.classList.remove('off'); }
   else { statusEl.textContent = 'Offline · from CV'; dotEl.classList.add('off');
     addMsg('system', "Live AI is unavailable right now — answering from the CV summary instead."); }
 }
