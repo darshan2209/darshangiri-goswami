@@ -1276,17 +1276,11 @@ function init(){
 
   if (reduce){ renderOnce(); } else { renderer.setAnimationLoop(animate); }
 
-  // pause the GPU loop entirely once the hero is well off-screen (canvas is ~invisible there)
+  // keep the 3D shield animating across the WHOLE page; pause only when the tab is hidden
   if (!reduce){
-    let running = true;
-    const setRunning = on => {
-      if (on === running) return;
-      running = on;
-      renderer.setAnimationLoop(on ? animate : null);
-    };
-    const check = () => setRunning(!document.hidden && window.scrollY < innerHeight * 1.6);
-    addEventListener('scroll', check, { passive:true });
-    document.addEventListener('visibilitychange', check);
+    document.addEventListener('visibilitychange', () => {
+      renderer.setAnimationLoop(document.hidden ? null : animate);
+    });
   }
 }
 
@@ -1404,7 +1398,7 @@ let kcLastY = window.scrollY;
 function onScrollFrame(){
   const y = window.scrollY;
   nav.classList.toggle('scrolled', y > 30);
-  bgCanvas.style.opacity = (1 - Math.min(1, y / innerHeight) * 0.8).toFixed(3);
+  bgCanvas.style.opacity = (1 - Math.min(1, y / innerHeight) * 0.55).toFixed(3);  // floor ~0.45: shield stays a live background everywhere
   const max = document.documentElement.scrollHeight - innerHeight;
   if (progressBar) progressBar.style.width = (max > 0 ? (y / max) * 100 : 0) + '%';
   if (toTop) toTop.classList.toggle('show', y > innerHeight * 1.2);
