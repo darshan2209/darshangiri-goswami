@@ -10,7 +10,8 @@ from PIL import Image, ImageDraw, ImageFont, ImageFilter, ImageChops, ImageOps
 
 HERE = pathlib.Path(__file__).parent
 ASSETS = HERE / "assets"; ASSETS.mkdir(exist_ok=True)
-SRC = pathlib.Path(r"C:\Users\Lenovo\Pictures\photo_2026-04-13_15-04-24.jpg")  # suit portrait
+SRC = pathlib.Path(r"C:\Users\Lenovo\Downloads\Untitled design.jpg")  # hero: black-suit studio portrait
+ABOUT_SRC = pathlib.Path(r"C:\Users\Lenovo\Downloads\Headshot.png")   # about: navy-suit headshot
 
 TEAL = (45, 212, 191); GOLD = (230, 185, 79); BG = (6, 10, 20); TEXT = (233, 238, 248); MUTED = (158, 176, 203)
 
@@ -33,6 +34,17 @@ def make_portrait():
     print(f"  portrait.jpg / .webp  ({im.size[0]}x{im.size[1]})")
     return im.size
 
+def make_about():
+    im = Image.open(ABOUT_SRC).convert("RGB")
+    w, h = im.size
+    scale = min(1.0, 1000 / max(w, h))
+    if scale < 1.0:
+        im = im.resize((round(w*scale), round(h*scale)), Image.LANCZOS)
+    im.save(ASSETS / "about.jpg", "JPEG", quality=86, optimize=True, progressive=True)
+    im.save(ASSETS / "about.webp", "WEBP", quality=82, method=6)
+    print(f"  about.jpg / .webp  ({im.size[0]}x{im.size[1]})")
+    return im.size
+
 def make_cyber_portrait():
     """A 'digital twin' of the real portrait: teal duotone + edge glow + scanlines + glitch bands."""
     im = Image.open(SRC).convert("L")
@@ -42,11 +54,10 @@ def make_cyber_portrait():
         im = im.resize((round(w*scale), round(h*scale)), Image.LANCZOS)
     base = ImageOps.autocontrast(im.filter(ImageFilter.MedianFilter(3)), cutoff=1)
 
-    # inverted duotone: bright wall -> deep navy, dark subject -> glowing teal (hologram look)
-    inv = ImageOps.invert(base)
+    # duotone: shadows -> deep navy, highlights -> glowing teal (lit subject reads as a hologram)
     dark, light = (4, 10, 22), (52, 214, 196)
     luts = [[int(dark[c] + (light[c]-dark[c]) * (i/255)) for i in range(256)] for c in range(3)]
-    duo = Image.merge("RGB", [inv.point(l) for l in luts])
+    duo = Image.merge("RGB", [base.point(l) for l in luts])
 
     # glowing edge lines (wireframe feel) — blur first so wall texture doesn't speckle
     edges = base.filter(ImageFilter.GaussianBlur(1.4)).filter(ImageFilter.FIND_EDGES)
@@ -127,6 +138,8 @@ def make_og():
 
 if __name__ == "__main__":
     sz = make_portrait()
+    asz = make_about()
     make_cyber_portrait()
     make_og()
+    print(f"\n  HERO width/height attrs: {sz[0]}x{sz[1]}   ABOUT width/height attrs: {asz[0]}x{asz[1]}")
     print(f"\n  HERO/ABOUT portrait intrinsic size for width/height attrs: {sz[0]}x{sz[1]}")
