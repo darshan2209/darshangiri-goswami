@@ -166,8 +166,8 @@ h1,h2,h3,h4{font-family:var(--font-display);line-height:1.12;font-weight:600;let
 .wrap{max-width:var(--maxw);margin:0 auto;padding:0 clamp(20px,5vw,48px)}
 section{padding:var(--space-2xl) 0;position:relative}
 /* below-fold sections: skip layout/paint until they approach the viewport */
-#skills,#experience,#projects,#writing,#certifications,#contact{content-visibility:auto;contain-intrinsic-size:auto 900px}
-@media print{ #skills,#experience,#projects,#writing,#certifications,#contact{content-visibility:visible} }
+#skills,#experience,#projects,#writing,#ops,#certifications,#fit,#contact{content-visibility:auto;contain-intrinsic-size:auto 900px}
+@media print{ #skills,#experience,#projects,#writing,#ops,#certifications,#fit,#contact{content-visibility:visible} }
 .section-head{margin-bottom:var(--space-lg);max-width:62ch}
 .section-head h2{font-size:var(--step-3);margin:.5rem 0 .8rem;position:relative;display:inline-block}
 .section-head h2::after{content:"";position:absolute;left:0;bottom:-9px;width:64px;height:3px;border-radius:3px;
@@ -806,6 +806,70 @@ nav.links a::after{content:"";position:absolute;left:14px;right:14px;bottom:7px;
   .post:hover .read{color:var(--teal-soft)}
 }
 @media print{ .post{background:#fff !important;border:1px solid #cfd6e0 !important;box-shadow:none !important;backdrop-filter:none !important} }
+
+/* ============================================================= FIT CHECK (Recruiter Mode) */
+.fit-panel{border:1px solid var(--border-bright);border-radius:var(--r-lg);background:var(--surface-glass);
+  padding:clamp(24px,4vw,40px);position:relative;overflow:hidden}
+.fit-panel::before{content:"";position:absolute;inset:0;opacity:.4;pointer-events:none;
+  background:radial-gradient(50% 60% at 80% 0%,rgba(45,212,191,.14),transparent 70%)}
+.fit-panel textarea{width:100%;min-height:170px;resize:vertical;background:rgba(255,255,255,.04);
+  border:1px solid var(--border);border-radius:12px;padding:14px 16px;color:var(--text);
+  font-family:var(--font-body);font-size:.95rem;line-height:1.55;outline:none;transition:border-color .2s}
+.fit-panel textarea:focus{border-color:var(--teal)}
+.fit-row{display:flex;flex-wrap:wrap;gap:12px 18px;align-items:center;margin-top:14px}
+.fit-note{font-family:var(--font-mono);font-size:.72rem;color:var(--faint)}
+.fit-out{margin-top:22px;border-top:1px solid var(--border);padding-top:20px;display:none;
+  font-size:.95rem;line-height:1.65;color:var(--muted)}
+.fit-out.show{display:block}
+.fit-out strong{color:var(--text)}
+.fit-out code{font-family:var(--font-mono);font-size:.85em;color:var(--teal-soft)}
+.fit-out .blink{display:inline-block;width:7px;height:1em;background:var(--teal);vertical-align:-2px;animation:blink 1s steps(1) infinite}
+
+/* ============================================================= LIVE OPS ROOM */
+.ops-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(250px,1fr));gap:18px}
+.ops-card{border:1px solid var(--border);border-radius:var(--r);background:var(--surface-glass);
+  padding:22px;display:flex;flex-direction:column;gap:8px;transition:border-color .3s var(--ease)}
+.ops-card .ops-k{font-family:var(--font-mono);font-size:.68rem;letter-spacing:.14em;text-transform:uppercase;
+  color:var(--faint);display:flex;align-items:center;gap:8px}
+.ops-card .ops-k .st-dot{width:8px;height:8px;border-radius:50%;background:var(--faint);flex:0 0 auto}
+.ops-card.ok .ops-k .st-dot{background:var(--teal);box-shadow:0 0 8px var(--teal);animation:pulse 2.4s infinite}
+.ops-card.warn .ops-k .st-dot{background:var(--gold);box-shadow:0 0 8px var(--gold)}
+.ops-card .ops-v{font-family:var(--font-display);font-weight:600;font-size:1.06rem;color:var(--text);line-height:1.35}
+.ops-card .ops-d{font-size:.85rem;color:var(--muted)}
+.ops-card .ops-m{font-family:var(--font-mono);font-size:.72rem;color:var(--teal);margin-top:auto}
+@media (hover:hover) and (pointer:fine){ .ops-card:hover{border-color:var(--border-bright)} }
+@media print{ .ops-card,.fit-panel{background:#fff !important;border:1px solid #cfd6e0 !important} }
+
+/* ============================================================= TERMINAL */
+.term{position:fixed;left:0;right:0;bottom:0;z-index:210;height:min(46vh,420px);display:none;flex-direction:column;
+  background:rgba(5,8,16,.97);border-top:1px solid var(--border-bright);backdrop-filter:blur(12px);
+  box-shadow:0 -24px 70px -20px rgba(0,0,0,.9);font-family:var(--font-mono);font-size:.84rem}
+.term.open{display:flex}
+.term::before{content:"";position:absolute;inset:0;pointer-events:none;opacity:.4;
+  background:repeating-linear-gradient(0deg,transparent 0 3px,rgba(45,212,191,.03) 3px 4px)}
+.term-head{display:flex;align-items:center;gap:10px;padding:8px 16px;border-bottom:1px solid var(--border);
+  color:var(--teal);font-size:.7rem;letter-spacing:.18em;text-transform:uppercase}
+.term-head .term-close{margin-left:auto;background:none;border:1px solid var(--border);border-radius:8px;
+  width:30px;height:30px;color:var(--muted);cursor:pointer;font-family:inherit}
+.term-body{flex:1;overflow-y:auto;padding:12px 16px;white-space:pre-wrap;word-break:break-word;color:#b9c7dd;line-height:1.55;scrollbar-width:thin}
+.term-body .t-ok{color:var(--teal)}
+.term-body .t-warn{color:var(--gold)}
+.term-body .t-err{color:#ff7a55}
+.term-body .t-dim{color:var(--faint)}
+.term-line{display:flex;gap:9px;padding:10px 16px;border-top:1px solid var(--border);align-items:center}
+.term-line .ps1{color:var(--teal);white-space:nowrap}
+.term-line input{flex:1;background:none;border:none;outline:none;color:var(--text);font-family:inherit;font-size:inherit;min-height:34px}
+@media (max-width:700px){ .term{height:60vh;font-size:.78rem} }
+@media print{ .term{display:none !important} }
+
+/* ============================================================= VOICE (AI twin) */
+.ai-tool{background:none;border:1px solid var(--border);border-radius:9px;width:38px;height:38px;color:var(--muted);
+  cursor:pointer;display:none;place-items:center;transition:.2s;flex:0 0 auto}
+.ai-tool.sup{display:grid}
+.ai-tool.on{color:var(--teal);border-color:var(--border-bright);background:rgba(45,212,191,.08)}
+.ai-tool svg{width:17px;height:17px}
+.ai-tool.listening{color:#ff7a55;border-color:#ff7a55;animation:pulse 1.2s infinite}
+@media (hover:hover) and (pointer:fine){ .ai-tool:hover{color:var(--text);border-color:var(--border-bright)} }
 </style>
 </head>
 <body>
@@ -846,6 +910,7 @@ nav.links a::after{content:"";position:absolute;left:14px;right:14px;bottom:7px;
       <a href="#projects">Projects</a>
       <a href="#writing">Writing</a>
       <a href="#certifications">Certifications</a>
+      <a href="#fit">Fit check</a>
       <a href="#contact" class="nav-cta">Get in touch</a>
     </nav>
     <button class="burger" id="burger" aria-label="Toggle menu" aria-expanded="false" aria-controls="navlinks">
@@ -1161,6 +1226,37 @@ nav.links a::after{content:"";position:absolute;left:14px;right:14px;bottom:7px;
   </div>
 </section>
 
+<!-- ===================== LIVE OPS ROOM ===================== -->
+<section id="ops">
+  <div class="wrap">
+    <div class="section-head reveal">
+      <p class="eyebrow">// Live ops</p>
+      <h2>My automations, running right now</h2>
+      <p>I don't just list automation as a skill — these cards query my real systems <strong>live from your browser</strong>: the AI backend serving this site, this site's own repository, and my autonomous LinkedIn agent.</p>
+    </div>
+    <div class="ops-grid">
+      <div class="ops-card reveal d1" id="opsTwin">
+        <span class="ops-k"><span class="st-dot"></span> AI twin backend · Render</span>
+        <span class="ops-v" data-v>Checking…</span>
+        <span class="ops-d">Flask + Claude Haiku proxy that powers the chat and fit-check on this page.</span>
+        <span class="ops-m" data-m>querying /health…</span>
+      </div>
+      <div class="ops-card reveal d2" id="opsRepo">
+        <span class="ops-k"><span class="st-dot"></span> This website · GitHub</span>
+        <span class="ops-v" data-v>Checking…</span>
+        <span class="ops-d">Single-file site, hand-built and continuously shipped via GitHub Pages.</span>
+        <span class="ops-m" data-m>querying api.github.com…</span>
+      </div>
+      <div class="ops-card reveal d3" id="opsAgent">
+        <span class="ops-k"><span class="st-dot"></span> LinkedIn agent · autonomous</span>
+        <span class="ops-v" data-v>Checking…</span>
+        <span class="ops-d">Python agent that researches, writes and publishes my daily security post.</span>
+        <span class="ops-m" data-m>reading ops feed…</span>
+      </div>
+    </div>
+  </div>
+</section>
+
 <!-- ===================== CERTS + EDU ===================== -->
 <section id="certifications">
   <div class="wrap">
@@ -1209,6 +1305,28 @@ nav.links a::after{content:"";position:absolute;left:14px;right:14px;bottom:7px;
   </div>
 </section>
 
+<!-- ===================== FIT CHECK (RECRUITER MODE) ===================== -->
+<section id="fit">
+  <div class="wrap">
+    <div class="section-head reveal">
+      <p class="eyebrow">// Recruiter mode</p>
+      <h2>Paste your job description</h2>
+      <p>Hiring for GRC, IAM, SecOps or compliance? Paste the role below and my AI twin will map it against my real CV — <strong>including the honest gaps</strong> — in about ten seconds.</p>
+    </div>
+    <div class="fit-panel reveal d1">
+      <textarea id="fitJd" placeholder="Paste the full job description here… (nothing you paste is stored)" aria-label="Job description"></textarea>
+      <div class="fit-row">
+        <button class="btn btn-primary" id="fitGo">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="7"/><path d="M21 21l-4.3-4.3"/><path d="M8 11l2 2 4-4"/></svg>
+          Analyse fit
+        </button>
+        <span class="fit-note">Grounded in my CV only · honest about gaps · nothing is stored</span>
+      </div>
+      <div class="fit-out" id="fitOut" aria-live="polite"></div>
+    </div>
+  </div>
+</section>
+
 <!-- ===================== CONTACT ===================== -->
 <section id="contact">
   <div class="wrap">
@@ -1246,6 +1364,7 @@ nav.links a::after{content:"";position:absolute;left:14px;right:14px;bottom:7px;
     © <span id="yr"></span> Darshangiri Goswami · Compliance · Monitoring · Responsible AI
     &nbsp;·&nbsp; Built with Three.js<span id="aiCredit"></span>
     &nbsp;·&nbsp; <a href=".well-known/security.txt">Security</a>
+    &nbsp;·&nbsp; <a href="#" id="termHint" title="Or press ~ anywhere">[ terminal ]</a>
   </div>
 </footer>
 
@@ -1266,6 +1385,7 @@ nav.links a::after{content:"";position:absolute;left:14px;right:14px;bottom:7px;
   <div class="ai-head">
     <div class="av"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2a9 9 0 0 0-9 9c0 1.6.4 3.1 1.1 4.4L3 21l5.6-1.1A9 9 0 1 0 12 2z"/><circle cx="8.5" cy="11" r="1" fill="currentColor" stroke="none"/><circle cx="12" cy="11" r="1" fill="currentColor" stroke="none"/><circle cx="15.5" cy="11" r="1" fill="currentColor" stroke="none"/></svg></div>
     <div class="ttl"><b>Darshan's AI twin</b><span><span class="d off" id="aiDot"></span><span id="aiStatus">Offline · from CV</span></span></div>
+    <button class="ai-tool" id="aiSpk" aria-label="Toggle spoken replies" aria-pressed="false" title="Speak replies aloud"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M11 5L6 9H3v6h3l5 4V5z"/><path d="M15.5 8.5a5 5 0 0 1 0 7"/><path d="M18.5 5.5a9 9 0 0 1 0 13"/></svg></button>
     <button class="ai-close" id="aiClose" aria-label="Close assistant"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><line x1="6" y1="6" x2="18" y2="18"/><line x1="18" y1="6" x2="6" y2="18"/></svg></button>
   </div>
   <div class="ai-msgs" id="aiMsgs"></div>
@@ -1277,6 +1397,7 @@ nav.links a::after{content:"";position:absolute;left:14px;right:14px;bottom:7px;
   </div>
   <form class="ai-input" id="aiForm">
     <input id="aiInput" type="text" placeholder="Ask about Darshan's experience…" autocomplete="off" aria-label="Message" />
+    <button type="button" class="ai-tool" id="aiMic" aria-label="Speak your question" title="Speak your question"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="9" y="3" width="6" height="11" rx="3"/><path d="M5 11a7 7 0 0 0 14 0"/><path d="M12 18v3"/></svg></button>
     <button type="submit" id="aiSend" aria-label="Send"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 12l16-8-6 16-3-6-7-2z"/></svg></button>
   </form>
 </div>
@@ -1487,7 +1608,7 @@ const spy = new IntersectionObserver(entries => {
     }
   });
 }, { rootMargin: '-45% 0px -50% 0px', threshold: 0 });
-['about','skills','experience','projects','writing','certifications','contact'].forEach(id => { const s = document.getElementById(id); if (s) spy.observe(s); });
+['about','skills','experience','projects','writing','ops','certifications','fit','contact'].forEach(id => { const s = document.getElementById(id); if (s) spy.observe(s); });
 
 /* count-up stats when they scroll into view */
 function animateCount(el){
@@ -1641,7 +1762,7 @@ async function send(text){
 
   if (backendOnline === false){
     const out = addMsg('ai', '<span class="blink"></span>');
-    setTimeout(()=>{ out.innerHTML = offlineAnswer(text); history.push({role:'assistant',content:out.textContent}); msgsEl.scrollTop=msgsEl.scrollHeight; sendBtn.disabled=false; }, 450);
+    setTimeout(()=>{ out.innerHTML = offlineAnswer(text); history.push({role:'assistant',content:out.textContent}); speakReply(out.textContent); msgsEl.scrollTop=msgsEl.scrollHeight; sendBtn.disabled=false; }, 450);
     return;
   }
 
@@ -1657,14 +1778,271 @@ async function send(text){
       acc += dec.decode(value, { stream:true }); out.innerHTML = mdToHtml(acc); msgsEl.scrollTop = msgsEl.scrollHeight;
     }
     history.push({ role:'assistant', content: acc });
+    speakReply(acc);
   } catch(err){
     backendOnline = false; statusEl.textContent='Offline · from CV'; dotEl.classList.add('off');
     out.innerHTML = offlineAnswer(text); history.push({ role:'assistant', content: out.textContent });
+    speakReply(out.textContent);
   } finally { sendBtn.disabled=false; msgsEl.scrollTop=msgsEl.scrollHeight; }
 }
 
 form.addEventListener('submit', e => { e.preventDefault(); send(input.value); });
 suggestEl.querySelectorAll('button').forEach(b => b.addEventListener('click', () => send(b.textContent)));
+
+/* ============================================================= VOICE (AI twin) */
+let spkOn = false;
+function speakReply(text){
+  if (!spkOn || !('speechSynthesis' in window) || !text) return;
+  try {
+    speechSynthesis.cancel();
+    const u = new SpeechSynthesisUtterance(text.replace(/<[^>]*>/g,' ').slice(0, 600));
+    u.lang = 'en-US'; u.rate = 1.04;
+    speechSynthesis.speak(u);
+  } catch(_){}
+}
+(function(){
+  const spkBtn = document.getElementById('aiSpk'), micBtn = document.getElementById('aiMic');
+  if ('speechSynthesis' in window && spkBtn){
+    spkBtn.classList.add('sup');
+    spkBtn.addEventListener('click', () => {
+      spkOn = !spkOn;
+      spkBtn.classList.toggle('on', spkOn);
+      spkBtn.setAttribute('aria-pressed', spkOn ? 'true' : 'false');
+      if (!spkOn) try { speechSynthesis.cancel(); } catch(_){}
+      else speakReply("Voice replies on.");
+    });
+  }
+  const SR = window.SpeechRecognition || window.webkitSpeechRecognition;
+  if (SR && micBtn){
+    micBtn.classList.add('sup');
+    let rec = null, listening = false;
+    micBtn.addEventListener('click', () => {
+      if (listening){ try { rec.stop(); } catch(_){} return; }
+      rec = new SR(); rec.lang = 'en-US'; rec.interimResults = false; rec.maxAlternatives = 1;
+      listening = true; micBtn.classList.add('listening');
+      rec.onresult = e => { const t = e.results[0][0].transcript; input.value = t; send(t); };
+      rec.onerror = () => {};
+      rec.onend = () => { listening = false; micBtn.classList.remove('listening'); };
+      try { rec.start(); } catch(_){ listening = false; micBtn.classList.remove('listening'); }
+    });
+  }
+})();
+
+/* ============================================================= FIT CHECK (Recruiter Mode) */
+(function(){
+  const FIT_ENDPOINT = AI_ENDPOINT ? AI_ENDPOINT.replace(/\/chat$/, '/fit') : '';
+  const jdEl = document.getElementById('fitJd'), go = document.getElementById('fitGo'), out = document.getElementById('fitOut');
+  if (!jdEl || !go || !out) return;
+  async function run(){
+    const jd = jdEl.value.trim();
+    if (jd.length < 80){
+      out.classList.add('show');
+      out.innerHTML = 'Please paste the <strong>full job description</strong> (at least a few sentences) so the analysis has something real to work with.';
+      return;
+    }
+    if (!FIT_ENDPOINT){
+      out.classList.add('show');
+      out.innerHTML = 'The live analyser is not configured — email <a href="mailto:darshangoswami22922@gmail.com" style="color:var(--teal)">darshangoswami22922@gmail.com</a> and Darshan will reply with a tailored fit summary.';
+      return;
+    }
+    go.disabled = true; out.classList.add('show'); out.innerHTML = '<span class="blink"></span>';
+    let acc = '';
+    try {
+      const res = await fetch(FIT_ENDPOINT, { method:'POST', headers:{'Content-Type':'application/json'}, body: JSON.stringify({ jd }) });
+      if (!res.ok || !res.body) throw new Error('bad response');
+      const reader = res.body.getReader(), dec = new TextDecoder();
+      while (true){
+        const { value, done } = await reader.read();
+        if (done) break;
+        acc += dec.decode(value, { stream:true });
+        out.innerHTML = mdToHtml(acc);
+      }
+      if (!acc.trim()) throw new Error('empty');
+    } catch(err){
+      out.innerHTML = 'The analyser is waking up or unreachable right now — try again in ~40 seconds, or email <a href="mailto:darshangoswami22922@gmail.com" style="color:var(--teal)">darshangoswami22922@gmail.com</a> directly.';
+    } finally { go.disabled = false; }
+  }
+  go.addEventListener('click', run);
+})();
+
+/* ============================================================= LIVE OPS ROOM */
+(function(){
+  const sec = document.getElementById('ops');
+  if (!sec) return;
+  const card = id => {
+    const c = document.getElementById(id);
+    return { c, v: c.querySelector('[data-v]'), m: c.querySelector('[data-m]') };
+  };
+  function rel(iso){
+    const s = (Date.now() - new Date(iso).getTime()) / 1000;
+    if (s < 3600) return Math.max(1, Math.round(s/60)) + ' min ago';
+    if (s < 86400) return Math.round(s/3600) + ' h ago';
+    return Math.round(s/86400) + ' days ago';
+  }
+  async function load(){
+    const twin = card('opsTwin'), repo = card('opsRepo'), agent = card('opsAgent');
+    // 1) AI twin backend — live latency from the visitor's browser
+    (async () => {
+      const t0 = performance.now();
+      try {
+        const r = await fetch('https://darshangiri-goswami.onrender.com/health', { cache:'no-store' });
+        const ms = Math.round(performance.now() - t0);
+        if (r.ok){ twin.c.classList.add('ok'); twin.v.textContent = 'Operational'; twin.m.textContent = 'live check from your browser · ' + ms + ' ms'; }
+        else throw 0;
+      } catch(_){ twin.c.classList.add('warn'); twin.v.textContent = 'Waking up…'; twin.m.textContent = 'free-tier cold start — retry in ~40 s'; }
+    })();
+    // 2) This repo — latest real commit via the public GitHub API
+    (async () => {
+      try {
+        const r = await fetch('https://api.github.com/repos/darshan2209/darshangiri-goswami/commits?per_page=1');
+        if (!r.ok) throw 0;
+        const j = await r.json();
+        const msg = (j[0].commit.message || '').split('\n')[0];
+        repo.c.classList.add('ok');
+        repo.v.textContent = 'Actively shipped';
+        repo.m.textContent = '"' + (msg.length > 44 ? msg.slice(0,44) + '…' : msg) + '" · ' + rel(j[0].commit.author.date);
+      } catch(_){ repo.c.classList.add('warn'); repo.v.textContent = 'GitHub API rate-limited'; repo.m.textContent = 'github.com/darshan2209'; }
+    })();
+    // 3) LinkedIn agent — latest run from the published ops feed
+    (async () => {
+      try {
+        const r = await fetch('assets/ops.json', { cache:'no-store' });
+        if (!r.ok) throw 0;
+        const j = await r.json();
+        agent.c.classList.add('ok');
+        agent.v.textContent = 'Last post: ' + j.linkedin.date;
+        agent.m.textContent = '"' + j.linkedin.title.slice(0, 46) + '…" · ' + j.linkedin.cadence;
+      } catch(_){ agent.c.classList.add('warn'); agent.v.textContent = 'Posting weekdays 09:00'; agent.m.textContent = 'see LinkedIn for the latest'; }
+    })();
+  }
+  new IntersectionObserver((es, ob) => {
+    es.forEach(e => { if (e.isIntersecting){ ob.disconnect(); load(); } });
+  }, { rootMargin: '200px' }).observe(sec);
+})();
+
+/* ============================================================= TERMINAL + CTF */
+(function(){
+  const FLAG = 'FLAG{' + ['least','privilege','greatest','candidate'].join('_') + '}';
+  const NOTE_B64 = btoa('Nice recon. The flag is ' + FLAG);
+  let el = null, body = null, tin = null, hist = [], hi = 0, solved = false;
+  const esc = s => s.replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');
+  function print(html, cls){ const d = document.createElement('div'); if (cls) d.className = cls; d.innerHTML = html; body.appendChild(d); body.scrollTop = body.scrollHeight; }
+  function build(){
+    el = document.createElement('div'); el.className = 'term'; el.setAttribute('role','dialog'); el.setAttribute('aria-label','Terminal');
+    el.innerHTML = '<div class="term-head"><span>guest@darshan-portfolio — hardened shell</span><button class="term-close" aria-label="Close terminal">✕</button></div>' +
+      '<div class="term-body"></div>' +
+      '<div class="term-line"><span class="ps1">guest@dg:~$</span><input type="text" autocomplete="off" spellcheck="false" aria-label="Terminal input" /></div>';
+    document.body.appendChild(el);
+    body = el.querySelector('.term-body'); tin = el.querySelector('.term-line input');
+    el.querySelector('.term-close').addEventListener('click', close);
+    tin.addEventListener('keydown', e => {
+      if (e.key === 'Enter'){ const v = tin.value; tin.value = ''; exec(v); }
+      else if (e.key === 'ArrowUp'){ e.preventDefault(); if (hist.length){ hi = Math.max(0, hi - 1); tin.value = hist[hi] || ''; } }
+      else if (e.key === 'ArrowDown'){ e.preventDefault(); hi = Math.min(hist.length, hi + 1); tin.value = hist[hi] || ''; }
+    });
+    print('<span class="t-ok">Darshan Goswami — interactive shell.</span> Type <span class="t-warn">help</span>. Somewhere in here, a flag is hiding…', '');
+  }
+  function open(){ if (!el) build(); el.classList.add('open'); tin.focus(); }
+  function close(){ if (el) el.classList.remove('open'); }
+  function typed(lines, cls, i){
+    i = i || 0; if (i >= lines.length) return;
+    print(lines[i], cls); setTimeout(() => typed(lines, cls, i + 1), 90);
+  }
+  const CMDS = {
+    help(){ print(
+      '<span class="t-ok">Available commands</span>\n' +
+      '  about · skills · certs · projects · experience · contact · linkedin · github · cv\n' +
+      '  open &lt;section&gt;   jump to a section (about/skills/projects/writing/ops/fit/contact)\n' +
+      '  nmap · sudo hire darshan · hack     for the curious\n' +
+      '  ls · cat · decode &lt;base64&gt; · submit &lt;flag&gt;     <span class="t-dim">// recon tools</span>\n' +
+      '  clear · exit'); },
+    about(){ print('MSc Business Management & Cybersecurity (GISMA, Berlin). GRC · SecOps · IAM · AI security.\nTrained 4500+ people (95% certified). Builds AI-driven monitoring and access-governance workflows.'); },
+    skills(){ print('<span class="t-ok">[GRC]</span> ISO 27001/ISMS · NIST CSF · GDPR · DORA · NIS2 · EU AI Act\n<span class="t-ok">[SecOps]</span> SOC-style triage · Wazuh SIEM · FIM · case documentation\n<span class="t-ok">[IAM]</span> Entra ID · RBAC · least privilege · JML · conditional access\n<span class="t-ok">[Auto]</span> Python · PowerShell · AI alert triage · anomaly detection'); },
+    certs(){ print('SC-900 ✔ · ISO 27001 Associate ✔ · Google Cybersecurity ✔ · Cisco CyberOps ✔ · CTIGA ✔\nSC-300 ⏳ · Security+ SY0-701 ⏳   <span class="t-dim">(verify: credly.com/users/darshan-goswami.e4c6c92c)</span>'); },
+    projects(){ print('1. AI-Assisted Monitoring — Python anomaly detection + AI triage/risk-scoring via API\n2. Wazuh SIEM Homelab — Ubuntu manager + Windows agent, FIM caught 100+ unauthorised changes'); },
+    experience(){ print('2025  Cybersecurity Trainer @ NIIT Foundation — 4500+ trained, 95% certified\n2023-24  Cybersecurity Research Analyst @ The CyberDiplomat — 50+ platforms monitored'); },
+    contact(){ print('email: <span class="t-ok">darshangoswami22922@gmail.com</span>\nphone: +49 155 1083 7720\nlocation: Berlin (open to relocation) · available now, up to 40 hrs/week'); },
+    linkedin(){ window.open('https://linkedin.com/in/darshangiri-goswami-033283213','_blank'); print('opening LinkedIn…','t-dim'); },
+    github(){ window.open('https://github.com/darshan2209','_blank'); print('opening GitHub…','t-dim'); },
+    cv(){ const a = document.createElement('a'); a.href = 'Darshangiri-Goswami-CV.pdf'; a.download = ''; a.click(); print('downloading CV…','t-dim'); },
+    date(){ print(new Date().toString()); },
+    clear(){ body.innerHTML = ''; },
+    exit(){ close(); },
+    ctf(){ print('A note is hidden in this filesystem. Old-school recon works: <span class="t-warn">ls -la</span>','t-dim'); },
+    nmap(){ typed([
+      'Starting Nmap 7.95 ( https://nmap.org ) at ' + new Date().toISOString().slice(0,10),
+      'Nmap scan report for darshan.goswami (127.0.0.1)',
+      'PORT      STATE     SERVICE',
+      '22/tcp    <span class="t-err">filtered</span>  ssh          <span class="t-dim">// least privilege, obviously</span>',
+      '443/tcp   <span class="t-ok">open</span>      hire-me      <span class="t-dim">// TLS 1.3, strong handshake</span>',
+      '3389/tcp  <span class="t-err">filtered</span>  rdp          <span class="t-dim">// nice try</span>',
+      '<span class="t-ok">All attack surface minimised. One service exposed by design: hire-me.</span>'
+    ]); },
+    hack(){ typed([
+      '<span class="t-err">[!]</span> initiating intrusion on darshan-portfolio…',
+      '<span class="t-err">[!]</span> bypassing WAF… <span class="t-err">FAILED</span> (rate-limited)',
+      '<span class="t-err">[!]</span> spraying credentials… <span class="t-err">FAILED</span> (MFA + conditional access)',
+      '<span class="t-err">[!]</span> escalating privileges… <span class="t-err">FAILED</span> (RBAC, least privilege)',
+      '<span class="t-ok">[✓]</span> incident logged, case documented, remediation tracked to closure.',
+      '<span class="t-ok">This is what he does for a living. Consider the interview instead.</span>'
+    ]); }
+  };
+  function exec(raw){
+    const v = raw.trim();
+    print('<span class="t-dim">guest@dg:~$</span> ' + esc(raw));
+    if (!v) return;
+    hist.push(v); hi = hist.length;
+    const low = v.toLowerCase();
+    if (low === 'ls') { print('index.html   assets/   Darshangiri-Goswami-CV.pdf   security.txt'); return; }
+    if (low === 'ls -la' || low === 'ls -a'){ print('drwxr-xr-x  .           \ndrwxr-xr-x  ..          \n-rw-r--r--  index.html  \ndrwxr-xr-x  assets/     \n<span class="t-warn">drwx------  .rec0n/</span>      <span class="t-dim">// hm, that looks interesting</span>'); return; }
+    if (low === 'ls .rec0n' || low === 'ls -la .rec0n' || low === 'ls .rec0n/'){ print('-rw-------  note.b64'); return; }
+    if (/^cat\s+(\.rec0n\/)?note(\.b64)?$/.test(low)){ print('<span class="t-warn">' + NOTE_B64 + '</span>\n<span class="t-dim">// looks encoded. try: decode &lt;that string&gt;</span>'); return; }
+    if (low.startsWith('decode ') || low.startsWith('base64 -d ')){
+      const s = v.replace(/^decode\s+|^base64 -d\s+/i,'').trim();
+      try { print('<span class="t-ok">' + esc(atob(s)) + '</span>\n<span class="t-dim">// now: submit &lt;flag&gt;</span>'); } catch(_){ print('decode: invalid base64','t-err'); }
+      return;
+    }
+    if (low.startsWith('submit ') || low.startsWith('flag ')){
+      const f = v.replace(/^submit\s+|^flag\s+/i,'').trim();
+      if (f === FLAG){
+        solved = true;
+        print('<span class="t-ok">✔ FLAG ACCEPTED — CTF solved.</span>\nYou clearly know your way around a shell. Skip the queue:\nemail <span class="t-warn">darshangoswami22922@gmail.com</span> with the subject <span class="t-warn">"FLAG verified"</span>\nand mention where you found it. He answers those first.');
+        try { console.log('%cCTF solved: ' + FLAG, 'color:#2dd4bf;font-weight:bold'); } catch(_){}
+      } else print('✘ wrong flag — keep digging. hint: ls -la','t-err');
+      return;
+    }
+    if (low.startsWith('open ')){
+      const id = low.slice(5).trim();
+      const t = document.getElementById(id);
+      if (t){ close(); t.scrollIntoView({ behavior:'smooth' }); print('navigating to #' + id,'t-dim'); }
+      else print('open: unknown section "' + esc(id) + '"','t-err');
+      return;
+    }
+    if (low.startsWith('echo ')){ print(esc(v.slice(5))); return; }
+    if (low === 'sudo hire darshan' || low === 'sudo hire'){ print('<span class="t-ok">[sudo] permission granted — this is the ONE privilege escalation he encourages.</span>\nGenerating offer letter… draft saved. Complete it: <span class="t-warn">darshangoswami22922@gmail.com</span>'); return; }
+    if (low.startsWith('sudo')){ print('guest is not in the sudoers file. This incident will be reported. <span class="t-dim">(to no one — but imagine.)</span>','t-err'); return; }
+    if (low === 'whoami'){ print('guest <span class="t-dim">// probably a recruiter with excellent instincts</span>'); return; }
+    if (low === 'exp'){ CMDS.experience(); return; }
+    const cmd = CMDS[low.split(' ')[0]];
+    if (cmd) cmd();
+    else print('command not found: ' + esc(low.split(' ')[0]) + ' — try <span class="t-warn">help</span>','t-err');
+  }
+  addEventListener('keydown', e => {
+    if ((e.key === '`' || e.key === '~') && !e.ctrlKey && !e.metaKey && !e.altKey){
+      const a = document.activeElement;
+      if (a && (a.tagName === 'INPUT' || a.tagName === 'TEXTAREA' || a.isContentEditable)) return;
+      e.preventDefault();
+      (el && el.classList.contains('open')) ? close() : open();
+    }
+    if (e.key === 'Escape' && el && el.classList.contains('open')) close();
+  });
+  const hint = document.getElementById('termHint');
+  if (hint) hint.addEventListener('click', e => { e.preventDefault(); open(); });
+  try {
+    console.log('%c⌁ You opened the console. Respect.', 'color:#2dd4bf;font-size:14px;font-weight:bold');
+    console.log('%cThere is a working terminal on this site — press ~ (or the footer link). A flag is hidden inside. Solve it and email darshangoswami22922@gmail.com with subject "FLAG verified".', 'color:#9eb0cb');
+  } catch(_){}
+})();
 
 /* card 3D tilt + pointer-tracking spotlight (mouse/trackpad only, motion-safe) */
 if (matchMedia('(hover:hover) and (pointer:fine)').matches &&
@@ -1823,7 +2201,7 @@ KillChain = (() => {
 
   const CONTROL = {
     ABOUT:'ISO 27001 A.5', METRICS:'continuous monitoring', SKILLS:'NIST CSF PR.AC',
-    EXPERIENCE:'GDPR Art.32', PROJECTS:'Wazuh IDS rule', WRITING:'ISO 27001 A.9', CERTIFICATIONS:'Microsoft SC-300', CONTACT:'MFA challenge'
+    EXPERIENCE:'GDPR Art.32', PROJECTS:'Wazuh IDS rule', WRITING:'ISO 27001 A.9', OPS:'SOC 2 availability', CERTIFICATIONS:'Microsoft SC-300', FIT:'ISO 27001 A.7 screening', CONTACT:'MFA challenge'
   };
 
   // feed lives after this <script> in the DOM, so resolve it lazily (null at init time)
