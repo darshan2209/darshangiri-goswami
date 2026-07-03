@@ -101,7 +101,7 @@ Associate; Certified Threat Intelligence & Governance Analyst (CTIGA, Red Team L
 CompTIA Security+ SY0-701 (in progress). More credentials listed on Credly and LinkedIn (23 total licenses on LinkedIn).
 
 WRITING
-Publishes a short practical security lesson most weekdays on LinkedIn (5,000+ followers) — currently a series on
+Publishes a short practical security lesson three times a week on LinkedIn (5,000+ followers) — currently a series on
 non-human identity (NHI) and identity security.
 
 LANGUAGES: English (C1), German (A2).
