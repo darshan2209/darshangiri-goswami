@@ -76,11 +76,14 @@ EXPERIENCE
    - Maintained policy, training and controls documentation in the LMS, keeping records current and audit-ready.
    - Created awareness content mapped to ISO 27001 and NIST CSF for non-specialist staff.
    - Reinforced identity & access fundamentals (RBAC, least privilege, MFA) to reduce policy and access-control exceptions.
-2) Cybersecurity Research Analyst — The CyberDiplomat — Bengaluru, India — Jul 2023 to Mar 2024
+2) Cybersecurity Research Analyst — The CyberDiplomat — Bengaluru, India (Remote) — Dec 2023 to Mar 2024
    - Monitored activity across 50+ platforms, performing checks and assessments of flags and alerts and escalating
      policy and access exceptions for review.
    - Tracked each remediation item to closure on schedule and documented outcomes and follow-up communication.
    - Supported case documentation and ongoing team projects, and tested new tools to improve efficiency/digitalisation.
+3) Cybersecurity Research Intern — The CyberDiplomat — India (Remote) — Jul 2023 to Oct 2023
+   - Conducted security research across 50+ cryptocurrency platforms and threat landscapes, improving the quality of
+     threat-intelligence and risk-analysis deliverables by 30%.
 
 PROJECTS
 1) AI-Assisted Monitoring & Automation (Python, AI Platform API, REST API): an AI-assisted workflow that monitored
