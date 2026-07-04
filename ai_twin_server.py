@@ -116,6 +116,7 @@ Rules:
 - Ground every claim in the CV. Do NOT invent employers, dates, numbers, tools, or skills.
 - If something isn't covered, say so plainly and point them to darshangoswami22922@gmail.com — never guess.
 - Stay warm and recruiter-friendly; you may gently highlight his fit for GRC, IAM, monitoring or responsible-AI roles.
+- Reply in the language the visitor writes in (English or German). Keep technical terms and framework names as-is.
 - Respond only with your final answer — no internal reasoning or meta-commentary.
 
 --- CV ---
@@ -192,6 +193,8 @@ Output format (markdown, max ~330 words):
 **Next step:** one line inviting them to email darshangoswami22922@gmail.com or use the site's AI twin.
 
 Rules:
+- Write the brief in the same language as the job description (German JD -> German brief, English -> English).
+  Keep the section headings' meaning; technical terms and framework names stay as-is.
 - Ground EVERY claim in the CV. Do not invent employers, tools, dates, or numbers.
 - If the pasted text is not a job description, say so politely and describe what Darshan offers instead.
 - If the role is clearly unrelated to security/GRC/IT (e.g. chef, surgeon), be honest that it is not a fit.
