@@ -1,0 +1,94 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Sample User Access Review Procedure — Darshangiri Goswami</title>
+<meta name="robots" content="noindex" />
+<style>
+:root{--ink:#141a24;--mut:#4a5568;--line:#d6dce6;--teal:#0c7a6e;--gold:#9a7a1e;--bg:#fff}
+*{box-sizing:border-box;margin:0;padding:0}
+body{font:15px/1.65 "Segoe UI",system-ui,sans-serif;color:var(--ink);background:#f4f6fa;padding:32px 16px}
+.page{max-width:880px;margin:0 auto;background:var(--bg);border:1px solid var(--line);border-radius:10px;padding:40px 44px;box-shadow:0 10px 30px -18px rgba(20,30,50,.25)}
+.badge{display:inline-block;font-size:.7rem;letter-spacing:.14em;text-transform:uppercase;color:var(--gold);border:1px solid #e3d9b8;background:#fbf7e9;border-radius:100px;padding:4px 12px;margin-bottom:14px}
+h1{font-size:1.5rem;margin-bottom:4px}
+.sub{color:var(--mut);font-size:.9rem;margin-bottom:20px}
+h2{font-size:1.02rem;margin:24px 0 8px;color:var(--teal)}
+p,li{color:#2a3342;font-size:.92rem}
+ul,ol{padding-left:22px;margin:6px 0 10px}
+li{margin-bottom:5px}
+table{width:100%;border-collapse:collapse;font-size:.82rem;margin:8px 0 6px}
+th{background:#eef2f7;text-align:left;padding:8px 10px;border:1px solid var(--line);font-size:.72rem;letter-spacing:.06em;text-transform:uppercase;color:var(--mut)}
+td{padding:8px 10px;border:1px solid var(--line);vertical-align:top}
+.doc-meta{display:grid;grid-template-columns:repeat(auto-fit,minmax(160px,1fr));gap:8px;border:1px solid var(--line);border-radius:8px;padding:12px 16px;font-size:.8rem;color:var(--mut);margin-bottom:8px}
+.doc-meta b{color:var(--ink);display:block;font-size:.72rem;text-transform:uppercase;letter-spacing:.06em}
+.note{margin-top:24px;font-size:.8rem;color:var(--mut);border-top:1px solid var(--line);padding-top:14px}
+@media print{body{background:#fff;padding:0}.page{border:none;box-shadow:none;padding:10mm}}
+</style>
+</head>
+<body>
+<div class="page">
+  <span class="badge">Illustrative work sample · no client data</span>
+  <h1>User Access Review (UAR) Procedure</h1>
+  <p class="sub">Example GmbH (fictional) · Authored by Darshangiri Goswami · Supports ISO/IEC 27001:2022 A.5.15/A.5.16/A.5.18 &amp; least-privilege policy</p>
+
+  <div class="doc-meta">
+    <span><b>Doc ID</b> PRC-IAM-002</span>
+    <span><b>Version</b> 1.2 (sample)</span>
+    <span><b>Owner</b> IAM Lead</span>
+    <span><b>Cycle</b> Quarterly + event-driven</span>
+    <span><b>Classification</b> Internal</span>
+  </div>
+
+  <h2>1. Purpose</h2>
+  <p>Ensure every account — human and non-human — holds only the access required for its current role (least privilege), and that access removal is timely, evidenced and auditable.</p>
+
+  <h2>2. Scope</h2>
+  <ul>
+    <li>All workforce identities in Entra ID and connected business applications.</li>
+    <li>Privileged/admin roles (reviewed monthly, not quarterly).</li>
+    <li>Non-human identities: service accounts, API keys, automation credentials — each must have a named owner and a last-used date.</li>
+  </ul>
+
+  <h2>3. Roles &amp; responsibilities</h2>
+  <table>
+    <thead><tr><th>Role</th><th>Responsibility</th></tr></thead>
+    <tbody>
+      <tr><td>IAM Lead</td><td>Owns the procedure, schedules campaigns, reports completion to CISO</td></tr>
+      <tr><td>Line manager (reviewer)</td><td>Certifies or revokes each direct report's access within 10 working days</td></tr>
+      <tr><td>Application owner</td><td>Reviews app-specific roles and service accounts; confirms role mappings</td></tr>
+      <tr><td>GRC Analyst</td><td>Prepares review packs, chases overdue reviews, archives evidence, tracks remediation to closure</td></tr>
+    </tbody>
+  </table>
+
+  <h2>4. Procedure</h2>
+  <ol>
+    <li><b>Prepare (day 1–3):</b> export current entitlements per system; flag anomalies up front — dormant &gt;60 days, orphaned (no HR match), privilege above role baseline, NHIs without owner.</li>
+    <li><b>Review (day 4–13):</b> reviewers certify (keep) or revoke each entitlement. "Keep" for flagged items requires a written justification.</li>
+    <li><b>Revoke (day 14–16):</b> IT executes revocations within 2 working days; emergency access is removed same-day.</li>
+    <li><b>Evidence (day 17–20):</b> GRC archives the signed review pack, revocation tickets and exception approvals in the evidence repository (naming: <code>UAR-&lt;YYYY-Qn&gt;-&lt;system&gt;</code>).</li>
+    <li><b>Report:</b> completion rate, revocation count, aged exceptions and repeat findings go to the CISO dashboard; open items enter the remediation log with owners and due dates.</li>
+  </ol>
+
+  <h2>5. Event-driven triggers (JML)</h2>
+  <table>
+    <thead><tr><th>Event</th><th>Action</th><th>SLA</th></tr></thead>
+    <tbody>
+      <tr><td>Joiner</td><td>Provision from RBAC role template only — no copy-from-colleague</td><td>Start date</td></tr>
+      <tr><td>Mover</td><td>Re-baseline to new role; old entitlements expire after 5 days unless re-approved</td><td>5 working days</td></tr>
+      <tr><td>Leaver</td><td>Disable all accounts and tokens; manager confirms; orphan check the following week</td><td>Last working day</td></tr>
+    </tbody>
+  </table>
+
+  <h2>6. KPIs</h2>
+  <ul>
+    <li>Review completion within campaign window: ≥ 98%</li>
+    <li>Revocations executed within SLA: ≥ 95%</li>
+    <li>Orphaned accounts at quarter end: 0</li>
+    <li>NHIs with named owner and rotation date: 100%</li>
+  </ul>
+
+  <p class="note"><b>About this sample:</b> authored by Darshangiri Goswami as an illustrative work sample for a fictional company — it demonstrates procedure structure and IAM governance thinking only and contains no real client or employer data. · darshangoswami22922@gmail.com</p>
+</div>
+</body>
+</html>

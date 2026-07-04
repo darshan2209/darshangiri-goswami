@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Sample Statement of Applicability (Excerpt) — Darshangiri Goswami</title>
+<meta name="robots" content="noindex" />
+<style>
+:root{--ink:#141a24;--mut:#4a5568;--line:#d6dce6;--teal:#0c7a6e;--gold:#9a7a1e;--bg:#fff}
+*{box-sizing:border-box;margin:0;padding:0}
+body{font:15px/1.6 "Segoe UI",system-ui,sans-serif;color:var(--ink);background:#f4f6fa;padding:32px 16px}
+.page{max-width:1060px;margin:0 auto;background:var(--bg);border:1px solid var(--line);border-radius:10px;padding:40px 44px;box-shadow:0 10px 30px -18px rgba(20,30,50,.25)}
+.badge{display:inline-block;font-size:.7rem;letter-spacing:.14em;text-transform:uppercase;color:var(--gold);border:1px solid #e3d9b8;background:#fbf7e9;border-radius:100px;padding:4px 12px;margin-bottom:14px}
+h1{font-size:1.5rem;margin-bottom:4px}
+.sub{color:var(--mut);font-size:.9rem;margin-bottom:22px}
+table{width:100%;border-collapse:collapse;font-size:.8rem}
+th{background:#eef2f7;text-align:left;padding:9px 10px;border:1px solid var(--line);font-size:.7rem;letter-spacing:.06em;text-transform:uppercase;color:var(--mut)}
+td{padding:9px 10px;border:1px solid var(--line);vertical-align:top}
+.y{color:var(--teal);font-weight:600}
+.st-i{color:var(--teal);font-weight:600}.st-p{color:var(--gold);font-weight:600}
+.note{margin-top:22px;font-size:.8rem;color:var(--mut);border-top:1px solid var(--line);padding-top:14px}
+.legend{margin:14px 0 22px;font-size:.8rem;color:var(--mut)}
+@media print{body{background:#fff;padding:0}.page{border:none;box-shadow:none;padding:10mm}}
+</style>
+</head>
+<body>
+<div class="page">
+  <span class="badge">Illustrative work sample · no client data</span>
+  <h1>Statement of Applicability — Excerpt</h1>
+  <p class="sub">Example GmbH (fictional) · ISO/IEC 27001:2022 Annex A · Prepared by Darshangiri Goswami · 10 of 93 controls shown</p>
+
+  <p class="legend"><b>Status:</b> <span class="st-i">Implemented</span> · <span class="st-p">Partially implemented</span> — justification records why each control is included and how it is realised; exclusions (none in this excerpt) would cite the risk assessment.</p>
+
+  <table>
+    <thead><tr>
+      <th>Control</th><th>Title</th><th>Applicable</th><th>Justification for inclusion</th><th>Implementation summary</th><th>Status</th>
+    </tr></thead>
+    <tbody>
+      <tr><td>A.5.1</td><td>Policies for information security</td><td class="y">Yes</td><td>Foundation for the ISMS; required by management commitment (Cl. 5)</td><td>Policy suite approved by management, reviewed annually, acknowledged by all staff at onboarding</td><td class="st-i">Implemented</td></tr>
+      <tr><td>A.5.15</td><td>Access control</td><td class="y">Yes</td><td>Risk R-02 (privilege creep); regulatory expectation (GDPR Art. 32)</td><td>RBAC role model per department; access granted via role templates only</td><td class="st-i">Implemented</td></tr>
+      <tr><td>A.5.16</td><td>Identity management</td><td class="y">Yes</td><td>Risks R-01/R-03 (orphaned accounts, unmanaged NHIs)</td><td>JML lifecycle automated from HR feed; NHI inventory with named owners</td><td class="st-p">Partially</td></tr>
+      <tr><td>A.5.18</td><td>Access rights</td><td class="y">Yes</td><td>Least-privilege policy; audit finding 2025-04</td><td>Quarterly UAR (PRC-IAM-002); monthly review of privileged roles</td><td class="st-i">Implemented</td></tr>
+      <tr><td>A.5.24</td><td>Incident management planning</td><td class="y">Yes</td><td>Required for timely response; NIS2 reporting duties</td><td>Incident response plan with severity matrix; SOC playbooks; annual tabletop exercise</td><td class="st-p">Partially</td></tr>
+      <tr><td>A.6.3</td><td>Security awareness &amp; training</td><td class="y">Yes</td><td>Risk R-04 (phishing); strongest people-layer control</td><td>Role-based curriculum; completion tracked in LMS with audit-ready records</td><td class="st-i">Implemented</td></tr>
+      <tr><td>A.8.2</td><td>Privileged access rights</td><td class="y">Yes</td><td>High-impact accounts are primary attack target</td><td>Separate admin identities, phishing-resistant MFA, just-in-time elevation</td><td class="st-p">Partially</td></tr>
+      <tr><td>A.8.15</td><td>Logging</td><td class="y">Yes</td><td>Detection &amp; forensics precondition; DORA/NIS2 expectations</td><td>Central SIEM collection from identity, endpoint and network sources; 12-month retention</td><td class="st-i">Implemented</td></tr>
+      <tr><td>A.8.16</td><td>Monitoring activities</td><td class="y">Yes</td><td>Risk R-05 (alert triage SLA)</td><td>Alert triage playbooks with risk-based prioritisation; weekly tuning cycle</td><td class="st-p">Partially</td></tr>
+      <tr><td>A.8.32</td><td>Change management</td><td class="y">Yes</td><td>Risk R-06 (unauthorized change)</td><td>CAB for production changes; file-integrity monitoring alerts mapped to change records</td><td class="st-i">Implemented</td></tr>
+    </tbody>
+  </table>
+
+  <p class="note"><b>About this sample:</b> authored by Darshangiri Goswami as an illustrative excerpt for a fictional company. It demonstrates SoA structure, justification style and control-to-risk traceability only — no real client or employer data. · darshangoswami22922@gmail.com</p>
+</div>
+</body>
+</html>

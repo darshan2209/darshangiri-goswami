@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Sample Risk Register — Darshangiri Goswami</title>
+<meta name="robots" content="noindex" />
+<style>
+:root{--ink:#141a24;--mut:#4a5568;--line:#d6dce6;--teal:#0c7a6e;--gold:#9a7a1e;--red:#b23c2e;--bg:#ffffff}
+*{box-sizing:border-box;margin:0;padding:0}
+body{font:15px/1.6 "Segoe UI",system-ui,sans-serif;color:var(--ink);background:#f4f6fa;padding:32px 16px}
+.page{max-width:1060px;margin:0 auto;background:var(--bg);border:1px solid var(--line);border-radius:10px;padding:40px 44px;box-shadow:0 10px 30px -18px rgba(20,30,50,.25)}
+.badge{display:inline-block;font-size:.7rem;letter-spacing:.14em;text-transform:uppercase;color:var(--gold);border:1px solid #e3d9b8;background:#fbf7e9;border-radius:100px;padding:4px 12px;margin-bottom:14px}
+h1{font-size:1.5rem;margin-bottom:4px}
+.sub{color:var(--mut);font-size:.9rem;margin-bottom:22px}
+.meta{display:flex;flex-wrap:wrap;gap:8px 26px;font-size:.8rem;color:var(--mut);border:1px solid var(--line);border-radius:8px;padding:12px 16px;margin-bottom:26px}
+.meta b{color:var(--ink)}
+table{width:100%;border-collapse:collapse;font-size:.82rem}
+th{background:#eef2f7;text-align:left;padding:9px 10px;border:1px solid var(--line);font-size:.72rem;letter-spacing:.06em;text-transform:uppercase;color:var(--mut)}
+td{padding:9px 10px;border:1px solid var(--line);vertical-align:top}
+.r-h{color:var(--red);font-weight:600}.r-m{color:var(--gold);font-weight:600}.r-l{color:var(--teal);font-weight:600}
+.note{margin-top:22px;font-size:.8rem;color:var(--mut);border-top:1px solid var(--line);padding-top:14px}
+.scale{margin:18px 0 26px;font-size:.8rem;color:var(--mut)}
+.scale b{color:var(--ink)}
+@media print{body{background:#fff;padding:0}.page{border:none;box-shadow:none;padding:10mm}}
+</style>
+</head>
+<body>
+<div class="page">
+  <span class="badge">Illustrative work sample · no client data</span>
+  <h1>Information Security Risk Register</h1>
+  <p class="sub">Example GmbH (fictional) · Prepared by Darshangiri Goswami · Method aligned to ISO/IEC 27005 &amp; ISO/IEC 27001:2022</p>
+
+  <div class="meta">
+    <span><b>Scope:</b> Corporate IT &amp; identity platform</span>
+    <span><b>Assessment cycle:</b> Quarterly</span>
+    <span><b>Rating:</b> Likelihood (1–5) × Impact (1–5)</span>
+    <span><b>Appetite:</b> ≥12 requires treatment plan</span>
+  </div>
+
+  <table>
+    <thead><tr>
+      <th>ID</th><th>Risk description</th><th>Asset / process</th><th>L</th><th>I</th><th>Rating</th><th>Treatment</th><th>Owner</th><th>Control ref (ISO 27001:2022)</th><th>Status</th>
+    </tr></thead>
+    <tbody>
+      <tr><td>R-01</td><td>Orphaned accounts of leavers retain access after exit (JML gap)</td><td>Entra ID / HR offboarding</td><td>4</td><td>4</td><td class="r-h">16 — High</td><td><b>Mitigate:</b> automate leaver deprovisioning; weekly orphan-account report; quarterly UAR</td><td>IAM Lead</td><td>A.5.16, A.5.18</td><td>In progress</td></tr>
+      <tr><td>R-02</td><td>Excessive privileges accumulate as staff change roles (privilege creep)</td><td>All business applications</td><td>4</td><td>3</td><td class="r-h">12 — High</td><td><b>Mitigate:</b> RBAC role model; mover trigger in JML; access recertification</td><td>IAM Lead</td><td>A.5.15, A.5.18, A.8.2</td><td>In progress</td></tr>
+      <tr><td>R-03</td><td>Unrotated service-account / API credentials (non-human identities) leak and remain valid</td><td>CI/CD, integrations</td><td>3</td><td>4</td><td class="r-h">12 — High</td><td><b>Mitigate:</b> NHI inventory with owner + last-used date; rotation policy; secrets vault</td><td>Platform Eng.</td><td>A.5.16, A.8.2, A.8.24</td><td>Planned</td></tr>
+      <tr><td>R-04</td><td>Phishing leads to credential compromise of privileged users</td><td>Workforce identities</td><td>4</td><td>4</td><td class="r-h">16 — High</td><td><b>Mitigate:</b> phishing-resistant MFA for admins; conditional access; awareness training</td><td>CISO Office</td><td>A.5.17, A.6.3, A.8.5</td><td>Implemented</td></tr>
+      <tr><td>R-05</td><td>Security alerts not triaged within SLA due to alert volume</td><td>SIEM / SOC process</td><td>3</td><td>3</td><td class="r-m">9 — Medium</td><td><b>Mitigate:</b> tuning + risk-based triage playbooks; weekly alert-quality review</td><td>SOC Lead</td><td>A.8.15, A.8.16, A.5.25</td><td>In progress</td></tr>
+      <tr><td>R-06</td><td>Unauthorized change to critical configuration goes undetected</td><td>Servers / endpoints</td><td>2</td><td>4</td><td class="r-m">8 — Medium</td><td><b>Mitigate:</b> file-integrity monitoring with alert-to-case workflow</td><td>IT Ops</td><td>A.8.9, A.8.15, A.8.32</td><td>Implemented</td></tr>
+      <tr><td>R-07</td><td>Vendor with data access lacks contractual security requirements</td><td>Third-party services</td><td>3</td><td>3</td><td class="r-m">9 — Medium</td><td><b>Mitigate:</b> supplier security clauses + annual review; register of processors (GDPR Art. 28)</td><td>Procurement + DPO</td><td>A.5.19–A.5.22</td><td>Planned</td></tr>
+      <tr><td>R-08</td><td>Records needed for audit (training, reviews, exceptions) are incomplete or scattered</td><td>Compliance evidence</td><td>3</td><td>2</td><td class="r-l">6 — Low</td><td><b>Mitigate:</b> single evidence repository; naming convention; audit-readiness checklist</td><td>GRC Analyst</td><td>A.5.33, A.5.35</td><td>Implemented</td></tr>
+    </tbody>
+  </table>
+
+  <p class="scale"><b>Rating bands:</b> <span class="r-h">12–25 High</span> · <span class="r-m">7–11 Medium</span> · <span class="r-l">1–6 Low</span> — treatments tracked to closure in the remediation log; residual risk re-scored after implementation.</p>
+
+  <p class="note"><b>About this sample:</b> authored by Darshangiri Goswami as an illustrative work sample for a fictional company. It demonstrates documentation style, risk articulation and control mapping only — it contains no real client or employer data. · darshangoswami22922@gmail.com</p>
+</div>
+</body>
+</html>

@@ -166,8 +166,8 @@ h1,h2,h3,h4{font-family:var(--font-display);line-height:1.12;font-weight:600;let
 .wrap{max-width:var(--maxw);margin:0 auto;padding:0 clamp(20px,5vw,48px)}
 section{padding:var(--space-2xl) 0;position:relative}
 /* below-fold sections: skip layout/paint until they approach the viewport */
-#skills,#experience,#projects,#writing,#ops,#certifications,#fit,#contact{content-visibility:auto;contain-intrinsic-size:auto 900px}
-@media print{ #skills,#experience,#projects,#writing,#ops,#certifications,#fit,#contact{content-visibility:visible} }
+#skills,#experience,#projects,#lab,#writing,#ops,#certifications,#fit,#contact{content-visibility:auto;contain-intrinsic-size:auto 900px}
+@media print{ #skills,#experience,#projects,#lab,#writing,#ops,#certifications,#fit,#contact{content-visibility:visible} }
 .section-head{margin-bottom:var(--space-lg);max-width:62ch}
 .section-head h2{font-size:var(--step-3);margin:.5rem 0 .8rem;position:relative;display:inline-block}
 .section-head h2::after{content:"";position:absolute;left:0;bottom:-9px;width:64px;height:3px;border-radius:3px;
@@ -658,7 +658,11 @@ nav.links a::after{content:"";position:absolute;left:14px;right:14px;bottom:7px;
   .about-photo{max-width:340px}
   .stats{grid-template-columns:repeat(2,1fr);gap:24px}
 }
-@media (max-width:900px){
+@media (max-width:1120px){
+  nav.links a{padding:0 9px;font-size:.85rem}
+  nav.links a::after{left:9px;right:9px}
+}
+@media (max-width:1010px){
   nav.links{display:none;position:fixed;top:70px;right:16px;left:16px;flex-direction:column;align-items:stretch;
     gap:4px;padding:14px;background:rgba(9,14,26,.97);backdrop-filter:blur(14px);border:1px solid var(--border);
     border-radius:16px;box-shadow:var(--shadow)}
@@ -862,6 +866,43 @@ nav.links a::after{content:"";position:absolute;left:14px;right:14px;bottom:7px;
 @media (max-width:700px){ .term{height:60vh;font-size:.78rem} }
 @media print{ .term{display:none !important} }
 
+/* ============================================================= LAB (artifacts + simulator) */
+.lab-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(250px,1fr));gap:18px}
+.lab-card{display:flex;flex-direction:column;gap:10px;border:1px solid var(--border);border-radius:var(--r);
+  background:var(--surface-glass);padding:24px 22px;color:inherit;transition:transform .3s var(--ease),border-color .3s var(--ease),box-shadow .3s var(--ease)}
+.lab-card .lk{font-family:var(--font-mono);font-size:.66rem;letter-spacing:.12em;text-transform:uppercase;color:var(--gold)}
+.lab-card h3{font-size:1.06rem;line-height:1.3}
+.lab-card p{color:var(--muted);font-size:.88rem;margin:0}
+.lab-card .go{margin-top:auto;font-family:var(--font-mono);font-size:.78rem;color:var(--teal);display:inline-flex;align-items:center;gap:7px;min-height:30px}
+.lab-card .go svg{width:13px;height:13px}
+.lab-card.sim{border-color:var(--border-bright);background:linear-gradient(150deg,rgba(45,212,191,.07),var(--surface-glass))}
+@media (hover:hover) and (pointer:fine){ .lab-card:hover{border-color:var(--border-bright);transform:translateY(-4px);box-shadow:var(--shadow)} }
+@media print{ .lab-card{background:#fff !important;border:1px solid #cfd6e0 !important} }
+
+/* simulator modal */
+.sim-wrap{position:fixed;inset:0;z-index:220;display:none;align-items:center;justify-content:center;padding:18px;
+  background:rgba(4,7,14,.8);backdrop-filter:blur(6px)}
+.sim-wrap.open{display:flex}
+.sim{width:min(560px,100%);max-height:min(88dvh,680px);overflow-y:auto;border-radius:20px;border:1px solid var(--border-bright);
+  background:rgba(9,14,26,.98);box-shadow:0 30px 80px -24px rgba(0,0,0,.9);padding:26px 26px 24px;scrollbar-width:thin}
+.sim .sim-top{display:flex;justify-content:space-between;align-items:center;gap:12px;margin-bottom:14px}
+.sim .sim-top b{font-family:var(--font-display);font-size:1.06rem}
+.sim .sim-prog{font-family:var(--font-mono);font-size:.72rem;color:var(--teal)}
+.sim-close{background:none;border:1px solid var(--border);border-radius:9px;width:38px;height:38px;color:var(--muted);cursor:pointer}
+.sim .acct{border:1px solid var(--border);border-radius:14px;background:rgba(255,255,255,.03);padding:18px;margin-bottom:16px}
+.sim .acct .who{font-weight:600;margin-bottom:4px}
+.sim .acct .what{color:var(--muted);font-size:.92rem}
+.sim .acct .tagrow{display:flex;flex-wrap:wrap;gap:7px;margin-top:12px}
+.sim .acct .tagrow span{font-family:var(--font-mono);font-size:.68rem;color:var(--gold);padding:4px 9px;border-radius:7px;border:1px solid var(--border)}
+.sim-btns{display:flex;gap:12px}
+.sim-btns .btn{flex:1}
+.sim .verdict{border-radius:12px;padding:14px 16px;font-size:.9rem;line-height:1.55;margin-top:14px;display:none}
+.sim .verdict.ok{display:block;background:rgba(45,212,191,.08);border:1px solid var(--border-bright);color:var(--text)}
+.sim .verdict.bad{display:block;background:rgba(255,122,85,.08);border:1px solid rgba(255,122,85,.4);color:var(--text)}
+.sim .next-row{display:flex;justify-content:flex-end;margin-top:14px}
+.sim .score-big{font-family:var(--font-display);font-size:2.2rem;font-weight:600;text-align:center;margin:10px 0 2px}
+.sim .score-sub{text-align:center;color:var(--muted);font-size:.92rem;margin-bottom:16px}
+
 /* ============================================================= VOICE (AI twin) */
 .ai-tool{background:none;border:1px solid var(--border);border-radius:9px;width:38px;height:38px;color:var(--muted);
   cursor:pointer;display:none;place-items:center;transition:.2s;flex:0 0 auto}
@@ -907,10 +948,11 @@ nav.links a::after{content:"";position:absolute;left:14px;right:14px;bottom:7px;
       <a href="#about">About</a>
       <a href="#skills">Skills</a>
       <a href="#experience">Experience</a>
-      <a href="#projects">Projects</a>
-      <a href="#writing">Writing</a>
-      <a href="#certifications">Certifications</a>
-      <a href="#fit">Fit check</a>
+      <a href="#projects" data-i18n="nav.projects">Projects</a>
+      <a href="#lab" data-i18n="nav.lab">Lab</a>
+      <a href="#writing" data-i18n="nav.writing">Writing</a>
+      <a href="#certifications" data-i18n="nav.certs">Certifications</a>
+      <a href="#fit" data-i18n="nav.fit">Fit check</a>
       <a href="#contact" class="nav-cta">Get in touch</a>
     </nav>
     <button class="burger" id="burger" aria-label="Toggle menu" aria-expanded="false" aria-controls="navlinks">
@@ -1185,6 +1227,44 @@ nav.links a::after{content:"";position:absolute;left:14px;right:14px;bottom:7px;
         </details>
       </div>
     </div>
+  </div>
+</section>
+
+<!-- ===================== LAB: ARTIFACTS + SIMULATOR ===================== -->
+<section id="lab">
+  <div class="wrap">
+    <div class="section-head reveal">
+      <p class="eyebrow">// Work samples</p>
+      <h2 data-i18n="lab.h2">Artifacts &amp; lab</h2>
+      <p data-i18n="lab.p">Anyone can list "risk assessment" as a skill — here's what my actual documentation looks like, plus a 60-second game that tests <strong>your</strong> least-privilege instincts.</p>
+    </div>
+    <div class="lab-grid">
+      <button class="lab-card sim reveal d1" id="simLaunch" type="button" style="text-align:left;cursor:pointer;font-family:inherit">
+        <span class="lk">Interactive · 60 seconds</span>
+        <h3 data-i18n="lab.simTitle">Access-Review Simulator</h3>
+        <p data-i18n="lab.simP">You're the IAM reviewer. Six accounts, one question each: keep or revoke? See how you score against least-privilege logic.</p>
+        <span class="go" data-i18n="lab.simGo">Start the review <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M13 6l6 6-6 6"/></svg></span>
+      </button>
+      <a class="lab-card reveal d2" href="artifacts/risk-register.html" target="_blank" rel="noopener">
+        <span class="lk">Sample · ISO 27005 / 27001</span>
+        <h3>Risk register</h3>
+        <p data-i18n="lab.riskP">Eight rated risks with treatments, owners and Annex-A control mapping — the register style I keep audit-ready.</p>
+        <span class="go">Open sample <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M7 17L17 7M9 7h8v8"/></svg></span>
+      </a>
+      <a class="lab-card reveal d3" href="artifacts/access-review-procedure.html" target="_blank" rel="noopener">
+        <span class="lk">Sample · IAM governance</span>
+        <h3>Access-review procedure</h3>
+        <p data-i18n="lab.uarP">A quarterly UAR procedure with JML triggers, SLAs and KPIs — least privilege as an operating routine, not a slogan.</p>
+        <span class="go">Open sample <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M7 17L17 7M9 7h8v8"/></svg></span>
+      </a>
+      <a class="lab-card reveal d4" href="artifacts/soa-excerpt.html" target="_blank" rel="noopener">
+        <span class="lk">Sample · ISO 27001:2022</span>
+        <h3>Statement of Applicability</h3>
+        <p data-i18n="lab.soaP">A 10-control SoA excerpt with inclusion justifications traced back to specific risks — the traceability auditors ask for.</p>
+        <span class="go">Open sample <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M7 17L17 7M9 7h8v8"/></svg></span>
+      </a>
+    </div>
+    <p class="fit-note reveal d4" style="margin-top:16px" data-i18n="lab.note">All samples are illustrative, authored for a fictional company — no client or employer data.</p>
   </div>
 </section>
 
@@ -1608,7 +1688,7 @@ const spy = new IntersectionObserver(entries => {
     }
   });
 }, { rootMargin: '-45% 0px -50% 0px', threshold: 0 });
-['about','skills','experience','projects','writing','ops','certifications','fit','contact'].forEach(id => { const s = document.getElementById(id); if (s) spy.observe(s); });
+['about','skills','experience','projects','lab','writing','ops','certifications','fit','contact'].forEach(id => { const s = document.getElementById(id); if (s) spy.observe(s); });
 
 /* count-up stats when they scroll into view */
 function animateCount(el){
@@ -2044,6 +2124,180 @@ function speakReply(text){
   } catch(_){}
 })();
 
+/* ============================================================= ACCESS-REVIEW SIMULATOR */
+(function(){
+  const launch = document.getElementById('simLaunch');
+  if (!launch) return;
+  const SCEN = [
+    { who:'M. Weber — Marketing intern', what:'Left the company 3 weeks ago. Account still active with access to the marketing SharePoint and shared mailbox.',
+      tags:['leaver','account active','HR: exited'], correct:'revoke',
+      why:'A leaver whose access survives offboarding is a classic JML failure — every day it stays active is unowned risk. Disable on the last working day, no exceptions.' },
+    { who:'S. Fischer — Finance analyst', what:'Holds admin rights on the production database, granted "temporarily" for a report — 14 months ago. Last admin action: never.',
+      tags:['unused privilege','14 months old','no ticket'], correct:'revoke',
+      why:'Unused elevated rights are pure downside: no business value, full attack surface. Least privilege says remove and re-grant properly if ever needed.' },
+    { who:'A. Yilmaz — New SOC analyst', what:'Starts Monday. Manager approved read-only SIEM access via the standard SOC role template, matching her role profile.',
+      tags:['joiner','role-mapped','manager approved'], correct:'keep',
+      why:'This is exactly how access should be granted: role-based, template-driven, approved — least privilege includes giving people what their role genuinely needs.' },
+    { who:'D. Novak — Product manager', what:'Moved from Engineering to Product 2 months ago. Still holds repository write access and production deploy keys from the old role.',
+      tags:['mover','role changed','stale entitlements'], correct:'revoke',
+      why:'Privilege creep in action: movers accumulate old rights unless a re-baseline is triggered. The new role defines the access — everything else expires.' },
+    { who:'svc-report-legacy — Service account', what:'Credential created in 2023, never rotated. The developer who made it left. No one can say what still uses it.',
+      tags:['non-human identity','no owner','never rotated'], correct:'revoke',
+      why:'An orphaned non-human identity — no owner, no rotation, unknown usage — is the quietest risk in the environment. Inventory, disable in a controlled window, watch what breaks.' },
+    { who:'CFO — Executive request', what:'Requests permanent Global Admin "so I don\'t have to keep asking IT for small things."',
+      tags:['privileged access','permanent','convenience'], correct:'revoke',
+      why:'Seniority is not a control. Standing global admin for convenience violates least privilege at the highest-impact tier — offer just-in-time elevation or a scoped role instead.' }
+  ];
+  let wrap = null, i = 0, score = 0;
+  function build(){
+    wrap = document.createElement('div');
+    wrap.className = 'sim-wrap'; wrap.setAttribute('role','dialog'); wrap.setAttribute('aria-label','Access-Review Simulator');
+    wrap.innerHTML = '<div class="sim"><div class="sim-top"><b>Access-Review Simulator</b><span class="sim-prog" id="simProg"></span><button class="sim-close" aria-label="Close">✕</button></div><div id="simBody"></div></div>';
+    document.body.appendChild(wrap);
+    wrap.querySelector('.sim-close').addEventListener('click', close);
+    wrap.addEventListener('click', e => { if (e.target === wrap) close(); });
+  }
+  function open(){ if (!wrap) build(); i = 0; score = 0; wrap.classList.add('open'); step(); }
+  function close(){ wrap.classList.remove('open'); }
+  function step(){
+    const body = wrap.querySelector('#simBody'), prog = wrap.querySelector('#simProg');
+    if (i >= SCEN.length){ finish(); return; }
+    const s = SCEN[i];
+    prog.textContent = 'account ' + (i+1) + ' / ' + SCEN.length;
+    body.innerHTML =
+      '<div class="acct"><div class="who">' + s.who + '</div><div class="what">' + s.what + '</div>' +
+      '<div class="tagrow">' + s.tags.map(t => '<span>' + t + '</span>').join('') + '</div></div>' +
+      '<div class="sim-btns"><button class="btn btn-ghost" data-a="keep">✓ Keep access</button>' +
+      '<button class="btn btn-gold" data-a="revoke">✕ Revoke</button></div>' +
+      '<div class="verdict" id="simVerdict"></div><div class="next-row" id="simNextRow" style="display:none"><button class="btn btn-primary" id="simNext">Next account →</button></div>';
+    body.querySelectorAll('[data-a]').forEach(b => b.addEventListener('click', () => answer(b.dataset.a)));
+  }
+  function answer(a){
+    const s = SCEN[i], v = wrap.querySelector('#simVerdict'), right = (a === s.correct);
+    if (right) score++;
+    wrap.querySelectorAll('[data-a]').forEach(b => b.disabled = true);
+    v.className = 'verdict ' + (right ? 'ok' : 'bad');
+    v.innerHTML = '<b>' + (right ? '✔ Correct.' : '✘ Risky call.') + '</b> ' + s.why;
+    const row = wrap.querySelector('#simNextRow');
+    row.style.display = 'flex';
+    wrap.querySelector('#simNext').addEventListener('click', () => { i++; step(); });
+  }
+  function finish(){
+    const body = wrap.querySelector('#simBody');
+    wrap.querySelector('#simProg').textContent = 'done';
+    const verdict = score === 6 ? 'Flawless — you review access like a pro.'
+      : score >= 4 ? 'Solid instincts — a few accounts slipped through.'
+      : 'Access reviews are harder than they look — that\'s why they\'re a discipline.';
+    body.innerHTML = '<div class="score-big">' + score + ' / 6</div><p class="score-sub">' + verdict + '</p>' +
+      '<div class="acct" style="margin-bottom:16px"><div class="what">This is the JML / least-privilege reasoning I apply in real access governance: leavers disabled on day one, movers re-baselined, unused privilege removed, and every non-human identity owned and rotated.</div></div>' +
+      '<div class="sim-btns"><button class="btn btn-ghost" id="simAgain">Play again</button>' +
+      '<a class="btn btn-primary" href="mailto:darshangoswami22922@gmail.com?subject=Access-review%20simulator">Hire this reviewer</a></div>';
+    body.querySelector('#simAgain').addEventListener('click', () => { i = 0; score = 0; step(); });
+  }
+  launch.addEventListener('click', open);
+  addEventListener('keydown', e => { if (e.key === 'Escape' && wrap && wrap.classList.contains('open')) close(); });
+})();
+
+/* ============================================================= BOOKING + ANALYTICS */
+/* Set BOOKING_URL to a Calendly / cal.com link to show a "Book a call" button in Contact. */
+const BOOKING_URL = '';
+if (BOOKING_URL){
+  const actions = document.querySelector('.contact-actions');
+  if (actions){
+    const a = document.createElement('a');
+    a.className = 'btn btn-ghost'; a.href = BOOKING_URL; a.target = '_blank'; a.rel = 'noopener';
+    a.innerHTML = '<svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="18" height="17" rx="2"/><path d="M8 2v4M16 2v4M3 9h18"/></svg> Book a 15-min call';
+    actions.appendChild(a);
+  }
+}
+/* Set GOATCOUNTER_CODE (e.g. 'darshangoswami') after creating a free account at goatcounter.com —
+   privacy-friendly, cookieless, GDPR-safe analytics. */
+const GOATCOUNTER_CODE = '';
+if (GOATCOUNTER_CODE){
+  const s = document.createElement('script');
+  s.async = true; s.src = '//gc.zgo.at/count.js';
+  s.dataset.goatcounter = 'https://' + GOATCOUNTER_CODE + '.goatcounter.com/count';
+  document.body.appendChild(s);
+}
+
+/* ============================================================= GERMAN MODE (DE/EN) */
+(function(){
+  const DE = [
+    ['nav.links a[href="#about"]', 'Über mich'],
+    ['nav.links a[href="#experience"]', 'Erfahrung'],
+    ['nav.links a[href="#projects"]', 'Projekte'],
+    ['nav.links a[href="#writing"]', 'Beiträge'],
+    ['nav.links a[href="#certifications"]', 'Zertifikate'],
+    ['nav.links a[href="#fit"]', 'Fit-Check'],
+    ['nav.links a.nav-cta', 'Kontakt'],
+    ['.status-row .chip:nth-child(1)', '<span class="dot"></span> Sofort verfügbar · bis zu 40 Std./Woche'],
+    ['.status-row .chip:nth-child(2)', '<span class="dot gold"></span> Berlin → umzugsbereit'],
+    ['.status-row .chip:nth-child(3)', '<span class="dot"></span> 5.000+ LinkedIn-Follower'],
+    ['#hero h1', 'Ich halte Systeme <span class="grad">konform,</span> überwacht &amp; nachvollziehbar.'],
+    ['.hero-lead', 'Werkstudenten-Kandidat mit Fokus auf <strong>Governance, Risk &amp; Compliance (GRC)</strong>, <strong>Identity &amp; Access Management (IAM)</strong> und <strong>KI in der Cybersecurity</strong> — mit praktischer Erfahrung in Compliance-Schulungen, Kontrollen und Access-Reviews sowie verantwortungsvollem, KI-gestütztem Monitoring.'],
+    ['#askHero', '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2a9 9 0 0 0-9 9c0 1.6.4 3.1 1.1 4.4L3 21l5.6-1.1A9 9 0 1 0 12 2z"/><circle cx="8.5" cy="11" r="1" fill="currentColor" stroke="none"/><circle cx="12" cy="11" r="1" fill="currentColor" stroke="none"/><circle cx="15.5" cy="11" r="1" fill="currentColor" stroke="none"/></svg> Frag meinen KI-Zwilling'],
+    ['#about .about-body h2', 'Compliance-Instinkt, Engineering-Werkzeugkasten.'],
+    ['#about .about-body p:nth-of-type(2)', 'Ich bin <strong>Masterstudent in Business Management &amp; Cybersecurity</strong> und arbeite an der Schnittstelle von Governance, Identität und Automatisierung. Meine Erfahrung umfasst <strong>Governance, Risk &amp; Compliance (GRC)</strong> — Compliance-Schulungen, Richtlinien- und Kontrolldokumentation — sowie das Monitoring auffälliger Aktivitäten durch strukturierte Prüfungen von Systemwarnungen.'],
+    ['#about .about-body p:nth-of-type(3)', 'Mein Plus: <strong>Identity &amp; Access Management (IAM)</strong> und <strong>KI in der Cybersecurity</strong> — verantwortungsvolle, KI-gestützte Workflows für Alert-Triage und Access-Governance. Dazu gebe ich <strong>Security-Awareness-Schulungen</strong> und IT-/cyberrechtlich fundierte Orientierung. Ich suche eine Werkstudenten-Stelle in GRC, IAM oder Compliance in Deutschland.'],
+    ['.stats .stat:nth-child(1) span', 'Geschulte Personen'],
+    ['.stats .stat:nth-child(2) span', 'Zertifizierungsquote'],
+    ['.stats .stat:nth-child(3) span', 'Überwachte Plattformen'],
+    ['.stats .stat:nth-child(4) span', 'Sicherheitszertifikate'],
+    ['#skills .section-head h2', 'Skills &amp; Frameworks'],
+    ['#skills .section-head p:nth-of-type(2)', 'GRC, SecOps, IAM und KI in der Cybersecurity — verankert in den Regulierungen und Standards, die in der EU-Finanzbranche zählen. Für eine Kurzdefinition Elemente antippen oder mit der Maus überfahren.'],
+    ['#experience .section-head h2', 'Erfahrung'],
+    ['#experience .section-head p:nth-of-type(2)', 'Teams in Governance schulen und echte Alerts triagieren — Richtlinien werden zu gelebter Praxis.'],
+    ['#projects .section-head h2', 'Projekte'],
+    ['#projects .section-head p:nth-of-type(2)', 'Ich baue das Monitoring und die Automatisierung, über die ich Richtlinien schreibe — von Anomalie-Erkennung bis zum SIEM-Homelab.'],
+    ['#lab .section-head h2', 'Arbeitsproben &amp; Lab'],
+    ['#lab .section-head p:nth-of-type(2)', '"Risk Assessment" kann jeder in den Lebenslauf schreiben — hier sehen Sie, wie meine Dokumentation wirklich aussieht. Plus: ein 60-Sekunden-Spiel, das <strong>Ihren</strong> Least-Privilege-Instinkt testet.'],
+    ['#simLaunch h3', 'Access-Review-Simulator'],
+    ['#simLaunch p', 'Sie sind der IAM-Reviewer. Sechs Konten, je eine Frage: behalten oder entziehen? Messen Sie sich an Least-Privilege-Logik.'],
+    ['#writing .section-head h2', 'Neues von LinkedIn'],
+    ['#writing .section-head p:nth-of-type(2)', 'Dreimal pro Woche veröffentliche ich eine kurze, praxisnahe Security-Lektion — aktuell eine Serie über <strong>Non-Human Identity (NHI)</strong> und Identity Security.'],
+    ['#ops .section-head h2', 'Meine Automationen — live'],
+    ['#ops .section-head p:nth-of-type(2)', 'Automatisierung steht bei mir nicht nur im Lebenslauf — diese Karten fragen meine echten Systeme <strong>live aus Ihrem Browser</strong> ab: das KI-Backend dieser Seite, das Repository der Website und meinen autonomen LinkedIn-Agenten.'],
+    ['#certifications .section-head h2', 'Zertifikate'],
+    ['#fit .section-head h2', 'Stellenausschreibung einfügen'],
+    ['#fit .section-head p:nth-of-type(2)', 'Sie besetzen eine Rolle in GRC, IAM, SecOps oder Compliance? Fügen Sie die Ausschreibung unten ein — mein KI-Zwilling gleicht sie in ca. zehn Sekunden mit meinem echten Lebenslauf ab, <strong>ehrliche Lücken inklusive</strong>. Deutsche Ausschreibungen erhalten eine deutsche Analyse.'],
+    ['#fitGo', '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="7"/><path d="M21 21l-4.3-4.3"/><path d="M8 11l2 2 4-4"/></svg> Fit analysieren'],
+    ['#contact h2', 'Offen für Werkstudenten-Rollen in GRC, IAM &amp; Cybersecurity'],
+    ['#contact .panel > p:nth-of-type(2)', 'In Berlin zuhause, umzugsbereit und sofort verfügbar — bis zu 40 Std./Woche. Sie bauen ein GRC-, IAM-, Monitoring- oder Digitalisierungsteam auf? Sprechen wir.']
+  ];
+  const ATTR_DE = [ ['#fitJd', 'placeholder', 'Fügen Sie hier die vollständige Stellenausschreibung ein … (nichts wird gespeichert)'],
+                    ['#aiInput', 'placeholder', 'Fragen Sie nach Darshans Erfahrung …'] ];
+  let lang = 'en';
+  try { lang = localStorage.getItem('lang') || 'en'; } catch(_){}
+  function apply(to){
+    DE.forEach(([sel, de]) => {
+      const el = document.querySelector(sel); if (!el) return;
+      if (to === 'de'){ if (el.dataset.en == null) el.dataset.en = el.innerHTML; el.innerHTML = de; }
+      else if (el.dataset.en != null) el.innerHTML = el.dataset.en;
+    });
+    ATTR_DE.forEach(([sel, attr, de]) => {
+      const el = document.querySelector(sel); if (!el) return;
+      const k = 'en' + attr;
+      if (to === 'de'){ if (el.dataset[k] == null) el.dataset[k] = el.getAttribute(attr) || ''; el.setAttribute(attr, de); }
+      else if (el.dataset[k] != null) el.setAttribute(attr, el.dataset[k]);
+    });
+    document.documentElement.lang = to;
+    const b = document.getElementById('langBtn');
+    if (b){ b.textContent = to === 'de' ? 'EN' : 'DE'; b.setAttribute('aria-label', to === 'de' ? 'Switch to English' : 'Auf Deutsch umschalten'); }
+    lang = to;
+    try { localStorage.setItem('lang', to); } catch(_){}
+  }
+  const btn = document.createElement('button');
+  btn.id = 'langBtn'; btn.type = 'button'; btn.textContent = 'DE';
+  btn.style.cssText = 'background:none;border:1px solid var(--border);border-radius:10px;min-width:44px;height:44px;color:var(--muted);cursor:pointer;font-family:var(--font-mono);font-size:.8rem;letter-spacing:.06em;transition:.2s';
+  btn.addEventListener('mouseenter', () => { btn.style.borderColor = 'var(--border-bright)'; btn.style.color = 'var(--teal)'; });
+  btn.addEventListener('mouseleave', () => { btn.style.borderColor = 'var(--border)'; btn.style.color = 'var(--muted)'; });
+  btn.addEventListener('click', () => apply(lang === 'de' ? 'en' : 'de'));
+  const navInner = document.querySelector('.nav-inner');
+  const burgerEl = document.getElementById('burger');
+  if (navInner && burgerEl) navInner.insertBefore(btn, burgerEl);
+  if (lang === 'de') apply('de');
+})();
+
 /* card 3D tilt + pointer-tracking spotlight (mouse/trackpad only, motion-safe) */
 if (matchMedia('(hover:hover) and (pointer:fine)').matches &&
     !matchMedia('(prefers-reduced-motion: reduce)').matches){
@@ -2201,7 +2455,7 @@ KillChain = (() => {
 
   const CONTROL = {
     ABOUT:'ISO 27001 A.5', METRICS:'continuous monitoring', SKILLS:'NIST CSF PR.AC',
-    EXPERIENCE:'GDPR Art.32', PROJECTS:'Wazuh IDS rule', WRITING:'ISO 27001 A.9', OPS:'SOC 2 availability', CERTIFICATIONS:'Microsoft SC-300', FIT:'ISO 27001 A.7 screening', CONTACT:'MFA challenge'
+    EXPERIENCE:'GDPR Art.32', PROJECTS:'Wazuh IDS rule', LAB:'ISO 27001 A.5.18', WRITING:'ISO 27001 A.9', OPS:'SOC 2 availability', CERTIFICATIONS:'Microsoft SC-300', FIT:'ISO 27001 A.7 screening', CONTACT:'MFA challenge'
   };
 
   // feed lives after this <script> in the DOM, so resolve it lazily (null at init time)
