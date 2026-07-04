@@ -105,12 +105,12 @@ def make_og():
     d.rounded_rectangle((80, 150, 90, 480), radius=5, fill=TEAL)
 
     # eyebrow
-    d.text((120, 152), "CYBERSECURITY  ·  GRC  ·  IAM  ·  AI", font=font(False, 24), fill=TEAL)
+    d.text((120, 152), "GRC  ·  SECOPS  ·  IAM  ·  AI SECURITY", font=font(False, 24), fill=TEAL)
     # name (two lines)
     d.text((118, 196), "Darshangiri", font=font(True, 86), fill=TEXT)
     d.text((118, 290), "Goswami", font=font(True, 86), fill=TEXT)
     # role
-    d.text((120, 404), "Governance, Risk & Compliance · Identity & Access", font=font(False, 28), fill=MUTED)
+    d.text((120, 404), "Compliance · Security Operations · Identity & Access", font=font(False, 28), fill=MUTED)
     # frameworks
     d.text((120, 452), "GDPR · DORA · NIS2 · ISO 27001 · NIST CSF · EU AI Act", font=font(False, 24), fill=GOLD)
     # url

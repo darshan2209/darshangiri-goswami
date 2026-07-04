@@ -33,7 +33,8 @@
 <link rel="preconnect" href="https://fonts.googleapis.com" />
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
 <link rel="preload" as="image" href="assets/portrait.webp" type="image/webp" fetchpriority="high" />
-<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=IBM+Plex+Sans:wght@300;400;500;600&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet" />
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=IBM+Plex+Sans:wght@300;400;500;600&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet" media="print" onload="this.media='all'" />
+<noscript><link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=IBM+Plex+Sans:wght@300;400;500;600&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet" /></noscript>
 
 <!-- Structured data -->
 <script type="application/ld+json">
@@ -54,7 +55,7 @@
         { "@type": "CollegeOrUniversity", "name": "Swarnim Startup and Innovation University" }
       ],
       "address": { "@type": "PostalAddress", "addressLocality": "Berlin", "addressCountry": "DE" },
-      "sameAs": ["https://linkedin.com/in/darshangiri-goswami-033283213"]
+      "sameAs": ["https://linkedin.com/in/darshangiri-goswami-033283213", "https://github.com/darshan2209", "https://www.credly.com/users/darshan-goswami.e4c6c92c"]
     },
     {
       "@type": "WebSite",
@@ -2152,13 +2153,23 @@ function speakReply(text){
   function build(){
     wrap = document.createElement('div');
     wrap.className = 'sim-wrap'; wrap.setAttribute('role','dialog'); wrap.setAttribute('aria-label','Access-Review Simulator');
-    wrap.innerHTML = '<div class="sim"><div class="sim-top"><b>Access-Review Simulator</b><span class="sim-prog" id="simProg"></span><button class="sim-close" aria-label="Close">✕</button></div><div id="simBody"></div></div>';
+    wrap.innerHTML = '<div class="sim" aria-modal="true"><div class="sim-top"><b>Access-Review Simulator</b><span class="sim-prog" id="simProg"></span><button class="sim-close" aria-label="Close">✕</button></div><div id="simBody"></div></div>';
     document.body.appendChild(wrap);
     wrap.querySelector('.sim-close').addEventListener('click', close);
     wrap.addEventListener('click', e => { if (e.target === wrap) close(); });
+    // keep Tab inside the dialog while it is open
+    wrap.addEventListener('keydown', e => {
+      if (e.key !== 'Tab') return;
+      const f = wrap.querySelectorAll('button:not([disabled]), a[href]');
+      if (!f.length) return;
+      const first = f[0], last = f[f.length - 1];
+      if (e.shiftKey && document.activeElement === first){ e.preventDefault(); last.focus(); }
+      else if (!e.shiftKey && document.activeElement === last){ e.preventDefault(); first.focus(); }
+    });
   }
-  function open(){ if (!wrap) build(); i = 0; score = 0; wrap.classList.add('open'); step(); }
-  function close(){ wrap.classList.remove('open'); }
+  let lastFocus = null;
+  function open(){ if (!wrap) build(); i = 0; score = 0; lastFocus = document.activeElement; wrap.classList.add('open'); step(); wrap.querySelector('.sim-close').focus(); }
+  function close(){ wrap.classList.remove('open'); if (lastFocus && lastFocus.focus) lastFocus.focus(); }
   function step(){
     const body = wrap.querySelector('#simBody'), prog = wrap.querySelector('#simProg');
     if (i >= SCEN.length){ finish(); return; }
@@ -2264,6 +2275,62 @@ if (GOATCOUNTER_CODE){
     ['#fitGo', '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="7"/><path d="M21 21l-4.3-4.3"/><path d="M8 11l2 2 4-4"/></svg> Fit analysieren'],
     ['#contact h2', 'Offen für Werkstudenten-Rollen in GRC, IAM &amp; Cybersecurity'],
     ['#contact .panel > p:nth-of-type(2)', 'In Berlin zuhause, umzugsbereit und sofort verfügbar — bis zu 40 Std./Woche. Sie bauen ein GRC-, IAM-, Monitoring- oder Digitalisierungsteam auf? Sprechen wir.'],
+    /* hero + contact buttons */
+    ['.hero-actions .btn-gold', '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3v12m0 0l-4-4m4 4l4-4M4 21h16"/></svg> Lebenslauf (CV)'],
+    ['.hero-actions .btn-ghost', '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 4h16v16H4z"/><path d="M4 7l8 6 8-6"/></svg> Kontakt'],
+    ['.contact-actions .btn-primary', '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 4h16v16H4z"/><path d="M4 7l8 6 8-6"/></svg> E-Mail senden'],
+    ['.contact-actions .btn-ghost', '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="18" height="18" rx="3"/><path d="M7 10v7M7 7v.01M11 17v-4a2 2 0 0 1 4 0v4"/></svg> Auf LinkedIn vernetzen'],
+    ['.contact-actions .btn-gold', '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3v12m0 0l-4-4m4 4l4-4M4 21h16"/></svg> Lebenslauf herunterladen'],
+    /* experience bullets */
+    ['#experience .t-item:nth-child(1) li:nth-child(1)', 'Compliance- und Richtlinienschulungen für <b>4500+ Studierende</b> zu Acceptable-Use- und Zugriffskontroll-Anforderungen — <b>95 % Zertifizierungsquote</b> und gelebte Governance im Alltag.'],
+    ['#experience .t-item:nth-child(1) li:nth-child(2)', 'Richtlinien-, Schulungs- und Kontrolldokumentation im LMS gepflegt — Unterlagen stets aktuell und <b>audit-bereit</b>.'],
+    ['#experience .t-item:nth-child(1) li:nth-child(3)', 'Awareness-Inhalte entlang anerkannter Standards (<b>ISO 27001, NIST CSF</b>) erstellt, damit Fachfremde Compliance-Anforderungen verstehen und umsetzen.'],
+    ['#experience .t-item:nth-child(1) li:nth-child(4)', '<b>IAM-Grundlagen</b> — RBAC, Least Privilege und MFA — verankert und so Richtlinien- und Zugriffsausnahmen reduziert.'],
+    ['#experience .t-item:nth-child(2) li:nth-child(1)', 'Aktivitäten auf <b>50+ Plattformen</b> überwacht, Flags und Alerts geprüft und bewertet, Richtlinien- und Zugriffsausnahmen zur Prüfung eskaliert.'],
+    ['#experience .t-item:nth-child(2) li:nth-child(2)', 'Jede Remediation-Maßnahme <b>termingerecht</b> bis zum Abschluss verfolgt, Ergebnisse und Follow-ups dokumentiert.'],
+    ['#experience .t-item:nth-child(2) li:nth-child(3)', 'Falldokumentation und laufende Teamprojekte unterstützt; neue Tools zur Effizienzsteigerung und Digitalisierung getestet.'],
+    /* projects */
+    ['.proj-grid .proj:nth-child(1) > p', 'Ein KI-gestützter Workflow, der simulierte Aktivitäten überwachte und Ausnahmen per Python-Anomalie-Erkennung markierte. Über eine API wurde eine KI-Plattform integriert, die Flags triagiert, Risiken bewertet und Fälle auf Playbook-Logik abbildet — ein Arbeitsmodell für verantwortungsvolle, KI-gestützte Prozessverbesserung.'],
+    ['.proj-grid .proj:nth-child(2) > p', 'Zentrale Monitoring-Plattform mit Wazuh aufgebaut und einen Host für Log-Sammlung und Echtzeit-Alerts angebunden. File-Integrity-Monitoring erkannte <b style="color:var(--text)">100+ unautorisierte Änderungen</b>, die über ein zentrales Dashboard abgearbeitet wurden.'],
+    ['.proj-grid .proj:nth-child(1) .proj-more summary', '<svg class="chev" viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 6l6 6-6 6"/></svg> Details ansehen'],
+    ['.proj-grid .proj:nth-child(2) .proj-more summary', '<svg class="chev" viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 6l6 6-6 6"/></svg> Details ansehen'],
+    /* skills card titles */
+    ['.skills-grid .skill-card:nth-child(3) h3', 'KI in Cybersecurity &amp; Automatisierung'],
+    ['.skills-grid .skill-card:nth-child(5) h3', 'Tools &amp; Stärken'],
+    /* lab cards */
+    ['[data-i18n="lab.simGo"]', 'Review starten <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M13 6l6 6-6 6"/></svg>'],
+    ['.lab-grid a:nth-child(2) h3', 'Risikoregister'],
+    ['.lab-grid a:nth-child(3) h3', 'Access-Review-Verfahren'],
+    ['[data-i18n="lab.riskP"]', 'Acht bewertete Risiken mit Maßnahmen, Ownern und Annex-A-Mapping — der Register-Stil, den ich audit-bereit halte.'],
+    ['[data-i18n="lab.uarP"]', 'Ein vierteljährliches UAR-Verfahren mit JML-Triggern, SLAs und KPIs — Least Privilege als Routine, nicht als Schlagwort.'],
+    ['[data-i18n="lab.soaP"]', 'Ein SoA-Auszug mit 10 Controls und risikobasierten Begründungen — die Nachvollziehbarkeit, nach der Auditoren fragen.'],
+    ['[data-i18n="lab.note"]', 'Alle Beispiele sind illustrativ und für ein fiktives Unternehmen erstellt — keine Kunden- oder Arbeitgeberdaten.'],
+    ['.lab-grid a:nth-child(2) .go', 'Beispiel öffnen <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M7 17L17 7M9 7h8v8"/></svg>'],
+    ['.lab-grid a:nth-child(3) .go', 'Beispiel öffnen <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M7 17L17 7M9 7h8v8"/></svg>'],
+    ['.lab-grid a:nth-child(4) .go', 'Beispiel öffnen <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M7 17L17 7M9 7h8v8"/></svg>'],
+    /* writing cards */
+    ['.writing-grid .post:nth-child(1) h3', 'Nicht jede Identität ist ein Mensch'],
+    ['.writing-grid .post:nth-child(1) p', 'Die meisten Identitäten in modernen Netzwerken gehören Software — und Maschinen scheitern anders als Menschen.'],
+    ['.writing-grid .post:nth-child(2) h3', 'Was genau ist eine NHI?'],
+    ['.writing-grid .post:nth-child(2) p', 'Service-Accounts, API-Keys, OAuth-Tokens, Zertifikate und CI/CD-Secrets — Zugangsdaten ohne Vorgesetzte und oft ohne Ablaufdatum.'],
+    ['.writing-grid .post:nth-child(3) h3', 'Das leiseste Risiko: verwaiste Zugangsdaten'],
+    ['.writing-grid .post:nth-child(3) p', 'Jedes Credential braucht einen Owner und ein Last-Used-Datum. Fehlt beides, gehört es entfernt.'],
+    ['.writing-grid .post:nth-child(1) .read', 'Auf LinkedIn lesen <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M7 17L17 7M9 7h8v8"/></svg>'],
+    ['.writing-grid .post:nth-child(2) .read', 'Auf LinkedIn lesen <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M7 17L17 7M9 7h8v8"/></svg>'],
+    ['.writing-grid .post:nth-child(3) .read', 'Auf LinkedIn lesen <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M7 17L17 7M9 7h8v8"/></svg>'],
+    ['.writing-cta .btn', '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="18" height="18" rx="3"/><path d="M7 10v7M7 7v.01M11 17v-4a2 2 0 0 1 4 0v4"/></svg> Alle Beiträge auf LinkedIn'],
+    ['.writing-note', '<span class="dot"></span> Neue Beiträge Mo · Mi · Sa · 5.000+ Follower'],
+    /* ops descriptions */
+    ['#opsTwin .ops-d', 'Flask-+-Claude-Proxy, der Chat und Fit-Check auf dieser Seite antreibt.'],
+    ['#opsRepo .ops-d', 'Single-File-Website, handgebaut und kontinuierlich über GitHub Pages ausgeliefert.'],
+    ['#opsAgent .ops-d', 'Python-Agent, der meine Security-Beiträge recherchiert, schreibt und veröffentlicht.'],
+    /* certifications + education */
+    ['.cert-grid a:nth-child(6) .st', 'In Arbeit'],
+    ['.cert-grid a:nth-child(7) .st', 'In Arbeit'],
+    ['#certifications a.btn-ghost', '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="8" r="6"/><path d="M9 13l-2 8 5-3 5 3-2-8"/></svg> Alle Nachweise auf Credly ansehen'],
+    ['#certifications .split > div:nth-child(2) .section-head h2', 'Ausbildung'],
+    /* fit note */
+    ['#fit .fit-note', 'Basiert nur auf meinem Lebenslauf · ehrlich bei Lücken · nichts wird gespeichert'],
     ['#bookBtn', '<svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="18" height="17" rx="2"/><path d="M8 2v4M16 2v4M3 9h18"/></svg> 15-Min-Gespräch buchen']
   ];
   const ATTR_DE = [ ['#fitJd', 'placeholder', 'Fügen Sie hier die vollständige Stellenausschreibung ein … (nichts wird gespeichert)'],

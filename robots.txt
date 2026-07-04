@@ -1,0 +1,5 @@
+User-agent: *
+Allow: /
+Disallow: /artifacts/
+
+Sitemap: https://darshan2209.github.io/darshangiri-goswami/sitemap.xml
