@@ -1,0 +1,19 @@
+{
+  "posts": [
+    {
+      "title": "Multi-factor authentication: the highest-leverage control for human accounts.",
+      "excerpt": "MFA requires more than a password: something you know plus something you have or are. Even if a password leaks, the attacker is stopped at the second",
+      "date": "2026-07-04"
+    },
+    {
+      "title": "OAuth tokens and API keys: the currency of machine-to-machine access.",
+      "excerpt": "An API key is a simple shared secret that identifies the calling application. An OAuth access token is richer: it represents a scoped, often time-limi",
+      "date": "2026-07-02"
+    },
+    {
+      "title": "OAuth tokens and API keys: the currency of machine-to-machine access.",
+      "excerpt": "An API key is a simple shared secret that identifies the calling application. An OAuth access token is richer: it represents a scoped, often time-limi",
+      "date": "2026-06-30"
+    }
+  ]
+}
