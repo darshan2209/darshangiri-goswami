@@ -1,6 +1,11 @@
 {
   "posts": [
     {
+      "title": "What is MITRE ATT&CK, and why defenders use it.",
+      "excerpt": "ATT&CK is a free, openly maintained knowledge base of real-world adversary tactics and techniques: how attackers gain access, escalate, move laterally",
+      "date": "2026-07-08"
+    },
+    {
       "title": "Phishing in 2026: cleaner, faster, and aimed at your credentials.",
       "excerpt": "Phishing is no longer full of typos. Attackers use polished, convincing messages to trick people into handing over passwords or approving access.",
       "date": "2026-07-06"
@@ -9,11 +14,6 @@
       "title": "Multi-factor authentication: the highest-leverage control for human accounts.",
       "excerpt": "MFA requires more than a password: something you know plus something you have or are. Even if a password leaks, the attacker is stopped at the second",
       "date": "2026-07-04"
-    },
-    {
-      "title": "OAuth tokens and API keys: the currency of machine-to-machine access.",
-      "excerpt": "An API key is a simple shared secret that identifies the calling application. An OAuth access token is richer: it represents a scoped, often time-limi",
-      "date": "2026-07-02"
     }
   ]
 }
