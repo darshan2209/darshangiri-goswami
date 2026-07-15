@@ -1,19 +1,19 @@
 {
   "posts": [
     {
+      "title": "ATT&CK in plain language: Unsecured Credentials (T1552).",
+      "excerpt": "The technique: attackers hunt for credentials left lying around. Hardcoded keys in source code, passwords in config files, tokens in build logs, secre",
+      "date": "2026-07-15"
+    },
+    {
+      "title": "ATT&CK in plain language: Unsecured Credentials (T1552).",
+      "excerpt": "The technique: attackers hunt for credentials left lying around. Hardcoded keys in source code, passwords in config files, tokens in build logs, secre",
+      "date": "2026-07-13"
+    },
+    {
       "title": "ATT&CK in plain language: Valid Accounts (T1078).",
       "excerpt": "The technique: attackers do not always break in. Often they simply log in, using legitimate credentials they stole, bought, or found.",
       "date": "2026-07-11"
-    },
-    {
-      "title": "What is MITRE ATT&CK, and why defenders use it.",
-      "excerpt": "ATT&CK is a free, openly maintained knowledge base of real-world adversary tactics and techniques: how attackers gain access, escalate, move laterally",
-      "date": "2026-07-08"
-    },
-    {
-      "title": "Phishing in 2026: cleaner, faster, and aimed at your credentials.",
-      "excerpt": "Phishing is no longer full of typos. Attackers use polished, convincing messages to trick people into handing over passwords or approving access.",
-      "date": "2026-07-06"
     }
   ]
 }
