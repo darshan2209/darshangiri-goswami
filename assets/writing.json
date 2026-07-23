@@ -1,6 +1,11 @@
 {
   "posts": [
     {
+      "title": "Why an AI agent should have its own identity, not borrow yours.",
+      "excerpt": "It is tempting to let an agent run with a human's account or a shared key. It is also a mistake.",
+      "date": "2026-07-23"
+    },
+    {
       "title": "AI agents and security: why this is a new kind of identity problem.",
       "excerpt": "An AI agent is software that can take actions: call APIs, read and write data, trigger workflows. To do any of that, it needs credentials, which makes",
       "date": "2026-07-21"
@@ -9,11 +14,6 @@
       "title": "ATT&CK in plain language: stealing and using access tokens (T1528, T1550.001).",
       "excerpt": "The technique: instead of a password, attackers grab an application access token, then use it to act as the application or service it belongs to. With",
       "date": "2026-07-18"
-    },
-    {
-      "title": "ATT&CK in plain language: Unsecured Credentials (T1552).",
-      "excerpt": "The technique: attackers hunt for credentials left lying around. Hardcoded keys in source code, passwords in config files, tokens in build logs, secre",
-      "date": "2026-07-15"
     }
   ]
 }
