@@ -29,12 +29,23 @@
 <link rel="icon" href="assets/favicon.svg" type="image/svg+xml" />
 <link rel="manifest" href="site.webmanifest" />
 
-<!-- Fonts + hero image preload -->
-<link rel="preconnect" href="https://fonts.googleapis.com" />
-<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<!-- Hero image preload -->
 <link rel="preload" as="image" href="assets/portrait.webp" type="image/webp" fetchpriority="high" />
-<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=IBM+Plex+Sans:wght@300;400;500;600&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet" media="print" onload="this.media='all'" />
-<noscript><link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=IBM+Plex+Sans:wght@300;400;500;600&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet" /></noscript>
+
+<!-- Fonts: self-hosted. No third-party font CDN — visitor IP addresses are never
+     transmitted to Google. See LG München I, 20.01.2022, Az. 3 O 17493/20. -->
+<link rel="preload" as="font" type="font/woff2" href="fonts/space-grotesk-latin.woff2" crossorigin />
+<link rel="preload" as="font" type="font/woff2" href="fonts/ibm-plex-sans-latin.woff2" crossorigin />
+<style>
+@font-face{font-family:'Space Grotesk';font-style:normal;font-weight:400 700;font-display:swap;src:url('fonts/space-grotesk-latin.woff2') format('woff2');unicode-range:U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+0304, U+0308, U+0329, U+2000-206F, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD}
+@font-face{font-family:'Space Grotesk';font-style:normal;font-weight:400 700;font-display:swap;src:url('fonts/space-grotesk-latin-ext.woff2') format('woff2');unicode-range:U+0100-02BA, U+02BD-02C5, U+02C7-02CC, U+02CE-02D7, U+02DD-02FF, U+0304, U+0308, U+0329, U+1D00-1DBF, U+1E00-1E9F, U+1EF2-1EFF, U+2020, U+20A0-20AB, U+20AD-20C0, U+2113, U+2C60-2C7F, U+A720-A7FF}
+@font-face{font-family:'IBM Plex Sans';font-style:normal;font-weight:300 600;font-display:swap;src:url('fonts/ibm-plex-sans-latin.woff2') format('woff2');unicode-range:U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+0304, U+0308, U+0329, U+2000-206F, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD}
+@font-face{font-family:'IBM Plex Sans';font-style:normal;font-weight:300 600;font-display:swap;src:url('fonts/ibm-plex-sans-latin-ext.woff2') format('woff2');unicode-range:U+0100-02BA, U+02BD-02C5, U+02C7-02CC, U+02CE-02D7, U+02DD-02FF, U+0304, U+0308, U+0329, U+1D00-1DBF, U+1E00-1E9F, U+1EF2-1EFF, U+2020, U+20A0-20AB, U+20AD-20C0, U+2113, U+2C60-2C7F, U+A720-A7FF}
+@font-face{font-family:'IBM Plex Mono';font-style:normal;font-weight:400;font-display:swap;src:url('fonts/ibm-plex-mono-400-latin.woff2') format('woff2');unicode-range:U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+0304, U+0308, U+0329, U+2000-206F, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD}
+@font-face{font-family:'IBM Plex Mono';font-style:normal;font-weight:400;font-display:swap;src:url('fonts/ibm-plex-mono-400-latin-ext.woff2') format('woff2');unicode-range:U+0100-02BA, U+02BD-02C5, U+02C7-02CC, U+02CE-02D7, U+02DD-02FF, U+0304, U+0308, U+0329, U+1D00-1DBF, U+1E00-1E9F, U+1EF2-1EFF, U+2020, U+20A0-20AB, U+20AD-20C0, U+2113, U+2C60-2C7F, U+A720-A7FF}
+@font-face{font-family:'IBM Plex Mono';font-style:normal;font-weight:500;font-display:swap;src:url('fonts/ibm-plex-mono-500-latin.woff2') format('woff2');unicode-range:U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+0304, U+0308, U+0329, U+2000-206F, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD}
+@font-face{font-family:'IBM Plex Mono';font-style:normal;font-weight:500;font-display:swap;src:url('fonts/ibm-plex-mono-500-latin-ext.woff2') format('woff2');unicode-range:U+0100-02BA, U+02BD-02C5, U+02C7-02CC, U+02CE-02D7, U+02DD-02FF, U+0304, U+0308, U+0329, U+1D00-1DBF, U+1E00-1E9F, U+1EF2-1EFF, U+2020, U+20A0-20AB, U+20AD-20C0, U+2113, U+2C60-2C7F, U+A720-A7FF}
+</style>
 
 <!-- Structured data -->
 <script type="application/ld+json">
@@ -69,8 +80,8 @@
 <script type="importmap">
 {
   "imports": {
-    "three": "https://cdn.jsdelivr.net/npm/three@0.161.0/build/three.module.js",
-    "three/addons/": "https://cdn.jsdelivr.net/npm/three@0.161.0/examples/jsm/"
+    "three": "./vendor/three/build/three.module.js",
+    "three/addons/": "./vendor/three/examples/jsm/"
   }
 }
 </script>
@@ -431,6 +442,7 @@ nav.links a{
 footer{border-top:1px solid var(--border);padding:30px 0;text-align:center;
   color:var(--faint);font-family:var(--font-mono);font-size:.78rem;letter-spacing:.03em}
 footer a{color:var(--muted)}
+.foot-note{margin-top:10px;font-size:.68rem;color:var(--faint);letter-spacing:.03em}
 
 /* ============================================================= AI TWIN */
 .ai-fab{position:fixed;z-index:60;display:inline-flex;align-items:center;gap:11px;
@@ -466,6 +478,14 @@ footer a{color:var(--muted)}
 .ai-close{background:none;border:1px solid var(--border);border-radius:9px;width:44px;height:44px;color:var(--muted);
   cursor:pointer;display:grid;place-items:center;transition:.2s}
 .ai-close svg{width:18px;height:18px}
+/* EU AI Act Art. 50 machine disclosure — permanent, non-dismissible, shown above
+   the input before any interaction. Applies from 2026-08-02. */
+.ai-disclosure{padding:11px 18px;border-bottom:1px solid var(--border);background:rgba(230,185,79,.06);
+  font-family:var(--font-mono);font-size:.7rem;line-height:1.5;color:var(--muted)}
+.ai-disclosure b{display:block;color:var(--gold);font-weight:500;letter-spacing:.04em;text-transform:uppercase;
+  font-size:.66rem;margin-bottom:4px}
+.ai-disclosure .de{display:block;color:var(--faint);margin-top:3px}
+.ai-disclosure a{color:var(--muted);text-decoration:underline;text-underline-offset:2px}
 .ai-msgs{flex:1;overflow-y:auto;padding:18px;display:flex;flex-direction:column;gap:14px;scrollbar-width:thin}
 .ai-msgs::-webkit-scrollbar{width:7px}.ai-msgs::-webkit-scrollbar-thumb{background:rgba(120,150,200,.2);border-radius:6px}
 .msg{max-width:88%;font-size:.92rem;line-height:1.55;padding:11px 14px;border-radius:14px;white-space:pre-wrap;word-wrap:break-word}
@@ -1442,6 +1462,14 @@ nav.links a::after{content:"";position:absolute;left:14px;right:14px;bottom:7px;
         </button>
         <span class="fit-note">Grounded in my CV only · honest about gaps · nothing is stored</span>
       </div>
+      <div class="ai-disclosure" style="border:1px solid var(--border);border-radius:var(--r-sm);margin-top:14px">
+        <b>AI system · KI-System</b>
+        This analysis is produced by an AI system (Claude Haiku 4.5, Anthropic), not by a person, and
+        it can be wrong. The text you paste is relayed via a server in the USA and is not stored.
+        <a href="datenschutz.html">Privacy notice</a>
+        <span class="de">Diese Analyse wird von einem KI-System erstellt, nicht von einer natürlichen
+        Person, und kann Fehler enthalten. <a href="datenschutz.html">Datenschutzerklärung</a></span>
+      </div>
       <div class="fit-out" id="fitOut" aria-live="polite"></div>
     </div>
   </div>
@@ -1482,9 +1510,11 @@ nav.links a::after{content:"";position:absolute;left:14px;right:14px;bottom:7px;
 <footer>
   <div class="wrap">
     © <span id="yr"></span> Darshangiri Goswami · Compliance · Monitoring · Responsible AI
-    &nbsp;·&nbsp; Built with Three.js<span id="aiCredit"></span>
+    &nbsp;·&nbsp; <a href="datenschutz.html">Datenschutz / Privacy</a>
+    &nbsp;·&nbsp; <a href="kolophon.html">Colophon</a><span id="aiCredit"></span>
     &nbsp;·&nbsp; <a href=".well-known/security.txt">Security</a>
     &nbsp;·&nbsp; <a href="#" id="termHint" title="Or press ~ anywhere">[ terminal ]</a>
+    <div class="foot-note">No cookies · cookieless EU-hosted analytics · fonts and libraries served from this origin only</div>
   </div>
 </footer>
 
@@ -1507,6 +1537,17 @@ nav.links a::after{content:"";position:absolute;left:14px;right:14px;bottom:7px;
     <div class="ttl"><b>Darshan's AI twin</b><span><span class="d off" id="aiDot"></span><span id="aiStatus">Offline · from CV</span></span></div>
     <button class="ai-tool" id="aiSpk" aria-label="Toggle spoken replies" aria-pressed="false" title="Speak replies aloud"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M11 5L6 9H3v6h3l5 4V5z"/><path d="M15.5 8.5a5 5 0 0 1 0 7"/><path d="M18.5 5.5a9 9 0 0 1 0 13"/></svg></button>
     <button class="ai-close" id="aiClose" aria-label="Close assistant"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><line x1="6" y1="6" x2="18" y2="18"/><line x1="18" y1="6" x2="6" y2="18"/></svg></button>
+  </div>
+  <div class="ai-disclosure">
+    <b>AI system · KI-System</b>
+    You are interacting with an AI system, not a natural person. It answers from Darshangiri's
+    CV and can be wrong. What you type is sent to Anthropic (Claude Haiku 4.5) via a relay
+    server in the USA and is not stored. Please don't enter personal or confidential data.
+    <a href="datenschutz.html">Privacy notice</a>
+    <span class="de">Sie interagieren mit einem KI-System, nicht mit einer natürlichen Person.
+    Es antwortet auf Grundlage des Lebenslaufs und kann Fehler enthalten. Eingaben werden an
+    einen Server in den USA übermittelt und nicht gespeichert — bitte keine personenbezogenen
+    oder vertraulichen Daten eingeben. <a href="datenschutz.html">Datenschutzerklärung</a></span>
   </div>
   <div class="ai-msgs" id="aiMsgs"></div>
   <div class="ai-suggest" id="aiSuggest">
