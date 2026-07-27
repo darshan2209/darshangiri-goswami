@@ -1607,26 +1607,45 @@ const saveData = (navigator.connection && navigator.connection.saveData) ||
 const canvas = document.getElementById('bg');
 const TEAL = 0x2dd4bf, GOLD = 0xe6b94f, NAVY = 0x0b1426;
 
-let renderer, scene, camera, composer, globe, landPoints, atmos, particles, clock;
+let renderer, scene, camera, composer, globe, landPts, halo, core, graticule,
+    targetPts, stars, clock;
 const pointer = { x: 0, y: 0, tx: 0, ty: 0 };
 let scrollN = 0;
 let heroHover = 0, heroHoverTarget = 0;
 
+const MOBILE = innerWidth < 760;
+const R = 2.35;
+
 /* ---------------------------------------------------------------- GEOGRAPHY
-   Natural Earth 110m land, rasterised to a 180x90 equirectangular bitmask
-   (2 degrees per cell) and base64-packed. ~2.7 KB for recognisable coastlines,
-   which is far cheaper than shipping a texture. */
-const NX = 180, NY = 90;
-const LAND = 'AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAf4AP/AAAAAAAAAAAAAAAAAAAAAAAAX/z///+AAAAAAAABAAAAAAAAAAAAAYd8P///wAA+AAAAAA8AAAAAAAAAAAwAnw////4AAIAAAAAAGAAAAAAAAAAADivwAf//wAAAAADAAf/wAHYAAAAAADoi3sAP//gAAAAAMAD///sAAAAgBgACfwz/AD/+gAAAwAEHf///+/8gBAP/7/nJdjwD/+AAAH/AA7f///////f4P//////h8H/gAAAf/6//f////////Mf/////9H4D8AeAA+ev///////////AP/////4A0B4AAAD5/////////////Af3////gHgA4AAAH5///////////LwAHgH///gHkAAAAAH4/////////+CIAABAB///4D+AAAAGCx/////////4A8AAIAAf///n/gAAAOCD/////////wA4AAAAAf///n/wAAAbP///////////AgAAAAAP/////wAAADf//////////9AAAAAAAF////0YAAAB///////////9AAAAAAAD////8EAAAB///////////5AAAAAAAD////2AAAAB/f5fP//////wAAAAAAAD////gAAAAfxnwPP//////jAAAAAAAD////AAAAAPCb3/n/////+CAAAAAAAD///8AAAAAfALf/n////+ECAAAAAAAB///8AAAAAGHQP/n/////mMAAAAAAAA///8AAAAAH+Ai///////E8AAAAAAAAf//wAAAAAP/AA///////BgAAAAAAAAP//gAAAAAf/73///////gAAAAAAAAAD/AQAAAAAf////f/////gAAAAAAAAAF+AQAAAAB///+/n/////AAAAAAAAAAC+AAAAAAB///+f0H////AAAAAAAAAAAeAwAAAAD////f/B///8gAAAAAAAAAAeGEAAAAH////v+B/z/AAAAAAAAAAAAPMAgAAAD////n+A/B+gAAAAAAAAAAAD8AAAAAD////n4AeB/AgAAAAAAAAAAAPAAAAAH////3gAcAfAgAAAAAAAAAAADAAAAAD////6AAcAfggAAAAAAAAAAABDwAAAD////8wAMATAIAAAAAAAAAAAAr/AAAB/////gAKASAAAAAAAAAAAAAAH/gAAA/////gACAAAIAAAAAAAAAAAAH/8AAAaH///AAAAsGAAAAAAAAAAAAAH/+AAAAB//+AAAAUOAAAAAAAAAAAAAP/+AAAAB//8AAAAYegAAAAAAAAAAAAP//gAAAD//4AAAAMeBgAAAAAAAAAAAP//8AAAB//wAAAAGdiuAAAAAAAAAAAf///AAAA//wAAAACAQHgAAAAAAAAAAP///gAAA//wAAAABwAHwgAAAAAAAAAH///AAAA//wAAAAACIDQIAAAAAAAAAH//+AAAAf/wAAAAAAAAAAAAAAAAAAAD//+AAAA//wgAAAAABxAAAAAAAAAAAD//+AAAA//wgAAAAAPxgBAAAAAAAAAA//8AAAA//jgAAAAAf5gAAAAAAAAAAAf/8AAAA//DgAAAAAf/gAAAAAAAAAAAf/8AAAAf/DAAAAAD//4CAAAAAAAAAAf/wAAAAf/DAAAAAH//4AAAAAAAAAAAf/AAAAAf+CAAAAAH//8AAAAAAAAAAAf/AAAAAP8AAAAAAH//+AAAAAAAAAAA/+AAAAAP8AAAAAAH//+AAAAAAAAAAA/+AAAAAH4AAAAAAD//+AAAAAAAAAAA/8AAAAAHwAAAAAADwf8AAAAAAAAAAA/gAAAAAAAAAAAAACAH4AIAAAAAAAAB/wAAAAAAAAAAAAAAAD4AEAAAAAAAAB+AAAAAAAAAAAAAAAAAAAGAAAAAAAAB6AAAAAAAAAAAAAAAAAwAMAAAAAAAAA8AAAAAAAAAAAAAAAAAQAYAAAAAAAAB4AAAAAAAAAAAAAAAAAAAwAAAAAAAAB4AAAAAAAAAAAAAAAAAAAAAAAAAAAADwAAAAAAAAAACAAAAAAAAAAAAAAAAADgAAAAAAAAAAAAAAAAAAAAAAAAAAAABwAAAAAAAAAAAAAAAAAAAAAAAAAAAAAwAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAACAAAAAAAAAAAAAAAAAAAAAAAAAAAAAMAAAAAAAAAeAAIP+f/gAAAAAAAAAAAMAAAAAAABP/+H//////AAAAAAAAAAA+AAAAAf////8////////AAAAAAAOEAPAAAB///////////////gAAAP//T//8AAAH//////////////+AAAH/////4AAAH///////////////8AAE//////4ABw////////////////8AAAD//////gCA////////////////wAAAf/////////////////////////+A/4A///////////////////////////////////////////////////////////////////////////////////////';
+   Natural Earth 50m land rasterised to a 1-degree equirectangular bitmask
+   (360x90 cells), base64-packed. ~10.8 KB inline, versus a texture download. */
+const NX = 360, NY = 180;
+const LAND = 'AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAb/8AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAD///+DG////4AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAN////7////////AAAAAAAAAAAeAAAAABAAAAAAAAAAAAAAAAAAAAAAAAAAAB////9////////4AAAAA7gAAD7/0AAAAfwAAAAAAAAAAAAAAAAAAAAAAAAAGA////A////////AAAAB//wAAAAAAACAAP9gAAAAAAAAAAAAAAAAAAAAAAAeH/v//9////////4AAAAB/+AAAAAAAAAAAAH6AAAAAAAAAAAAAAAAAAAAAAdcIh5P/A/////////AAAAAPHAAAAAAAAAABAA8AAAAAAAAAAAAAAAAAAAAAH/jH9///AP////////AAAAACAAAAAAAX4AAAB//+AAAAAAAAAAAAAAAAAAAAAf///3/+AAAf//////AAAAAAAAAAAAH+AAAD////AAAF/uAAAAAAAAAAAAAAfI8AA7/8AAAH/////+AAAAAAAAAAAAfAAAAP///+AAAAYAAAAAAAAAAAAAAAf/A4++f/gAAD/////8AAAAAAAAAAAB8ADCP/////+H4APAAAAAAAAAAAAAAA///5/8//4AAD/////wAAAAAAAAAAADwAHt////////8Af+AAAAAwAABAAAAAPf/8P4///gAD/////wAAAAAAAAAAAHwAf/////////8///wAAABAAAf/wAACAP//h8f//8AB/////4AAAAAAH/gAAA9A/v/////////////8AAAAAD////P//n//n/D//+AB/////gAAAAAB///AAwB+f//////////////////4Af//////////H/z4f/AAf///8AAAAAAf///4MP/////////////////////+AD/////////////4Z/4A///4AAAAAAAP///+M////v//////////////////8P/////////////wD/+A///wAQYAAAAf////////////////////////////4//////////////g/+4Af/+AA/+AAAA/+/+D///////////////////////BwP/////////////4//gAP/wAAf8AAAD/8//f//////////////////////+AOB////////////HMg/wAP/gAAHgAAAP///////////////////////////+AAP///////////8Ay+fwAH/AAAAABAB//H//////////////////////////AAP///////////4AA/gAAB/AAAAABAB//H//////////////////////3//AAAf///////////wAA/4QAA+AAAAAACB//n//////////////////////C/8AAAA/7AH///////gAA/44AAAAAAAAAAB//h/////////////////////+D4AAAAAv8AA///////4AB//8AAAAAAAABYA9+D///////////////////8AAPgAAAAAD8AAP//////8AAf/+AAAAAAAAD8AH+m///////////////////wAAfgAAAAAOQAAH///////wCf/+AAAAAAAAB8AO+H///////////////////AAA/wAAAAB4AAAD////////g///gAAAAAAAD+AP4H///////////////////AAB/AAAAAHAAAABf///////z///4AAAAAAAP/APz////////////////////SAB/AAAABwAAAAB////////x///8AAAAAAAPPB//////////////////////+AA8AAABAAAAAAAn///////5///+AAAAAAAPfz///////////////////////AA4ABAMAAAAAAAD///////////+AAAAAAAMf3///////////////////////AAwAABAAAAAAAAD///////////sAAAAAAAAef//////////////////////7ABgAAAAAAAAAAAB/////////+sPAAAAAAAAD///////////////////////7gAAAAAAAAAAAAAAf/////////wfgAAAAAAAf///////////////////////yAAAAAAAAAAAAAAAf/////////wfwAAAAAAAP///////////////////////iAAAAAAAAAAAAAAAP/////////9AgAAAAAAAD//////v/h//////////////jAAAAAAAAAAAAAAAP//////////AAAAAAAAAB/////H//B//////////////ECAAAAAAAAAAAAAAP/////////4AAAAAAAAAB//v/+Gf+H/////////////+HcAAAAAAAAAAAAAAf////////wgAAAAAAAAH//zz/+AH+H/////////////4HwAAAAAAAAAAAAAAf////////wAAAAAAAAAH/4P4/8AB/B////////////+APAAAAAAAAAAAAAAAP////////wAAAAAAAAAH/4M+f+fh/g////////////8AIAAAAAAAAAAAAAAAf///////+AAAAAAAAAAH/gMPf////x////////////8AMAAAAAAAAAAAAAAAP///////8AAAAAAAAAAP/MMCPP///g///////////fwAMAAAAAAAAAAAAAAAP///////4AAAAAAAQAAH/AAGPv///g//////////8B4AcAAAAAAAAAAAAAAAH///////4AAAAAAACAAH+AEcH////g///////////44A4AAAAAAAAAAAAAAAD///////wAAAAAAAAAAB8/+ICXv//////////////w8D4AAAAAAAAAAAAAAAB///////4AAAAAAAAAAAr/+ABwE//////////////A8/4AAAAAAAAAAAAAAAB///////wAAAAAAAAAAB//+AAAM//////////////Ax/gAAAAAAAAAAAAAAAAf/////+AAAAAAAAAAAH///AAAB//////////////gn8AAAAAAAAAAAAAAAAAH/////8AAAAAAAAAAAH///4PAB//////////////gHAAAAAAAAAAAAAAAAAAH/////4AAAAAAAAAAAP///8P47//////////////wDAAAAAAAAAAAAAAAAAADf////4AAAAAAAAAAAP/////////////////////wAAAAAAAAAAAAAAAAAAAD///3g4AAAAAAAAAAAP/////////v///////////wAAAAAAAAAAAAAAAAAAABv//AAcAAAAAAAAAAw//////////n///////////wEAAAAAAAAAAAAAAAAAAB3/+AAcAAAAAAAAAAD///////9//z///////////gAAAAAAAAAAAAAAAAAAAA7/+AAMgAAAAAAAAAD///////8//w///////////AAAAAAAAAAAAAAAAAAAAAJ/+AAMQAAAAAAAAAH///////+f/8b//////////AAAAAAAAAAAAAAAAAAAAAM/+AABgAAAAAAAAAH////////f/94Af///////+wAAAAAAAAAAAAAAAAAAAAGf+AAAIAAAAAAAAAP////////P//+AP///////4wAAAAAAAAAAAAAAAAAAAAAP8AB/EAAAAAAAAAf////////n///AH///////wgAAAAAAAAAAAAAAAAAAAAAP+A4DwAAAAAAAAAf////////n///AH///P//+AAAAAAAAAAAAAABAAAAAAAAP+B4A8AAAAAAAAAf////////n//+AAf/4P/+IAAAAAAAAAAAAAAAgAAAAAAAH/B4AB4AAAAAAAAf////////x//8AA//wH/8YAAAAAAAAAAAAAAAAAAAAAAAD//4Aj9gAAAAAAAP////////x//4AAf/gD/8YAwAAAAAAAAAAAAAAAAAAAAAA//wAAAAAAAAAAAP////////4//wAAf+AD/+AA4AAAAAAAAAAAAAAAAAAAAAAP/wAAACAAAAAAAf////////4//AAAf8AD//AAwAAAAAAAAAAAAAAAAAAAAAABP/gAACAAAAAAgf////////8/8AAAf4AAf/gAwAAAAAAAAAAAAAAAAAAAAAAAD/gAAAAAAAAAA/////////+fwAAAPwAAP/gA4AAAAAAAAAAAAAAAAAAAAAAAA/gAAAAAAAAAAf//////////AAAAP4AAP/wA8AAAAAAAAAAAAAAAAAAAAAAAAHgAgAAAAAAAAf/////////4BAAAHwAIN/wAfAAAAAAAAAAAAAAAAAAAAAAAADgD4AAAAAAAAP/////////w4AAAHwAAMfgBPAAAAAAAAAAAAAAAAAAAAAAAADgP/+AAAAAAAH//////////4AAADwAAMfABPAAAAAAAAAAAAAAAAAAAAAAAABzP/+AAAAAAAD//////////4AAAD4AAMGACPAAAAAAAAAAAAAAAAAAAAAAAAA////gAAAAAAD//////////4AAABcAAMAAEHgAAAAAAAAAAAAAAAAAAAAAAAAM///wAAAAAAB//////////wAAAAMAAGAAAPgAAAAAAAAAAAAAAAAAAAAAAAAA///4AAAAAAAf/////////gAAAAMAAHAAMDAAAAAAAAAAAAAAAAAAAAAAAAAA////gAAAAAAP/B///////gAAAAAABjgAeAAAAAAAAAAAAAAAAAAAAAAAAAAA////4AAAAAACAB///////AAAAAAABzwA+AAAAAAAAAAAAAAAAAAAAAAAAAAA////4AAAAAAAAAP/////+AAAAAAAAdwB8AAAAAAAAAAAAAAAAAAAAAAAAAAB////8AAAAAAAAAD/////8AAAAAAAAfwH8AIAAAAAAAAAAAAAAAAAAAAAAAAB////8AAAAAAAAAH/////4AAAAAAAAf4f+SYAAAAAAAAAAAAAAAAAAAAAAAAD////8AAAAAAAAAH/////wAAAAAAAAHwf8+YAAAAAAAAAAAAAAAAAAAAAADAH/////gAAAAAAAAH/////gAAAAAAAAL4f9QT0AAAAAAAAAAAAAAAAAAAAAAAH/////4AAAAAAAAH/////AAAAAAAAAD8f5+T7AAAAAAAAAAAAAAAAAAAAAAAH//////AAAAAAAAH////+AAAAAAAAAB+P5wA74AgAAAAAAAAAAAAAAAAAAAAH//////8AAAAAAAD////8AAAAAAAAAA8C54+f/AAAAAAAAAAAAAAAAAAAAAAP//////+AAAAAAAB////8AAAAAAAAAAcAB4AH/wYAAAAAAAAAAAAAAAAAAAAH///////gAAAAAAA////8AAAAAAAAAAMABoAI//yAAAAAAAAAAAAAAAAAAAAH///////gAAAAAAA////8AAAAAAAAAAHsAAAI/9hAAAAAAAAAAAAAAAAAAAAD///////gAAAAAAAf///8AAAAAAAAAAD/AAhA/8AQAAAAAAAAAAAAAAAAAAAB///////gAAAAAAAf///8AAAAAAAAAAAH//gAvOAUAAAAAAAAAAAAAAAAAAAB///////gAAAAAAAf///8AAAAAAAAAAAABjAAAHgHAAAAAAAAAAAAAAAAAAAA///////AAAAAAAAf///+AAAAAAAAAAAAAEAACBgBAAAAAAAAAAAAAAAAAAAA//////+AAAAAAAAP///+AAAAAAAAAAAAAADyCAEAAAAAAAAAAAAAAAAAAAAAf/////8AAAAAAAAf///+AQAAAAAAAAAAAAD+HAAAAAAAQAAAAAAAAAAAAAAAf/////4AAAAAAAA////+AwAAAAAAAAAAAAD+HAAAAAAAAAAAAAAAAAAAAAAAP/////4AAAAAAAA////+BwAAAAAAAAAAAB38HgAAAAAAAAAAAAAAAAAAAAAAH/////4AAAAAAAA////+D4AAAAAAAAAAAD/+HwAADAAAAAAAAAAAAAAAAAAAD/////4AAAAAAAA////8PwAAAAAAAAAAAH//XwAABgDAAAAAgAAAAAAAAAAAA/////4AAAAAAAB////wPwAAAAAAAAAAAP///wAAAAGAAAAAAAAAAAAAAAAAAf////4AAAAAAAA////gPwAAAAAAAAAAAP///4AAAACAAAAAAAAAAAAAAAAAAf////wAAAAAAAA////APgAAAAAAAAAAAf///8AAAAAAAAAAAAAAAAAAAAAAAP////wAAAAAAAAf//+APgEAAAAAAAAAH////+AAIAAAAAAAAAAAAAAAAAAAAP////gAAAAAAAAP///AfgQAAAAAAAAAf/////AAGAAAAAAAAAAAAAAAAAAAAf////gAAAAAAAAP///AfAAAAAAAAAAA//////gACAAAAAAAAAAAAAAAAAAAAf///8AAAAAAAAAP///AfAAAAAAAAAAB//////gAAAAAAAAAAAAAAAAAAAAAAf///gAAAAAAAAAP//+AfAAAAAAAAAAB//////4AAAAAAAAAAAAAAAAAAAAAAf///AAAAAAAAAAH//8AMAAAAAAAAAAB//////4AAAAAAAAAAAAAAAAAAAAAAf///AAAAAAAAAAH//4AAAAAAAAAAAAB//////4AAAAAAAAAAAAAAAAAAAAAAf///AAAAAAAAAAH//4AAAAAAAAAAAAA//////8AAAAAAAAAAAAAAAAAAAAAA///+AAAAAAAAAAD//4AAAAAAAAAAAAA//////8AAAAAAAAAAAAAAAAAAAAAA///+AAAAAAAAAAB//wAAAAAAAAAAAAAf/////8AAAAAAAAAAAAAAAAAAAAAA///8AAAAAAAAAAB//gAAAAAAAAAAAAAf/////4AAAAAAAAAAAAAAAAAAAAAA///4AAAAAAAAAAA//AAAAAAAAAAAAAAf/////4AAAAAAAAAAAAAAAAAAAAAA///wAAAAAAAAAAA/+AAAAAAAAAAAAAAf/wP//4AAAAAAAAAAAAAAAAAAAAAA///gAAAAAAAAAAA/8AAAAAAAAAAAAAAf8AP//wAAAAAAAAAAAAAAAAAAAAAA///AAAAAAAAAAAAcAAAAAAAAAAAAAAAeAAF//gAAAAAAAAAAAAAAAAAAAAAB//4AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAD//gAABgAAAAAAAAAAAAAAAAAB//8AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAf/AAAAwAAAAAAAAAAAAAAAAAD//4AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAP/AAAA+AAAAAAAAAAAAAAAAAD//wAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAH4AAAA+AAAAAAAAAAAAAAAAAD/8AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA8AAAAAAAAAAAAAAAAAD/8AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAiAAACYAAAAAAAAAAAAAAAAAD/gAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAeAAADwAAAAAAAAAAAAAAAAAD/4AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAcAAAHAEAAAAAAAAAAAAAAAAH/gAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAMAAAeAAAAAAAAAAAAAAAAAAH/gAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAB8AAAAAAAAAAAAAAAAAAH+AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAD4AAAAAAAAAAAAAAAAAAP+AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAABwAAAAAAAAAAAAAAAAAAH/AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAP/AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAP+AAAAAAAAAAAAAAAAAAAAAAGAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAP8AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAH4BwAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAH8AgAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAD8AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA/wAAABAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAOAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAABAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAABeAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAP4AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAeAAAAAAAAAAAAAAAAAAAAAAAAAADQAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAD+AAAAAAAAAAAAAAAAAAv4AAAAY///PwHn/wAAAAAAAAAAAAAAAAAAAAAAAAHgAAAAAAAAAAAAAAAAAH///AAD//////////wAAAAAAAAAAAAAAAAAAAAAAAB4AAAAAAAAAAAAAAAED////8A////////////+AAAAAAAAAAAAAAAAAAAAAJ/8AAAAAAAAAAAACAAP3////8D/////////////8AAAAAAAAAAAAAAAAAAAAM/+AAAAAAAABMH//3r//////5///////////////+AAAAAAAAAAAAAAAAAAAP/+AAAAAAAA/////////////5////////////////4AAAAAAAAAAAAAB/iQAF7/AAAAAAAB//////////////////////////////wAAAAAAAAABmAAB///v///AAAAAAAf//////////////////////////////QAAAAAAAAJz+/sA//////+AAAAAAA//////////////////////////////4AAAAAAAC/////////////4AAAAAAf//////////////////////////////gAAAAAAB/////////////4AAAAAA////////////////////////////////gAAAAAH/////////////+AAAAAAf////////////////////////////////zgAAADB/////////////gOAAD8A/////////////////////////////////+AAAAD4T////////////w/AAH+B3///////////////////////////////+AAAAAAAB////////////4x/g/wA////////////////////////////////+AAAAAAB///////////////wAAA//////////////////////////////////AAAAAAAP//////////////+H////////////////////////////////////+AAAH////////////////////////////////////////////////////////+A//H/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////';
+
+/* Equirectangular cells crowd together toward the poles, so accepting every
+   land cell would pile dots onto Greenland and Antarctica. Keep each cell with
+   probability cos(lat) to get even coverage on the sphere, using a hashed
+   value rather than Math.random so the planet looks identical on every load. */
+function hash(i){
+  let x = (i * 374761393 + 668265263) | 0;
+  x = (x ^ (x >>> 13)) * 1274126177 | 0;
+  return ((x ^ (x >>> 16)) >>> 0) / 4294967296;
+}
 
 function landCells(){
   const bin = atob(LAND), out = [];
+  const keep = MOBILE ? 0.55 : 1.0;
   for (let iy = 0; iy < NY; iy++){
+    const lat = 90 - (iy + 0.5) * (180 / NY);
+    const p = Math.cos(lat * Math.PI / 180) * keep;
     for (let ix = 0; ix < NX; ix++){
       const idx = iy * NX + ix;
-      if (bin.charCodeAt(idx >> 3) & (1 << (7 - (idx & 7)))){
-        out.push([ 90 - (iy + 0.5) * (180 / NY), -180 + (ix + 0.5) * (360 / NX) ]);
-      }
+      if (!(bin.charCodeAt(idx >> 3) & (1 << (7 - (idx & 7))))) continue;
+      if (hash(idx) > p) continue;
+      // Jitter inside the cell, otherwise the lattice shows as hard columns
+      // where the surface turns away from the camera.
+      out.push(lat + (hash(idx * 3) - 0.5) * (180 / NY) * 0.45,
+               -180 + (ix + 0.5 + (hash(idx * 11) - 0.5) * 0.45) * (360 / NX));
     }
   }
   return out;
@@ -1638,166 +1657,389 @@ function toVec(lat, lon, r){
   return new THREE.Vector3(r * c * Math.sin(o), r * Math.sin(a), r * c * Math.cos(o));
 }
 
-/* Real coordinates, used to make the motion plausible. The traffic itself is
-   simulated — see the label rendered under the canvas and the colophon. */
+/* Real city coordinates, so the motion is plausible. The traffic itself is
+   simulated - see the label under the canvas and O-06 in the colophon. */
 const ORIGINS = [
   [55.75,37.62],[39.90,116.41],[31.23,121.47],[-23.55,-46.63],[6.52,3.38],
   [19.08,72.88],[10.82,106.63],[50.45,30.52],[35.69,51.39],[37.57,126.98],
   [-6.21,106.85],[44.43,26.10],[41.01,28.98],[40.71,-74.01],[34.05,-118.24],
-  [30.04,31.24],[-26.20,28.05],[1.35,103.82],[35.68,139.69],[-33.87,151.21]
+  [30.04,31.24],[-26.20,28.05],[1.35,103.82],[35.68,139.69],[-33.87,151.21],
+  [-34.60,-58.38],[25.20,55.27],[13.75,100.50],[52.23,21.01]
 ];
 const TARGETS = [ [52.52,13.40], [50.11,8.68], [48.14,11.58], [53.55,9.99] ];
 
-const R = 2.35;
-const MOBILE = innerWidth < 760;
-const ARCS = MOBILE ? 5 : 9;
-const arcs = [];
+const TEAL = new THREE.Color(0x2dd4bf);
+const AQUA = new THREE.Color(0x6fe9ff);
+const CORAL = new THREE.Color(0xff5f45);
+const GOLD = new THREE.Color(0xffc061);
 
+/* ------------------------------------------------------------------ GLOBE */
 function buildGlobe(){
   globe = new THREE.Group();
 
-  // Opaque core: without it the far-side dots read as a cloud, not a sphere.
-  const core = new THREE.Mesh(
-    new THREE.SphereGeometry(R * 0.985, 48, 32),
-    new THREE.MeshBasicMaterial({ color: 0x081020 })
+  // Planet body. A flat disc reads as a hole; a fresnel-lit sphere reads as
+  // mass, and it also occludes arcs travelling around the far side.
+  core = new THREE.Mesh(
+    new THREE.SphereGeometry(R * 0.992, 64, 48),
+    new THREE.ShaderMaterial({
+      uniforms: {
+        uDeep: { value: new THREE.Color(0x050b16) },
+        uRim:  { value: new THREE.Color(0x14405c) }
+      },
+      vertexShader: FRESNEL_VS,
+      fragmentShader: `
+        uniform vec3 uDeep; uniform vec3 uRim;
+        varying vec3 vN; varying vec3 vE;
+        void main(){
+          float f = pow(clamp(1.0 - abs(dot(normalize(vN), normalize(vE))), 0.0, 1.0), 2.4);
+          gl_FragColor = vec4(mix(uDeep, uRim, f * 0.9), 1.0);
+        }`
+    })
   );
   globe.add(core);
 
-  // Faint graticule so the sphere reads as a globe even where there is no land.
-  const gr = new THREE.LineSegments(
-    new THREE.WireframeGeometry(new THREE.SphereGeometry(R * 0.995, 24, 12)),
-    new THREE.LineBasicMaterial({ color: 0x1d3b5a, transparent: true, opacity: 0.10 })
+  graticule = new THREE.LineSegments(
+    new THREE.WireframeGeometry(new THREE.SphereGeometry(R * 0.997, 36, 18)),
+    new THREE.LineBasicMaterial({ color: 0x1b4a63, transparent: true, opacity: 0.085,
+      depthWrite: false })
   );
-  globe.add(gr);
+  globe.add(graticule);
 
-  const cells = landCells();
-  const pos = new Float32Array(cells.length * 3);
-  for (let i = 0; i < cells.length; i++){
-    const v = toVec(cells[i][0], cells[i][1], R);
+  // Land
+  const flat = landCells();
+  const n = flat.length / 2;
+  const pos = new Float32Array(n * 3), rnd = new Float32Array(n);
+  for (let i = 0; i < n; i++){
+    const v = toVec(flat[i*2], flat[i*2+1], R);
     pos[i*3] = v.x; pos[i*3+1] = v.y; pos[i*3+2] = v.z;
+    rnd[i] = hash(i * 7919);
   }
   const lg = new THREE.BufferGeometry();
   lg.setAttribute('position', new THREE.BufferAttribute(pos, 3));
-  landPoints = new THREE.Points(lg, new THREE.PointsMaterial({
-    color: 0x2dd4bf, size: MOBILE ? 0.030 : 0.026,
-    transparent: true, opacity: 0.62, depthWrite: false, sizeAttenuation: true
+  lg.setAttribute('aRnd', new THREE.BufferAttribute(rnd, 1));
+  landPts = new THREE.Points(lg, new THREE.ShaderMaterial({
+    uniforms: {
+      // Sizes are CSS pixels at the camera's nominal distance (6.4 units);
+      // the divisor in the shader scales them with depth from there.
+      uSize:    { value: MOBILE ? 2.3 : 2.0 },
+      uPR:      { value: Math.min(devicePixelRatio, 1.5) },
+      uTime:    { value: 0 },
+      uColA:    { value: TEAL.clone() },
+      uColB:    { value: AQUA.clone() },
+      uOpacity: { value: 0.9 }
+    },
+    vertexShader: `
+      attribute float aRnd;
+      uniform float uSize; uniform float uPR;
+      varying float vFace; varying float vRnd;
+      void main(){
+        vec4 mv = modelViewMatrix * vec4(position, 1.0);
+        vFace = normalize(normalMatrix * normalize(position)).z;
+        vRnd = aRnd;
+        gl_PointSize = uSize * uPR * (6.4 / max(0.001, -mv.z));
+        gl_Position = projectionMatrix * mv;
+      }`,
+    fragmentShader: `
+      uniform vec3 uColA; uniform vec3 uColB;
+      uniform float uOpacity; uniform float uTime;
+      varying float vFace; varying float vRnd;
+      void main(){
+        if (vFace <= 0.0) discard;                  // far side never draws
+        vec2 c = gl_PointCoord - vec2(0.5);
+        float d = dot(c, c);
+        if (d > 0.25) discard;
+        float soft = smoothstep(0.25, 0.01, d);     // round, anti-aliased dot
+        float limb = smoothstep(0.0, 0.30, vFace);  // dissolve toward silhouette
+        float tw   = 0.74 + 0.26 * sin(uTime * 0.9 + vRnd * 47.0);
+        gl_FragColor = vec4(mix(uColA, uColB, vRnd), soft * limb * tw * uOpacity);
+      }`,
+    transparent: true, depthWrite: false, blending: THREE.AdditiveBlending
   }));
-  globe.add(landPoints);
+  globe.add(landPts);
 
-  // Rim light: back-face sphere, additive, so the limb glows without a shader.
-  atmos = new THREE.Mesh(
-    new THREE.SphereGeometry(R * 1.055, 40, 26),
-    new THREE.MeshBasicMaterial({
-      color: 0x2dd4bf, transparent: true, opacity: 0.055,
-      side: THREE.BackSide, blending: THREE.AdditiveBlending, depthWrite: false
+  // Atmosphere: back-face fresnel shell, so the limb carries a real halo.
+  halo = new THREE.Mesh(
+    new THREE.SphereGeometry(R * 1.075, 48, 32),
+    new THREE.ShaderMaterial({
+      uniforms: {
+        uCol: { value: new THREE.Color(0x35e2d8) },
+        uInt: { value: 0.70 },
+        uPow: { value: 5.2 }     // tight against the limb, not a fuzzy shell
+      },
+      vertexShader: FRESNEL_VS,
+      fragmentShader: `
+        uniform vec3 uCol; uniform float uInt; uniform float uPow;
+        varying vec3 vN; varying vec3 vE;
+        void main(){
+          float f = pow(clamp(1.0 - abs(dot(normalize(vN), normalize(vE))), 0.0, 1.0), uPow);
+          gl_FragColor = vec4(uCol, f * uInt);
+        }`,
+      transparent: true, side: THREE.BackSide,
+      blending: THREE.AdditiveBlending, depthWrite: false
     })
   );
-  globe.add(atmos);
+  globe.add(halo);
 
-  for (let i = 0; i < ARCS; i++) arcs.push(makeArc(i * 0.55));
+  buildTargets();
+  for (let i = 0; i < ARC_N; i++) arcs.push(makeArc(i * (MOBILE ? 0.8 : 0.5)));
 
-  globe.position.set(1.35, 0.05, 0);
-  globe.rotation.z = 0.22;                      // axial tilt, so it isn't a spinning ball
+  globe.position.set(1.32, 0.05, 0);
+  globe.rotation.z = 0.21;                 // axial tilt: not a spinning ball
   scene.add(globe);
 }
 
-const SEG = 96;
+const FRESNEL_VS = `
+  varying vec3 vN; varying vec3 vE;
+  void main(){
+    vec4 mv = modelViewMatrix * vec4(position, 1.0);
+    vN = normalize(normalMatrix * normal);
+    vE = mv.xyz;
+    gl_Position = projectionMatrix * mv;
+  }`;
+
+/* Persistent markers on the four German targets. */
+function buildTargets(){
+  const pos = new Float32Array(TARGETS.length * 3);
+  TARGETS.forEach((t, i) => {
+    const v = toVec(t[0], t[1], R * 1.008);
+    pos[i*3] = v.x; pos[i*3+1] = v.y; pos[i*3+2] = v.z;
+  });
+  const g = new THREE.BufferGeometry();
+  g.setAttribute('position', new THREE.BufferAttribute(pos, 3));
+  targetPts = new THREE.Points(g, new THREE.ShaderMaterial({
+    uniforms: {
+      uCol:  { value: GOLD.clone() },
+      uTime: { value: 0 },
+      uPR:   { value: Math.min(devicePixelRatio, 1.5) }
+    },
+    vertexShader: `
+      uniform float uTime; uniform float uPR;
+      varying float vFace;
+      void main(){
+        vec4 mv = modelViewMatrix * vec4(position, 1.0);
+        vFace = normalize(normalMatrix * normalize(position)).z;
+        gl_PointSize = (5.0 + 1.6 * sin(uTime * 2.2)) * uPR * (6.4 / max(0.001, -mv.z));
+        gl_Position = projectionMatrix * mv;
+      }`,
+    fragmentShader: `
+      uniform vec3 uCol;
+      varying float vFace;
+      void main(){
+        if (vFace <= 0.02) discard;
+        float d = length(gl_PointCoord - vec2(0.5));
+        if (d > 0.5) discard;
+        float core = smoothstep(0.16, 0.0, d);
+        float glow = smoothstep(0.5, 0.10, d) * 0.55;
+        gl_FragColor = vec4(uCol, (core + glow) * smoothstep(0.0, 0.25, vFace));
+      }`,
+    transparent: true, depthWrite: false, blending: THREE.AdditiveBlending
+  }));
+  globe.add(targetPts);
+}
+
+/* -------------------------------------------------------------------- ARCS */
+const ARC_N = MOBILE ? 5 : 10;
+const SEG = 128;
+const arcs = [];
+
 function makeArc(delay){
-  const geo = new THREE.BufferGeometry();
-  geo.setAttribute('position', new THREE.BufferAttribute(new Float32Array((SEG + 1) * 3), 3));
-  const line = new THREE.Line(geo, new THREE.LineBasicMaterial({
-    color: 0xff6b5d, transparent: true, opacity: 0.85,
-    blending: THREE.AdditiveBlending, depthWrite: false
+  /* A tube, not a Line: WebGL clamps line width to 1px on every desktop
+     driver, which made the traces read as hair-thin scratches. TubeGeometry
+     also hands us uv.x running 0..1 along its length, so the comet tail needs
+     no custom attribute. */
+  const line = new THREE.Mesh(new THREE.BufferGeometry(), new THREE.ShaderMaterial({
+    uniforms: {
+      uHead:{value:0}, uTail:{value:0.34}, uOpacity:{value:1},
+      uColA:{value: CORAL.clone()}, uColB:{value: GOLD.clone()}
+    },
+    vertexShader: `
+      varying float vT; varying vec3 vN; varying vec3 vE;
+      void main(){
+        vT = uv.x;
+        vec4 mv = modelViewMatrix * vec4(position, 1.0);
+        vN = normalize(normalMatrix * normal);
+        vE = mv.xyz;
+        gl_Position = projectionMatrix * mv;
+      }`,
+    fragmentShader: `
+      uniform float uHead; uniform float uTail; uniform float uOpacity;
+      uniform vec3 uColA; uniform vec3 uColB;
+      varying float vT; varying vec3 vN; varying vec3 vE;
+      void main(){
+        if (vT > uHead) discard;
+        float a = smoothstep(uHead - uTail, uHead, vT);
+        a *= a;
+        // Brighten the silhouette of the tube so it reads as a glowing cord
+        // rather than a flat extruded ribbon.
+        float rim = pow(clamp(1.0 - abs(dot(normalize(vN), normalize(vE))), 0.0, 1.0), 1.6);
+        vec3 c = mix(uColA, uColB, vT) * (0.55 + 1.15 * rim);
+        gl_FragColor = vec4(c, a * uOpacity);
+      }`,
+    transparent: true, depthWrite: false, blending: THREE.AdditiveBlending
   }));
   globe.add(line);
 
-  const ring = new THREE.Mesh(
-    new THREE.RingGeometry(0.035, 0.05, 22),
-    new THREE.MeshBasicMaterial({
-      color: 0xffb14a, transparent: true, opacity: 0,
-      side: THREE.DoubleSide, blending: THREE.AdditiveBlending, depthWrite: false
-    })
-  );
-  globe.add(ring);
+  const hg = new THREE.BufferGeometry();
+  hg.setAttribute('position', new THREE.BufferAttribute(new Float32Array(3), 3));
+  const head = new THREE.Points(hg, new THREE.ShaderMaterial({
+    uniforms: {
+      uCol:{value: new THREE.Color(0xfff0d0)}, uOpacity:{value:0},
+      uPR:{value: Math.min(devicePixelRatio,1.5)}, uSize:{value: MOBILE ? 7.0 : 8.5}
+    },
+    vertexShader: `
+      uniform float uPR; uniform float uSize;
+      void main(){
+        vec4 mv = modelViewMatrix * vec4(position,1.0);
+        gl_PointSize = uSize * uPR * (6.4 / max(0.001, -mv.z));
+        gl_Position = projectionMatrix * mv;
+      }`,
+    fragmentShader: `
+      uniform vec3 uCol; uniform float uOpacity;
+      void main(){
+        float d = length(gl_PointCoord - vec2(0.5));
+        if (d > 0.5) discard;
+        float g = smoothstep(0.5, 0.0, d);
+        gl_FragColor = vec4(uCol, g * g * uOpacity);
+      }`,
+    transparent: true, depthWrite: false, blending: THREE.AdditiveBlending
+  }));
+  globe.add(head);
 
-  const a = { line, ring, t: -delay, dur: 1, pts: [], target: null };
+  const rings = [0,1].map(() => {
+    const m = new THREE.Mesh(
+      new THREE.RingGeometry(0.30, 0.345, 40),
+      new THREE.MeshBasicMaterial({ color: GOLD, transparent: true, opacity: 0,
+        side: THREE.DoubleSide, blending: THREE.AdditiveBlending, depthWrite: false })
+    );
+    m.scale.setScalar(0.001);
+    globe.add(m);
+    return m;
+  });
+
+  const a = { line, head, rings, curve: null, t: -delay, dur: 1, gap: 0 };
   respawn(a);
+  a.t = -delay;
   return a;
 }
 
 function respawn(a){
   const o = ORIGINS[(Math.random() * ORIGINS.length) | 0];
   const d = TARGETS[(Math.random() * TARGETS.length) | 0];
-  const s = toVec(o[0], o[1], R), e = toVec(d[0], d[1], R);
+  const s = toVec(o[0], o[1], R * 1.004), e = toVec(d[0], d[1], R * 1.004);
 
-  // Lift the control point by the angular separation, so long hops arc higher.
+  // Lift the control point by angular separation, so long hops arc higher.
   const sep = s.angleTo(e);
   const mid = s.clone().add(e).multiplyScalar(0.5).normalize()
-               .multiplyScalar(R * (1 + 0.10 + sep * 0.20));
-  const curve = new THREE.QuadraticBezierCurve3(s, mid, e);
+               .multiplyScalar(R * (1 + 0.055 + sep * 0.17));
+  a.curve = new THREE.QuadraticBezierCurve3(s, mid, e);
 
-  a.pts = curve.getPoints(SEG);
-  const arr = a.line.geometry.attributes.position.array;
-  for (let i = 0; i <= SEG; i++){
-    arr[i*3] = a.pts[i].x; arr[i*3+1] = a.pts[i].y; arr[i*3+2] = a.pts[i].z;
-  }
-  a.line.geometry.attributes.position.needsUpdate = true;
-  a.line.geometry.setDrawRange(0, 0);
+  // Rebuilt per launch. ~700 vertices each, a handful of times a second at
+  // most, which is far cheaper than the alternative of faking width.
+  a.line.geometry.dispose();
+  a.line.geometry = new THREE.TubeGeometry(a.curve, SEG, 0.0165, 6, false);
+  a.line.material.uniforms.uHead.value = 0;
+  a.line.material.uniforms.uOpacity.value = 1;
+  a.head.material.uniforms.uOpacity.value = 0;
 
-  a.ring.position.copy(e);
-  a.ring.lookAt(0, 0, 0);
-  a.ring.material.opacity = 0;
+  a.rings.forEach(r => {
+    r.position.copy(e);
+    r.lookAt(0, 0, 0);
+    r.material.opacity = 0;
+    r.scale.setScalar(0.001);
+  });
 
   a.t = 0;
-  a.dur = 2.6 + Math.random() * 2.2;
-  a.gap = 0.5 + Math.random() * 2.4;
-  a.target = d;
+  a.dur = 2.4 + Math.random() * 2.4;
+  a.gap = 0.4 + Math.random() * 2.6;
 }
 
-const TAIL = 26;
+const FADE = 1.15;                       // seconds of impact animation
 function stepArcs(dt){
   for (const a of arcs){
     a.t += dt;
+    if (a.t < 0) continue;
     const p = a.t / a.dur;
 
-    if (p < 0){ continue; }
-
     if (p <= 1){
-      // Comet: a fixed-length window of the polyline advancing to the target.
-      const head = Math.min(SEG, Math.round(p * SEG));
-      const start = Math.max(0, head - TAIL);
-      a.line.geometry.setDrawRange(start, Math.max(0, head - start));
-      a.line.material.opacity = 0.85 * Math.min(1, (1 - p) * 3.2 + 0.25);
+      const e = p * p * (3.0 - 2.0 * p);          // ease so it leaves and lands softly
+      a.line.material.uniforms.uHead.value = e * 1.0001;
+      a.line.material.uniforms.uOpacity.value = 1;
+      const hp = a.curve.getPointAt(Math.min(1, e));
+      const ha = a.head.geometry.attributes.position;
+      ha.array[0] = hp.x; ha.array[1] = hp.y; ha.array[2] = hp.z;
+      ha.needsUpdate = true;
+      a.head.material.uniforms.uOpacity.value = Math.min(1, p * 6) * Math.min(1, (1 - p) * 8 + 0.25);
     } else {
-      a.line.geometry.setDrawRange(0, 0);
-      const q = (a.t - a.dur) / 0.9;                 // impact ring expands + fades
-      if (q < 1){
-        a.ring.material.opacity = 0.75 * (1 - q);
-        a.ring.scale.setScalar(1 + q * 2.6);
-      } else {
-        a.ring.material.opacity = 0;
-        a.ring.scale.setScalar(1);
-        if (a.t > a.dur + 0.9 + a.gap) respawn(a);
-      }
+      const q = (a.t - a.dur) / FADE;
+      a.head.material.uniforms.uOpacity.value = 0;
+      // Trail drains away from the origin end rather than vanishing at once.
+      a.line.material.uniforms.uOpacity.value = Math.max(0, 1 - q * 1.6);
+      a.rings.forEach((r, i) => {
+        const qq = q - i * 0.22;
+        if (qq > 0 && qq < 1){
+          r.material.opacity = 0.85 * (1 - qq) * (i ? 0.5 : 1);
+          r.scale.setScalar(0.05 + qq * (i ? 1.5 : 1.05));
+        } else {
+          r.material.opacity = 0;
+        }
+      });
+      if (q > 1 && a.t > a.dur + FADE + a.gap) respawn(a);
     }
   }
 }
 
-function buildParticles(){
-  const C = MOBILE ? 900 : 1700, pos = new Float32Array(C*3);
-  for (let i=0;i<C;i++){
-    const r = 7 + Math.random()*13, t = Math.random()*Math.PI*2, p = Math.acos(2*Math.random()-1);
-    pos[i*3]=r*Math.sin(p)*Math.cos(t); pos[i*3+1]=r*Math.cos(p)*0.6; pos[i*3+2]=r*Math.sin(p)*Math.sin(t);
+/* ------------------------------------------------------------------ STARS */
+function buildStars(){
+  const C = MOBILE ? 700 : 1400;
+  const pos = new Float32Array(C*3), sz = new Float32Array(C), br = new Float32Array(C);
+  for (let i = 0; i < C; i++){
+    const r = 9 + Math.random()*16, th = Math.random()*Math.PI*2,
+          ph = Math.acos(2*Math.random()-1);
+    pos[i*3]   = r*Math.sin(ph)*Math.cos(th);
+    pos[i*3+1] = r*Math.cos(ph)*0.62;
+    pos[i*3+2] = r*Math.sin(ph)*Math.sin(th);
+    sz[i] = 1.3 + Math.pow(Math.random(), 3) * 4.2;   // a few bright, most faint
+    br[i] = 0.25 + Math.random()*0.75;
   }
-  const g = new THREE.BufferGeometry(); g.setAttribute('position', new THREE.BufferAttribute(pos, 3));
-  particles = new THREE.Points(g, new THREE.PointsMaterial({ color:0x4d6b9a, size:0.032, transparent:true, opacity:0.55, depthWrite:false, blending:THREE.AdditiveBlending }));
-  scene.add(particles);
+  const g = new THREE.BufferGeometry();
+  g.setAttribute('position', new THREE.BufferAttribute(pos, 3));
+  g.setAttribute('aSize', new THREE.BufferAttribute(sz, 1));
+  g.setAttribute('aBri', new THREE.BufferAttribute(br, 1));
+  stars = new THREE.Points(g, new THREE.ShaderMaterial({
+    uniforms: {
+      uPR:{value: Math.min(devicePixelRatio,1.5)}, uTime:{value:0},
+      uCol:{value: new THREE.Color(0x9fc4ee)}
+    },
+    vertexShader: `
+      attribute float aSize; attribute float aBri;
+      uniform float uPR; uniform float uTime;
+      varying float vBri;
+      void main(){
+        vec4 mv = modelViewMatrix * vec4(position,1.0);
+        vBri = aBri * (0.7 + 0.3*sin(uTime*0.7 + aSize*12.0));
+        gl_PointSize = aSize * uPR * (6.4 / max(0.001, -mv.z));
+        gl_Position = projectionMatrix * mv;
+      }`,
+    fragmentShader: `
+      uniform vec3 uCol; varying float vBri;
+      void main(){
+        float d = length(gl_PointCoord - vec2(0.5));
+        if (d > 0.5) discard;
+        gl_FragColor = vec4(uCol, smoothstep(0.5, 0.0, d) * vBri * 0.55);
+      }`,
+    transparent: true, depthWrite: false, blending: THREE.AdditiveBlending
+  }));
+  scene.add(stars);
 }
 
 function onResize(){
   camera.aspect = innerWidth/innerHeight; camera.updateProjectionMatrix();
   renderer.setSize(innerWidth, innerHeight); composer.setSize(innerWidth, innerHeight);
-  renderer.setPixelRatio(Math.min(devicePixelRatio, 1.5));
+  const pr = Math.min(devicePixelRatio, 1.5);
+  renderer.setPixelRatio(pr);
+  [landPts, targetPts, stars].forEach(o => {
+    if (o && o.material.uniforms.uPR) o.material.uniforms.uPR.value = pr;
+  });
 }
 function renderOnce(){ composer.render(); }
 
@@ -1806,28 +2048,30 @@ function animate(){
   const dt = Math.min(0.05, clock.getDelta());
   const t = clock.getElapsedTime();
 
-  pointer.x += (pointer.tx - pointer.x)*0.05; pointer.y += (pointer.ty - pointer.y)*0.05;
+  pointer.x += (pointer.tx - pointer.x)*0.045;
+  pointer.y += (pointer.ty - pointer.y)*0.045;
   heroHover += (heroHoverTarget - heroHover)*0.06;
 
   if (globe){
-    globe.rotation.y = t * 0.055 + pointer.x * 0.35;
-    globe.rotation.x = Math.sin(t*0.18)*0.05 + pointer.y * 0.18;
+    globe.rotation.y = t * 0.048 + pointer.x * 0.30;
+    globe.rotation.x = Math.sin(t*0.16)*0.045 + pointer.y * 0.16;
     globe.position.y = 0.05 - scrollN * 0.55;
-    globe.scale.setScalar(1 + heroHover * 0.03);
+    globe.scale.setScalar(1 + heroHover * 0.025);
+    landPts.material.uniforms.uTime.value = t;
+    targetPts.material.uniforms.uTime.value = t;
+    halo.material.uniforms.uInt.value = 0.66 + Math.sin(t*0.5)*0.07;
     stepArcs(dt);
   }
-  if (atmos) atmos.material.opacity = 0.045 + Math.sin(t*0.6)*0.012;
-  if (particles) particles.rotation.y = t*0.012;
+  if (stars) { stars.rotation.y = t*0.008; stars.material.uniforms.uTime.value = t; }
 
-  camera.position.x += ((pointer.x*0.8) - camera.position.x)*0.04;
-  camera.position.y += ((0.3 - pointer.y*0.6) - camera.position.y)*0.04;
+  camera.position.x += ((pointer.x*0.7) - camera.position.x)*0.04;
+  camera.position.y += ((0.3 - pointer.y*0.5) - camera.position.y)*0.04;
   camera.lookAt(1.1, 0, 0);
   composer.render();
 }
 
 function init(){
   scene = new THREE.Scene();
-  scene.fog = new THREE.FogExp2(0x060a14, 0.055);
 
   camera = new THREE.PerspectiveCamera(46, innerWidth/innerHeight, 0.1, 100);
   camera.position.set(0, 0.3, 6.4);
@@ -1836,14 +2080,22 @@ function init(){
   renderer.setSize(innerWidth, innerHeight);
   renderer.setPixelRatio(Math.min(devicePixelRatio, 1.5));
   renderer.toneMapping = THREE.ACESFilmicToneMapping;
-  renderer.toneMappingExposure = 1.05;
+  renderer.toneMappingExposure = 1.12;
 
-  buildGlobe(); buildParticles();
+  buildGlobe(); buildStars();
 
-  const rt = new RenderPass(scene, camera);
-  const bloom = new UnrealBloomPass(new THREE.Vector2(innerWidth, innerHeight), 0.62, 0.55, 0.28);
+  // Threshold sits above the land dots so bloom lifts the arcs, the impact
+  // rings and the limb without smearing the whole planet.
+  const bloom = new UnrealBloomPass(
+    new THREE.Vector2(innerWidth, innerHeight),
+    MOBILE ? 0.52 : 0.72,   // strength
+    0.72,                   // radius
+    0.20                    // threshold
+  );
   composer = new EffectComposer(renderer);
-  composer.addPass(rt); composer.addPass(bloom); composer.addPass(new OutputPass());
+  composer.addPass(new RenderPass(scene, camera));
+  composer.addPass(bloom);
+  composer.addPass(new OutputPass());
 
   clock = new THREE.Clock();
   addEventListener('resize', onResize);
@@ -1859,20 +2111,27 @@ function init(){
     heroEl.addEventListener('pointerleave', () => { heroHoverTarget = 0; });
   }
 
-  // Reduced motion: render the globe once, with no arcs in flight, and stop.
   if (reduce){
-    arcs.forEach(a => { a.line.geometry.setDrawRange(0,0); a.ring.material.opacity = 0; });
-    renderOnce();
-  } else {
+    // Still a planet, just a still one: no arcs in flight, no twinkle.
+    arcs.forEach(a => {
+      a.line.material.uniforms.uOpacity.value = 0;
+      a.head.material.uniforms.uOpacity.value = 0;
+      a.rings.forEach(r => { r.material.opacity = 0; });
+    });
+  }
+
+  // Paint one frame immediately, so a tab that starts backgrounded still has
+  // a rendered globe the moment it is shown rather than a blank canvas.
+  renderOnce();
+
+  if (!reduce){
     renderer.setAnimationLoop(animate);
     document.addEventListener('visibilitychange', () => {
       renderer.setAnimationLoop(document.hidden ? null : animate);
     });
   }
-
 }
 
-// Respect Save-Data / reduced-data: skip the 3D scene entirely.
 if (saveData){
   canvas.style.display = 'none';
   document.documentElement.classList.add('no-globe');
