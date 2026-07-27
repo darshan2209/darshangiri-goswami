@@ -118,6 +118,9 @@ listed because a register that only contains solved problems is not a register.<
     <dt>Hosting</dt><dd>GitHub Pages, deployed from the <code>main</code> branch</dd>
     <dt>Type</dt><dd>Space Grotesk, IBM Plex Sans, IBM Plex Mono — self-hosted woff2 subsets (latin + latin-ext), 170 KB total</dd>
     <dt>3D</dt><dd>three.js r161 with the postprocessing addons, vendored locally under <code>/vendor/three/</code></dd>
+    <dt>Background</dt><dd>Rotating globe with animated arcs. Coastlines are Natural Earth 110m land,
+      rasterised to a 180&times;90 bitmask (2.7 KB) rather than a texture. <strong>The traffic it shows is
+      simulated</strong> &mdash; see O-06 below</dd>
     <dt>AI backend</dt><dd>Flask + gunicorn on Render, proxying the Anthropic API so the key never reaches the browser</dd>
     <dt>Cookies</dt><dd>None</dd>
     <dt>Analytics</dt><dd>GoatCounter — cookieless, EU-hosted, no IP stored. No Google Analytics, no tag manager, no pixel, no heatmap</dd>
@@ -303,6 +306,16 @@ listed because a register that only contains solved problems is not a register.<
       <td>No light mode and no print stylesheet</td>
       <td>A recruiter who prints or PDF-exports any page gets an unusable near-black sheet — a real
           problem in a market where applications are assembled as PDFs. Scheduled for the redesign</td>
+      <td><span class="tag t-watch">Planned</span></td>
+    </tr>
+    <tr>
+      <td class="k">O-06</td>
+      <td>Background globe animates simulated attack traffic</td>
+      <td>The arcs are generated, not observed. Origin and target coordinates are real cities, but no
+          detection, log or feed sits behind them &mdash; it is an illustration, and the page says so
+          permanently in the label under the canvas rather than leaving a viewer to assume it is live
+          telemetry. The honest upgrade is to replace it with real data from my own Wazuh honeypot,
+          with a collection window and an event count stated alongside it</td>
       <td><span class="tag t-watch">Planned</span></td>
     </tr>
     <tr>
