@@ -1605,7 +1605,6 @@ const reduce = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
 const saveData = (navigator.connection && navigator.connection.saveData) ||
                  window.matchMedia('(prefers-reduced-data: reduce)').matches;
 const canvas = document.getElementById('bg');
-const TEAL = 0x2dd4bf, GOLD = 0xe6b94f, NAVY = 0x0b1426;
 
 let renderer, scene, camera, composer, globe, landPts, halo, core, graticule,
     targetPts, stars, clock;
@@ -1761,12 +1760,14 @@ function buildGlobe(){
 
   // Atmosphere: back-face fresnel shell, so the limb carries a real halo.
   halo = new THREE.Mesh(
-    new THREE.SphereGeometry(R * 1.075, 48, 32),
+    new THREE.SphereGeometry(R * 1.05, 48, 32),
     new THREE.ShaderMaterial({
       uniforms: {
         uCol: { value: new THREE.Color(0x35e2d8) },
-        uInt: { value: 0.70 },
-        uPow: { value: 5.2 }     // tight against the limb, not a fuzzy shell
+        // Additive + bloom multiplies this hard: at 0.70 the limb rendered as
+        // a solid teal band rather than atmosphere.
+        uInt: { value: 0.17 },
+        uPow: { value: 6.5 }     // tight against the limb, not a fuzzy shell
       },
       vertexShader: FRESNEL_VS,
       fragmentShader: `
@@ -1787,6 +1788,10 @@ function buildGlobe(){
 
   globe.position.set(0, 0.05, 0);
   globe.rotation.z = 0.21;                 // axial tilt: not a spinning ball
+  // Tip the north pole toward the camera. Every arc terminates in Germany at
+  // ~52 degrees N, which without this sits hard against the top edge and the
+  // impacts land half off-screen.
+  globe.rotation.x = 0.40;
   scene.add(globe);
 }
 
@@ -2041,15 +2046,21 @@ function buildStars(){
    the same 46 degrees as a desktop's but its width is a third of it, so a
    fixed distance that looks generous on a laptop puts the viewer inside the
    planet on a handset. Fill > 1 means the globe bleeds past the limiting edge. */
-const HALO_R = R * 1.075;
 function fitCamera(){
   // Guard the divisor: a viewport reported as 0 (a backgrounded or collapsed
   // pane) would otherwise make aspect NaN and park the camera at NaN, which
   // renders nothing and throws nothing.
   const aspect = Math.max(1, innerWidth) / Math.max(1, innerHeight);
-  const tan = Math.tan(46 * Math.PI / 360);
-  const fill = aspect < 1 ? 1.28 : 1.12;
-  camera.position.z = (HALO_R / fill) / (tan * Math.min(1, aspect));
+  const tanHalf = Math.tan(46 * Math.PI / 360);
+
+  // Fraction of the limiting half-extent the silhouette should cover.
+  const fill = aspect < 1 ? 1.25 : 1.02;
+
+  // A sphere's silhouette subtends asin(R/d), not atan(R/d) — the tangent
+  // point sits in front of the centre. Solving the naive ratio instead put
+  // the camera ~12% too close and cropped the planet off the top and bottom.
+  const T = fill * tanHalf * Math.min(1, aspect);
+  camera.position.z = R * Math.sqrt(1 + T * T) / T;
   camera.updateProjectionMatrix();
   const ref = camera.position.z;
   [landPts, targetPts, stars].forEach(o => {
@@ -2082,12 +2093,12 @@ function animate(){
 
   if (globe){
     globe.rotation.y = t * 0.048 + pointer.x * 0.30;
-    globe.rotation.x = Math.sin(t*0.16)*0.045 + pointer.y * 0.16;
+    globe.rotation.x = 0.40 + Math.sin(t*0.16)*0.045 + pointer.y * 0.16;
     globe.position.y = 0.05 - scrollN * 0.55;
     globe.scale.setScalar(1 + heroHover * 0.025);
     landPts.material.uniforms.uTime.value = t;
     targetPts.material.uniforms.uTime.value = t;
-    halo.material.uniforms.uInt.value = 0.66 + Math.sin(t*0.5)*0.07;
+    halo.material.uniforms.uInt.value = 0.16 + Math.sin(t*0.5)*0.025;
     stepArcs(dt);
   }
   if (stars) { stars.rotation.y = t*0.008; stars.material.uniforms.uTime.value = t; }
@@ -2118,9 +2129,9 @@ function init(){
   // rings and the limb without smearing the whole planet.
   const bloom = new UnrealBloomPass(
     new THREE.Vector2(innerWidth, innerHeight),
-    MOBILE ? 0.52 : 0.72,   // strength
-    0.72,                   // radius
-    0.20                    // threshold
+    MOBILE ? 0.42 : 0.55,   // strength
+    0.70,                   // radius
+    0.42                    // threshold: above the limb, so only arcs bloom
   );
   composer = new EffectComposer(renderer);
   composer.addPass(new RenderPass(scene, camera));
