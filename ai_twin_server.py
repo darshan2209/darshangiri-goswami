@@ -104,8 +104,13 @@ EDUCATION
 
 CERTIFICATIONS
 Microsoft SC-900; ISO/IEC 27001 Information Security Associate; Google Cybersecurity Certificate; Cisco CyberOps
-Associate; Certified Threat Intelligence & Governance Analyst (CTIGA, Red Team Leaders); Microsoft SC-300 (in progress);
-CompTIA Security+ SY0-701 (in progress). More credentials listed on Credly and LinkedIn (23 total licenses on LinkedIn).
+Associate; Certified Threat Intelligence & Governance Analyst (CTIGA, Red Team Leaders); TryHackMe Sec1;
+Microsoft SC-300 (in progress); CompTIA Security+ SY0-701 (in progress). More credentials listed on Credly and
+LinkedIn (23 total licenses on LinkedIn).
+
+INVOLVEMENT & AWARDS
+Cybercrime Volunteer, State Cyber Cell; Cybersecurity Lead, GDSC Club. Aspire Leadership Program (2024);
+L'Oreal BOOST Scholarship (2023).
 
 WRITING
 Publishes a short practical security lesson three times a week on LinkedIn (5,000+ followers) — currently a series on
