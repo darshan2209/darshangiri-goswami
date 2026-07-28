@@ -45,16 +45,20 @@ def rate_limited(ip):
 
 # --- Grounding: Darshan's CV, given to Claude as a cached system prompt ---------
 CV = """\
-Darshangiri Goswami — Working Student candidate: Governance, Risk & Compliance (GRC) | Identity & Access Management (IAM) | Monitoring & Investigations | AI in Cybersecurity.
-Location: Berlin, Germany (open to relocation). Available immediately, up to 40 hrs/week.
+Darshangiri Goswami — Entry-level candidate: Governance, Risk & Compliance (GRC) | Identity & Access Management (IAM) | Monitoring & Investigations | AI in Cybersecurity.
+Location: Berlin, Germany (open to relocation). Available FULL-TIME from October 2026, after completing the M.Sc.
+in September 2026; already interviewing for autumn starts. Work eligibility: as a graduate of a German university
+he receives an 18-month post-study residence permit for job-seeking, which allows unrestricted employment, so an
+employer does not need to sponsor him. He is NOT looking for internships or working-student roles.
 Contact: +49 155 1083 7720 | darshangoswami22922@gmail.com | linkedin.com/in/darshangiri-goswami-033283213 | credly.com/users/darshan-goswami.e4c6c92c
 
 SUMMARY
-Business Management & Cybersecurity master's student focused on Governance, Risk & Compliance (GRC), Identity &
+Business Management & Cybersecurity M.Sc. graduate (September 2026) focused on Governance, Risk & Compliance (GRC), Identity &
 Access Management (IAM) and AI in cybersecurity, with hands-on experience in compliance and regulatory training,
 policy and controls documentation, and monitoring flagged activity through checks and assessments of system alerts.
 Particular strength in process automation and AI-driven workflows, applied with a focus on ethical and responsible
-AI. Fluent in English (C1), conversational German (A2). Seeking a Working Student role in GRC, IAM or compliance.
+AI. Fluent in English (C1), conversational German (A2). Seeking a first full-time role in GRC, IAM or compliance —
+analyst, associate or graduate-programme level.
 
 SKILLS
 - Governance, Risk & Compliance (GRC): policy & procedure documentation, Code of Conduct / acceptable-use training,
