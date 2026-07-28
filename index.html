@@ -1719,10 +1719,12 @@ function buildGlobe(){
   lg.setAttribute('aRnd', new THREE.BufferAttribute(rnd, 1));
   landPts = new THREE.Points(lg, new THREE.ShaderMaterial({
     uniforms: {
-      // Sizes are CSS pixels at the camera's nominal distance (6.4 units);
-      // the divisor in the shader scales them with depth from there.
+      // Sizes are CSS pixels for a dot sitting at the globe's centre depth.
+      // uRef tracks the camera distance, so fitCamera() can move the camera
+      // for any viewport without the dots changing apparent size.
       uSize:    { value: MOBILE ? 2.3 : 2.0 },
       uPR:      { value: Math.min(devicePixelRatio, 1.5) },
+      uRef:     { value: 6.4 },
       uTime:    { value: 0 },
       uColA:    { value: TEAL.clone() },
       uColB:    { value: AQUA.clone() },
@@ -1730,13 +1732,13 @@ function buildGlobe(){
     },
     vertexShader: `
       attribute float aRnd;
-      uniform float uSize; uniform float uPR;
+      uniform float uSize; uniform float uPR; uniform float uRef;
       varying float vFace; varying float vRnd;
       void main(){
         vec4 mv = modelViewMatrix * vec4(position, 1.0);
         vFace = normalize(normalMatrix * normalize(position)).z;
         vRnd = aRnd;
-        gl_PointSize = uSize * uPR * (6.4 / max(0.001, -mv.z));
+        gl_PointSize = uSize * uPR * (uRef / max(0.001, -mv.z));
         gl_Position = projectionMatrix * mv;
       }`,
     fragmentShader: `
@@ -1783,7 +1785,7 @@ function buildGlobe(){
   buildTargets();
   for (let i = 0; i < ARC_N; i++) arcs.push(makeArc(i * (MOBILE ? 0.8 : 0.5)));
 
-  globe.position.set(1.32, 0.05, 0);
+  globe.position.set(0, 0.05, 0);
   globe.rotation.z = 0.21;                 // axial tilt: not a spinning ball
   scene.add(globe);
 }
@@ -1810,15 +1812,16 @@ function buildTargets(){
     uniforms: {
       uCol:  { value: GOLD.clone() },
       uTime: { value: 0 },
-      uPR:   { value: Math.min(devicePixelRatio, 1.5) }
+      uPR:   { value: Math.min(devicePixelRatio, 1.5) },
+      uRef:  { value: 6.4 }
     },
     vertexShader: `
-      uniform float uTime; uniform float uPR;
+      uniform float uTime; uniform float uPR; uniform float uRef;
       varying float vFace;
       void main(){
         vec4 mv = modelViewMatrix * vec4(position, 1.0);
         vFace = normalize(normalMatrix * normalize(position)).z;
-        gl_PointSize = (5.0 + 1.6 * sin(uTime * 2.2)) * uPR * (6.4 / max(0.001, -mv.z));
+        gl_PointSize = (5.0 + 1.6 * sin(uTime * 2.2)) * uPR * (uRef / max(0.001, -mv.z));
         gl_Position = projectionMatrix * mv;
       }`,
     fragmentShader: `
@@ -1884,13 +1887,14 @@ function makeArc(delay){
   const head = new THREE.Points(hg, new THREE.ShaderMaterial({
     uniforms: {
       uCol:{value: new THREE.Color(0xfff0d0)}, uOpacity:{value:0},
-      uPR:{value: Math.min(devicePixelRatio,1.5)}, uSize:{value: MOBILE ? 7.0 : 8.5}
+      uPR:{value: Math.min(devicePixelRatio,1.5)}, uSize:{value: MOBILE ? 7.0 : 8.5},
+      uRef:{value: 6.4}
     },
     vertexShader: `
-      uniform float uPR; uniform float uSize;
+      uniform float uPR; uniform float uSize; uniform float uRef;
       void main(){
         vec4 mv = modelViewMatrix * vec4(position,1.0);
-        gl_PointSize = uSize * uPR * (6.4 / max(0.001, -mv.z));
+        gl_PointSize = uSize * uPR * (uRef / max(0.001, -mv.z));
         gl_Position = projectionMatrix * mv;
       }`,
     fragmentShader: `
@@ -2008,16 +2012,16 @@ function buildStars(){
   stars = new THREE.Points(g, new THREE.ShaderMaterial({
     uniforms: {
       uPR:{value: Math.min(devicePixelRatio,1.5)}, uTime:{value:0},
-      uCol:{value: new THREE.Color(0x9fc4ee)}
+      uRef:{value: 6.4}, uCol:{value: new THREE.Color(0x9fc4ee)}
     },
     vertexShader: `
       attribute float aSize; attribute float aBri;
-      uniform float uPR; uniform float uTime;
+      uniform float uPR; uniform float uTime; uniform float uRef;
       varying float vBri;
       void main(){
         vec4 mv = modelViewMatrix * vec4(position,1.0);
         vBri = aBri * (0.7 + 0.3*sin(uTime*0.7 + aSize*12.0));
-        gl_PointSize = aSize * uPR * (6.4 / max(0.001, -mv.z));
+        gl_PointSize = aSize * uPR * (uRef / max(0.001, -mv.z));
         gl_Position = projectionMatrix * mv;
       }`,
     fragmentShader: `
@@ -2032,14 +2036,38 @@ function buildStars(){
   scene.add(stars);
 }
 
+/* Pull the camera to whatever distance makes the globe fill the viewport,
+   rather than trusting one hard-coded z. A phone's vertical field of view is
+   the same 46 degrees as a desktop's but its width is a third of it, so a
+   fixed distance that looks generous on a laptop puts the viewer inside the
+   planet on a handset. Fill > 1 means the globe bleeds past the limiting edge. */
+const HALO_R = R * 1.075;
+function fitCamera(){
+  // Guard the divisor: a viewport reported as 0 (a backgrounded or collapsed
+  // pane) would otherwise make aspect NaN and park the camera at NaN, which
+  // renders nothing and throws nothing.
+  const aspect = Math.max(1, innerWidth) / Math.max(1, innerHeight);
+  const tan = Math.tan(46 * Math.PI / 360);
+  const fill = aspect < 1 ? 1.28 : 1.12;
+  camera.position.z = (HALO_R / fill) / (tan * Math.min(1, aspect));
+  camera.updateProjectionMatrix();
+  const ref = camera.position.z;
+  [landPts, targetPts, stars].forEach(o => {
+    if (o) o.material.uniforms.uRef.value = ref;
+  });
+  arcs.forEach(a => { a.head.material.uniforms.uRef.value = ref; });
+}
+
 function onResize(){
-  camera.aspect = innerWidth/innerHeight; camera.updateProjectionMatrix();
+  camera.aspect = Math.max(1, innerWidth) / Math.max(1, innerHeight);
   renderer.setSize(innerWidth, innerHeight); composer.setSize(innerWidth, innerHeight);
   const pr = Math.min(devicePixelRatio, 1.5);
   renderer.setPixelRatio(pr);
   [landPts, targetPts, stars].forEach(o => {
-    if (o && o.material.uniforms.uPR) o.material.uniforms.uPR.value = pr;
+    if (o) o.material.uniforms.uPR.value = pr;
   });
+  arcs.forEach(a => { a.head.material.uniforms.uPR.value = pr; });
+  fitCamera();
 }
 function renderOnce(){ composer.render(); }
 
@@ -2064,17 +2092,18 @@ function animate(){
   }
   if (stars) { stars.rotation.y = t*0.008; stars.material.uniforms.uTime.value = t; }
 
-  camera.position.x += ((pointer.x*0.7) - camera.position.x)*0.04;
-  camera.position.y += ((0.3 - pointer.y*0.5) - camera.position.y)*0.04;
-  camera.lookAt(1.1, 0, 0);
+  // Drift only; the globe is centred, so the rest position is dead ahead.
+  camera.position.x += ((pointer.x*0.5) - camera.position.x)*0.04;
+  camera.position.y += ((0.12 - pointer.y*0.38) - camera.position.y)*0.04;
+  camera.lookAt(0, 0, 0);
   composer.render();
 }
 
 function init(){
   scene = new THREE.Scene();
 
-  camera = new THREE.PerspectiveCamera(46, innerWidth/innerHeight, 0.1, 100);
-  camera.position.set(0, 0.3, 6.4);
+  camera = new THREE.PerspectiveCamera(46, Math.max(1, innerWidth) / Math.max(1, innerHeight), 0.1, 100);
+  camera.position.set(0, 0.12, 6.4);   // z is replaced by fitCamera() below
 
   renderer = new THREE.WebGLRenderer({ canvas, antialias:false, alpha:true, powerPreference:'high-performance' });
   renderer.setSize(innerWidth, innerHeight);
@@ -2083,6 +2112,7 @@ function init(){
   renderer.toneMappingExposure = 1.12;
 
   buildGlobe(); buildStars();
+  fitCamera();
 
   // Threshold sits above the land dots so bloom lifts the arcs, the impact
   // rings and the limb without smearing the whole planet.
@@ -2161,7 +2191,10 @@ let kcLastY = window.scrollY;
 function onScrollFrame(){
   const y = window.scrollY;
   nav.classList.toggle('scrolled', y > 30);
-  bgCanvas.style.opacity = (1 - Math.min(1, y / innerHeight) * 0.55).toFixed(3);  // floor ~0.45: shield stays a live background everywhere
+  // Floor ~0.32. The globe is centred now, so it sits directly behind body
+  // copy rather than off to one side, and needs to recede further than the
+  // old right-hand shield did.
+  bgCanvas.style.opacity = (1 - Math.min(1, y / innerHeight) * 0.68).toFixed(3);
   const max = document.documentElement.scrollHeight - innerHeight;
   if (progressBar) progressBar.style.width = (max > 0 ? (y / max) * 100 : 0) + '%';
   if (toTop) toTop.classList.toggle('show', y > innerHeight * 1.2);
