@@ -1,6 +1,11 @@
 {
   "posts": [
     {
+      "title": "If it is not logged, it did not happen (as far as your investigation knows).",
+      "excerpt": "Logging and monitoring turn identity activity into something you can see, alert on, and investigate later. For both human and machine identities, you",
+      "date": "2026-07-30"
+    },
+    {
       "title": "Discovery: you cannot protect what you cannot see.",
       "excerpt": "Before you can secure identities, you have to know they exist. In practice, many organizations cannot produce a complete list of their service account",
       "date": "2026-07-27"
@@ -9,11 +14,6 @@
       "title": "Accountability: every identity needs an owner.",
       "excerpt": "Ownership means a specific, named person is responsible for an identity: why it exists, what it can access, and when it should be retired.",
       "date": "2026-07-25"
-    },
-    {
-      "title": "Why an AI agent should have its own identity, not borrow yours.",
-      "excerpt": "It is tempting to let an agent run with a human's account or a shared key. It is also a mistake.",
-      "date": "2026-07-23"
     }
   ]
 }
