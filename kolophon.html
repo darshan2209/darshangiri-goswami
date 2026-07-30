@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
-<title>Colophon &amp; self-assessment — Darshangiri Goswami</title>
+<title>Colophon &amp; self-assessment | Darshangiri Goswami</title>
 <meta name="description" content="How this site is built and governed: sub-processor register, AI system inventory entry under the EU AI Act, decision record and open items." />
 <meta name="robots" content="index,follow" />
 <meta name="theme-color" content="#060a14" />
@@ -106,7 +106,7 @@ footer a{color:var(--muted)}
 <p class="stand">Version 1.0 · 2026-07-27 · Owner: D. Goswami · Next review: 2026-10-27</p>
 
 <p>I claim on the front page that I keep systems compliant, monitored and accountable. This page is
-where I hold my own site to that claim — the processors it relies on, the AI system I operate on it,
+where I hold my own site to that claim: the processors it relies on, the AI system I operate on it,
 the decisions I made and why, and the items I have <strong>not</strong> closed yet. Open items are
 listed because a register that only contains solved problems is not a register.</p>
 
@@ -116,14 +116,14 @@ listed because a register that only contains solved problems is not a register.<
   <dl>
     <dt>Structure</dt><dd>One static <code>index.html</code>; no framework, no build step, no package manager</dd>
     <dt>Hosting</dt><dd>GitHub Pages, deployed from the <code>main</code> branch</dd>
-    <dt>Type</dt><dd>Space Grotesk, IBM Plex Sans, IBM Plex Mono — self-hosted woff2 subsets (latin + latin-ext), 170 KB total</dd>
+    <dt>Type</dt><dd>Space Grotesk, IBM Plex Sans, IBM Plex Mono, self-hosted woff2 subsets (latin + latin-ext), 170 KB total</dd>
     <dt>3D</dt><dd>three.js r161 with the postprocessing addons, vendored locally under <code>/vendor/three/</code></dd>
     <dt>Background</dt><dd>Rotating globe with animated arcs. Coastlines are Natural Earth 110m land,
       rasterised to a 180&times;90 bitmask (2.7 KB) rather than a texture. <strong>The traffic it shows is
-      simulated</strong> &mdash; see O-06 below</dd>
+      simulated</strong>, see O-06 below</dd>
     <dt>AI backend</dt><dd>Flask + gunicorn on Render, proxying the Anthropic API so the key never reaches the browser</dd>
     <dt>Cookies</dt><dd>None</dd>
-    <dt>Analytics</dt><dd>GoatCounter — cookieless, EU-hosted, no IP stored. No Google Analytics, no tag manager, no pixel, no heatmap</dd>
+    <dt>Analytics</dt><dd>GoatCounter, cookieless, EU-hosted, no IP stored. No Google Analytics, no tag manager, no pixel, no heatmap</dd>
     <dt>Third-party CDN</dt><dd>None at load time</dd>
   </dl>
 </div>
@@ -146,14 +146,14 @@ listed because a register that only contains solved problems is not a register.<
     </tr>
     <tr>
       <td class="k">Render Services, Inc.<br>USA</td>
-      <td>Processor — relay for the AI features</td>
+      <td>Processor, relay for the AI features</td>
       <td>Submitted text; IP held in memory ≤ 60 s for rate limiting</td>
       <td>Only when you submit a question or a job description</td>
       <td>Art. 28 DPA with SCCs</td>
     </tr>
     <tr>
       <td class="k">Anthropic PBC<br>USA</td>
-      <td>Sub-processor — model inference (Claude Haiku 4.5)</td>
+      <td>Sub-processor, model inference (Claude Haiku 4.5)</td>
       <td>Submitted text plus the CV system prompt</td>
       <td>Same as above</td>
       <td>Art. 28 DPA with SCCs</td>
@@ -163,15 +163,15 @@ listed because a register that only contains solved problems is not a register.<
       <td>Public API read</td>
       <td>IP address</td>
       <td>“Live ops” status card</td>
-      <td>Art. 6(1)(f) — verifiable status display</td>
+      <td>Art. 6(1)(f), verifiable status display</td>
     </tr>
     <tr>
       <td class="k">GoatCounter<br>M. Tournoij, Ireland<br>servers: Hetzner, DE/FI</td>
-      <td>Processor — visit statistics</td>
+      <td>Processor, visit statistics</td>
       <td>Page, referrer, browser/OS type, screen width, coarse country. IP and full user agent are
           <strong>not</strong> stored; a random session ID is derived in memory for ≤ 8 h</td>
       <td>Every page view</td>
-      <td><strong>EU only</strong> — no third-country transfer</td>
+      <td><strong>EU only</strong>, no third-country transfer</td>
     </tr>
     <tr>
       <td class="k">Calendly LLC<br>USA</td>
@@ -190,9 +190,9 @@ listed because a register that only contains solved problems is not a register.<
 <p>The entry I would expect to keep for any AI system in a corporate inventory, kept here for my own.</p>
 <div class="card">
   <dl>
-    <dt>System</dt><dd>AI twin — conversational assistant + job-description fit analysis</dd>
-    <dt>My role</dt><dd><strong>Deployer</strong> (Betreiber) under the EU AI Act — not the provider</dd>
-    <dt>Provider</dt><dd>Anthropic PBC — Claude Haiku 4.5 (<code>claude-haiku-4-5-20251001</code>)</dd>
+    <dt>System</dt><dd>AI twin, conversational assistant + job-description fit analysis</dd>
+    <dt>My role</dt><dd><strong>Deployer</strong> (Betreiber) under the EU AI Act, not the provider</dd>
+    <dt>Provider</dt><dd>Anthropic PBC, Claude Haiku 4.5 (<code>claude-haiku-4-5-20251001</code>)</dd>
     <dt>Purpose</dt><dd>Answer recruiter questions from my CV; compare a pasted job description against it</dd>
     <dt>Risk class</dt><dd>Not high-risk under Annex III. Interacts directly with natural persons, so
       <strong>Art. 50(1) transparency applies</strong></dd>
@@ -224,7 +224,7 @@ listed because a register that only contains solved problems is not a register.<
     <tr>
       <td class="k">2026-07-27</td>
       <td>Self-host all web fonts; remove the Google Fonts CDN</td>
-      <td>LG München I, 20.01.2022, Az. 3 O 17493/20 — dynamically embedding Google Fonts transmits the
+      <td>LG München I, 20.01.2022, Az. 3 O 17493/20, dynamically embedding Google Fonts transmits the
           visitor's IP to Google without a legal basis. Also cut font payload from 516 KB to 170 KB</td>
       <td><span class="tag t-done">Done</span></td>
     </tr>
@@ -252,7 +252,7 @@ listed because a register that only contains solved problems is not a register.<
       <td class="k">2026-07-27</td>
       <td>Keep GoatCounter rather than removing analytics</td>
       <td>Verified against the vendor's published policy: cookieless, no IP or full user agent stored,
-          servers at Hetzner in Germany and Finland, operator in Ireland — so there is no third-country
+          servers at Hetzner in Germany and Finland, operator in Ireland. So there is no third-country
           transfer and no § 25 TDDDG consent trigger. Disclosing an accurate processing activity beats
           deleting a useful one to make a document read more cleanly</td>
       <td><span class="tag t-done">Done</span></td>
@@ -282,7 +282,7 @@ listed because a register that only contains solved problems is not a register.<
       <td>No Impressum published</td>
       <td>§ 5 DDG exempts only services that are exclusively personal or family-purpose, and this
           exemption is read narrowly. A job-seeking portfolio is arguably self-marketing and therefore
-          in scope. Publishing one requires a ladungsfähige Anschrift — a real postal address, permanently
+          in scope. Publishing one requires a ladungsfähige Anschrift, a real postal address, permanently
           public. Deferred deliberately while I decide which address to use, not overlooked</td>
       <td><span class="tag t-open">Open</span></td>
     </tr>
@@ -304,7 +304,7 @@ listed because a register that only contains solved problems is not a register.<
     <tr>
       <td class="k">O-04</td>
       <td>No light mode and no print stylesheet</td>
-      <td>A recruiter who prints or PDF-exports any page gets an unusable near-black sheet — a real
+      <td>A recruiter who prints or PDF-exports any page gets an unusable near-black sheet, a real
           problem in a market where applications are assembled as PDFs. Scheduled for the redesign</td>
       <td><span class="tag t-watch">Planned</span></td>
     </tr>
@@ -312,7 +312,7 @@ listed because a register that only contains solved problems is not a register.<
       <td class="k">O-06</td>
       <td>Background globe animates simulated attack traffic</td>
       <td>The arcs are generated, not observed. Origin and target coordinates are real cities, but no
-          detection, log or feed sits behind them &mdash; it is an illustration, and the page says so
+          detection, log or feed sits behind them, it is an illustration, and the page says so
           permanently in the label under the canvas rather than leaving a viewer to assume it is live
           telemetry. The honest upgrade is to replace it with real data from my own Wazuh honeypot,
           with a collection window and an event count stated alongside it</td>
