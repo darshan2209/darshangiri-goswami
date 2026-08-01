@@ -1,6 +1,11 @@
 {
   "posts": [
     {
+      "title": "Lifecycle: every identity should have an end, not just a beginning.",
+      "excerpt": "We are good at creating identities and bad at retiring them. Deprovisioning, the act of disabling and removing an identity when it is no longer needed",
+      "date": "2026-08-01"
+    },
+    {
       "title": "If it is not logged, it did not happen (as far as your investigation knows).",
       "excerpt": "Logging and monitoring turn identity activity into something you can see, alert on, and investigate later. For both human and machine identities, you",
       "date": "2026-07-30"
@@ -9,11 +14,6 @@
       "title": "Discovery: you cannot protect what you cannot see.",
       "excerpt": "Before you can secure identities, you have to know they exist. In practice, many organizations cannot produce a complete list of their service account",
       "date": "2026-07-27"
-    },
-    {
-      "title": "Accountability: every identity needs an owner.",
-      "excerpt": "Ownership means a specific, named person is responsible for an identity: why it exists, what it can access, and when it should be retired.",
-      "date": "2026-07-25"
     }
   ]
 }
