@@ -10,8 +10,17 @@ from PIL import Image, ImageDraw, ImageFont, ImageFilter, ImageChops, ImageOps
 
 HERE = pathlib.Path(__file__).parent
 ASSETS = HERE / "assets"; ASSETS.mkdir(exist_ok=True)
+# Original imports from Downloads. Those files are gone from this machine, so each
+# falls back to the committed asset it originally produced — enough to regenerate
+# the OG card (which only needs a circle crop) without the source photos on hand.
+# Re-point these at the originals before regenerating the hero/about portraits,
+# since a fallback rebuild would resample an already-compressed JPEG.
 SRC = pathlib.Path(r"C:\Users\Lenovo\Downloads\Untitled design.jpg")  # hero: black-suit studio portrait
 ABOUT_SRC = pathlib.Path(r"C:\Users\Lenovo\Downloads\Headshot.png")   # about: navy-suit headshot
+if not SRC.exists():
+    SRC = HERE / "assets" / "portrait.jpg"
+if not ABOUT_SRC.exists():
+    ABOUT_SRC = HERE / "assets" / "about.jpg"
 
 TEAL = (45, 212, 191); GOLD = (230, 185, 79); BG = (6, 10, 20); TEXT = (233, 238, 248); MUTED = (158, 176, 203)
 
@@ -105,14 +114,17 @@ def make_og():
     d.rounded_rectangle((80, 150, 90, 480), radius=5, fill=TEAL)
 
     # eyebrow
-    d.text((120, 152), "GRC  ·  SECOPS  ·  IAM  ·  AI SECURITY", font=font(False, 24), fill=TEAL)
+    d.text((120, 152), "DETECTION  ·  IDENTITY  ·  GOVERNANCE", font=font(False, 24), fill=TEAL)
     # name (two lines)
     d.text((118, 196), "Darshangiri", font=font(True, 86), fill=TEXT)
     d.text((118, 290), "Goswami", font=font(True, 86), fill=TEXT)
     # role
-    d.text((120, 404), "Compliance · Security Operations · Identity & Access", font=font(False, 28), fill=MUTED)
-    # frameworks
-    d.text((120, 452), "GDPR · DORA · NIS2 · ISO 27001 · NIST CSF · EU AI Act", font=font(False, 24), fill=GOLD)
+    # Both lines must clear the portrait circle, whose left edge sits at x=800.
+    # At 28pt roughly 47 characters fit, at 24pt roughly 52. Longer strings run
+    # under the photo instead of wrapping, so check the render after editing.
+    d.text((120, 404), "Detection & Response · Cloud · Identity", font=font(False, 28), fill=MUTED)
+    # stack — named tools read as evidence where framework acronyms read as reading
+    d.text((120, 452), "Zeek · Kafka · Wazuh/OpenSearch · MISP · AWS · k3s", font=font(False, 24), fill=GOLD)
     # url
     d.text((120, 540), "darshan2209.github.io/darshangiri-goswami", font=font(False, 22), fill=(103, 120, 154))
 

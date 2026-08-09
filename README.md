@@ -1,31 +1,34 @@
 # Darshangiri Goswami — 3D Cybersecurity Portfolio
 
-An ultra-realistic 3D portfolio built with **Three.js** (WebGL + bloom) and an
-**"Ask my AI twin"** chat assistant that can run on the **Claude API**. Theme:
-professional *compliance & trust* — deep navy, teal + gold, an animated 3D data-shield,
-an orbiting monitoring-network graph, and a particle field.
+A single-file 3D portfolio built with **Three.js** (WebGL + bloom) and an
+**"Ask my AI twin"** chat assistant running on the **Claude API**. Deep navy, teal +
+gold, an animated 3D data-shield, an orbiting monitoring-network graph and a particle
+field. The content leads with **detection engineering** — the labs, the research, the
+stack — and carries governance, identity and compliance as the second half.
 
 ## Files
 
 | File | What it is |
 |------|------------|
-| `index.html` | **The website** — edit this directly. References external assets (no base64). |
-| `assets/portrait.jpg` · `assets/portrait.webp` | Shared portrait used by hero + about (one download, served twice). |
+| `index.html` | **The website** — everything lives here: markup, CSS, JS, the German translation map, the terminal easter egg and the access-review simulator. Edit directly. |
+| `assets/portrait.*` · `about.*` · `portrait-cyber.webp` | Hero portrait, About headshot, hologram twin. |
 | `assets/og-image.jpg` | 1200×630 social-share card. |
-| `assets/favicon.svg` | SVG favicon (the shield mark). |
-| `site.webmanifest` | PWA manifest. |
-| `.well-known/security.txt` | Security contact (RFC 9116). |
-| `generate_assets.py` | Regenerates `portrait.*` and `og-image.jpg` from the source photo. |
-| `ai_twin_server.py` | Claude backend that powers live chat (keeps the API key server-side). |
-| `Procfile` · `render.yaml` | Deploy config for hosting the backend (Render/Railway/Heroku-style). |
-| `requirements.txt` | Python deps for the backend / asset generator. |
-| `Darshangiri-Goswami-CV.pdf` | Linked by the "Download CV" buttons. |
+| `assets/writing.json` · `ops.json` | Written by the LinkedIn agent; feed the Writing cards and the Live Ops room. |
+| `artifacts/` | Three illustrative GRC work samples (risk register, access-review procedure, ISO 27001 SoA excerpt). Fictional company, robots-noindexed. |
+| `fonts/` · `vendor/three/` | Self-hosted fonts and a vendored Three.js. No third-party requests at page load except GoatCounter. |
+| `datenschutz.html` · `kolophon.html` | DSGVO Art. 13 privacy notice and the colophon (sub-processor register, AI-system inventory, open items). |
+| `404.html` | RBAC-flavoured "access denied" page with a redirect. |
+| `site.webmanifest` · `sitemap.xml` · `robots.txt` · `.well-known/security.txt` | PWA manifest, SEO, security contact (RFC 9116). |
+| `generate_assets.py` | Regenerates `portrait.*`, `about.*` and `og-image.jpg`. |
+| `ai_twin_server.py` | Claude backend for the chat and the JD fit-check (keeps the API key server-side). |
+| `Procfile` · `render.yaml` · `requirements.txt` | Backend deploy config and Python deps. |
+| `Darshangiri-Goswami-CV.pdf` | Linked by the "Download CV" buttons. Built from `resume-agent/base/resume.yaml` — regenerate there, then copy it here, so the CV and the site never drift apart. |
 
 ## View the site
 
-Open `index.html` in a browser (Three.js loads from a CDN, so the first load needs
-internet). The AI twin works in **offline mode** out of the box — answers come from a
-built-in summary of the CV, with no network calls and no API key.
+Open `index.html` in a browser. Fonts and Three.js are served from this repo, so it
+renders fully offline. The AI twin also has an **offline mode** — if the backend is
+unreachable, answers come from a built-in CV summary with no network calls and no key.
 
 ## Regenerate the images
 
@@ -33,7 +36,21 @@ built-in summary of the CV, with no network calls and no API key.
 pip install -r requirements.txt
 python generate_assets.py
 ```
-Edit the source photo paths at the top of `generate_assets.py` to swap the portrait.
+
+The source photos are read from `Downloads/`; when those are missing,
+`generate_assets.py` falls back to the committed `assets/portrait.jpg` and
+`assets/about.jpg`. That fallback is fine for rebuilding the OG card, which only needs
+a circle crop, but re-point `SRC` / `ABOUT_SRC` at the originals before regenerating
+the hero and about portraits — otherwise it resamples an already-compressed JPEG.
+
+To rebuild only the social card:
+
+```powershell
+python -c "import generate_assets as g; g.make_og()"
+```
+
+Both text lines on that card have to clear the portrait circle at x=800; longer strings
+run under the photo instead of wrapping, so look at the result after editing.
 
 ## Enable the live Claude AI twin
 
@@ -50,24 +67,30 @@ python ai_twin_server.py            # http://localhost:8787
    `render.yaml` is detected automatically (gunicorn start command, health check).
 3. Add an environment variable **`ANTHROPIC_API_KEY`** = your key from
    [console.anthropic.com](https://console.anthropic.com). Never commit the key.
-4. Deploy → copy the service URL, e.g. `https://darshan-ai-twin.onrender.com`.
+4. Deploy → copy the service URL. This site's is `https://darshangiri-goswami.onrender.com`.
 5. In `index.html`, set the one config constant to that URL **+ `/chat`**:
    ```js
-   const AI_ENDPOINT = 'https://darshan-ai-twin.onrender.com/chat';
+   const AI_ENDPOINT = 'https://darshangiri-goswami.onrender.com/chat';
    ```
-   Then rebuild assets aren't needed — just commit & push `index.html`.
+   No asset rebuild needed — just commit and push `index.html`.
 
 Leave `AI_ENDPOINT = ''` for offline mode. **Never put an API key in `index.html`.**
 When set, the chat header shows **"Online · Claude"** and answers stream live from
-`claude-opus-4-8` (override with the `AI_TWIN_MODEL` env var), grounded in the CV.
+`claude-haiku-4-5` (override with the `AI_TWIN_MODEL` env var), grounded in the CV
+block at the top of `ai_twin_server.py`. That block is the twin's whole world: it also
+carries a **KNOWN GAPS** section, and both the chat and the fit-check are instructed to
+state those plainly rather than soften them. Keep it in sync with the master résumé.
 
 ### Built-in safeguards (public endpoint)
 - CORS locked to the portfolio origin · per-IP rate limit (20 req/min)
 - Message-length cap (2000 chars) and history cap (12 turns) to bound token spend
 - The API key lives only in the host's environment, never in the browser
 
-> Render's free tier sleeps after ~15 min idle, so the first message after a pause
-> takes a few seconds to wake the service. Upgrade the plan to keep it always-on.
+> Render's free tier sleeps after ~15 min idle, which is what makes the widget show
+> "Offline · from CV". The repo's GitHub Actions `keep-alive.yml` is **not** reliable —
+> GitHub throttles scheduled jobs well below the needed interval. An external
+> cron-job.org job pings `/health` every 5 minutes instead. If the twin reads Offline,
+> check that job first.
 
 ## Publish
 
