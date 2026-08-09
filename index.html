@@ -55,7 +55,7 @@
     {
       "@type": "Person",
       "name": "Darshangiri Goswami",
-      "jobTitle": "Cybersecurity Analyst — Detection & Response, GRC, Identity",
+      "jobTitle": "Cybersecurity Analyst: Detection & Response, GRC, Identity",
       "description": "Cybersecurity graduate (B.Tech Information Technology; MSc Business Management & Cyber Security, September 2026) working across detection engineering, Linux and cloud security, GRC and Identity & Access Management. Based in Berlin, available full-time from October 2026.",
       "seeks": { "@type": "Demand", "name": "Graduate and entry-level roles in detection and response, security engineering, GRC and IAM" },
       "email": "mailto:darshangoswami22922@gmail.com",
@@ -1423,6 +1423,8 @@ nav.links a::after{content:"";position:absolute;left:14px;right:14px;bottom:7px;
           <summary><svg class="chev" viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 6l6 6-6 6"/></svg> View details</summary>
           <p>The script is idempotent: run it twice and the second run reports nothing to change. It also refuses to disable password authentication until it can see a working <code>authorized_keys</code>, because a hardening script that locks you out of your own box is not a hardening script.</p>
           <p>auditd rules record privileged command execution and access to sensitive files, and those events forward into the detection pipeline above. That link is the point of the lab: a host change is not really monitored until it is alertable somewhere else.</p>
+          <a class="doclink" href="https://github.com/darshan2209/linux-cis-hardening" target="_blank" rel="noopener">Repository / write-up
+            <svg viewBox="0 0 24 24" width="13" height="13" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M7 17L17 7M9 7h8v8"/></svg></a>
         </details>
       </div>
 
@@ -1432,12 +1434,14 @@ nav.links a::after{content:"";position:absolute;left:14px;right:14px;bottom:7px;
           <div class="ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M6 18a4 4 0 0 1 0-8 6 6 0 0 1 11.6-2A4.5 4.5 0 0 1 18 18z"/><path d="M12 12v5m0 0l-2-2m2 2l2-2"/></svg></div>
           <h3>Multi-Cloud Posture Lab</h3>
         </div>
-        <p>I built an AWS account wrong on purpose — over-permissive IAM, a public S3 bucket, logging switched off — then remediated each finding back to least privilege and traced every CloudTrail and GuardDuty detection to the exact setting that produced it. Repeated on Google Cloud and Oracle Cloud, plus an admin review of Google Workspace and Microsoft 365.</p>
+        <p>I built an AWS account wrong on purpose, with over-permissive IAM, a public S3 bucket and logging switched off, then remediated each finding back to least privilege and traced every CloudTrail and GuardDuty detection to the exact setting that produced it. Repeated on Google Cloud and Oracle Cloud, plus an admin review of Google Workspace and Microsoft 365.</p>
         <div class="tags"><span>AWS IAM</span><span>CloudTrail</span><span>GuardDuty</span><span>S3</span><span>GCP</span><span>Oracle Cloud</span><span>boto3</span></div>
         <details class="proj-more">
           <summary><svg class="chev" viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 6l6 6-6 6"/></svg> View details</summary>
-          <p>A boto3 script does the repeatable part: flagging wildcard permissions and unused credentials across the account, run before and after remediation so the diff is the evidence. On GCP and Oracle the same review shape held — turn on audit logging, read the IAM bindings, and both surfaced service accounts holding far more than they used.</p>
+          <p>A boto3 script does the repeatable part: flagging wildcard permissions and unused credentials across the account, run before and after remediation so the diff is the evidence. On GCP and Oracle the same review shape held. Turn on audit logging, read the IAM bindings, and both surfaced service accounts holding far more than they used.</p>
           <p>An honesty note I keep with this lab: GuardDuty on a fresh empty account produces nothing by itself, so the findings here are its sample findings, each mapped to the misconfiguration class it represents. Useful for learning the finding-to-cause path, not a claim of live attacker traffic.</p>
+          <a class="doclink" href="https://github.com/darshan2209/cloud-security-posture" target="_blank" rel="noopener">Repository / write-up
+            <svg viewBox="0 0 24 24" width="13" height="13" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M7 17L17 7M9 7h8v8"/></svg></a>
         </details>
       </div>
 
@@ -1453,6 +1457,8 @@ nav.links a::after{content:"";position:absolute;left:14px;right:14px;bottom:7px;
           <summary><svg class="chev" viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 6l6 6-6 6"/></svg> View details</summary>
           <p>Two things this lab taught me that reading would not have. First, k3s ships with Flannel, which accepts NetworkPolicy objects and silently ignores them; the policies only actually enforce after swapping in Calico. A control you believe in but that does nothing is worse than no control.</p>
           <p>Second, the honest version of "which controls caught it": pod security admission rejected the privileged pod before it was ever scheduled, so the network and runtime controls were never tested by it. The compliant workload and the labelled/unlabelled probes are what demonstrate those.</p>
+          <a class="doclink" href="https://github.com/darshan2209/k3s-security-lab" target="_blank" rel="noopener">Repository / write-up
+            <svg viewBox="0 0 24 24" width="13" height="13" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M7 17L17 7M9 7h8v8"/></svg></a>
         </details>
       </div>
 
@@ -1462,7 +1468,7 @@ nav.links a::after{content:"";position:absolute;left:14px;right:14px;bottom:7px;
           <div class="ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="6" cy="6" r="2.5"/><circle cx="18" cy="6" r="2.5"/><circle cx="12" cy="18" r="2.5"/><path d="M6 8.5v3a2 2 0 0 0 2 2h8a2 2 0 0 0 2-2v-3M12 13.5v2"/></svg></div>
           <h3>Network Segmentation &amp; Secure Tooling</h3>
         </div>
-        <p>The segmented network the detection lab runs on: management, endpoint and DMZ VLANs, the Zeek sensor on a mirror port, firewall zone rules between them. Alongside it, the secure-development practice applied to everything above — input validation, credentials held in the environment, static analysis and dependency scanning.</p>
+        <p>The segmented network the detection lab runs on: management, endpoint and DMZ VLANs, the Zeek sensor on a mirror port, firewall zone rules between them. Alongside it, the secure-development practice applied to everything above: input validation, credentials held in the environment, static analysis and dependency scanning.</p>
         <div class="tags"><span>VLANs</span><span>DMZ</span><span>SPAN port</span><span>nftables</span><span>Bandit</span><span>pip-audit</span></div>
         <details class="proj-more">
           <summary><svg class="chev" viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 6l6 6-6 6"/></svg> View details</summary>
@@ -1488,7 +1494,7 @@ nav.links a::after{content:"";position:absolute;left:14px;right:14px;bottom:7px;
       </div>
 
     </div>
-    <p class="fit-note reveal d3" style="margin-top:18px">Repositories go public as each lab's evidence is written up, so the two linked above are the ones live today. Happy to walk through any of the others, including the parts that did not work.</p>
+    <p class="fit-note reveal d3" style="margin-top:18px">Every lab above is public on <a href="https://github.com/darshan2209?tab=repositories" target="_blank" rel="noopener" style="color:var(--teal)">GitHub</a> with its configuration, scripts and write-up. <strong>65 automated tests</strong> cover the parts that take input from outside the trust boundary, so you can verify the tooling works without an AWS account or a cluster. Happy to walk through any of it, including the parts that did not work.</p>
   </div>
 </section>
 

@@ -1,7 +1,7 @@
 {
-  "name": "Darshangiri Goswami — Detection & Response · GRC · Identity",
+  "name": "Darshangiri Goswami · Detection & Response · GRC · Identity",
   "short_name": "DG Portfolio",
-  "description": "Portfolio of Darshangiri Goswami — cybersecurity graduate working across detection engineering (Zeek, Kafka, Wazuh/OpenSearch, MISP), Linux and cloud security, Identity & Access, and Governance, Risk & Compliance.",
+  "description": "Portfolio of Darshangiri Goswami, a cybersecurity graduate working across detection engineering (Zeek, Kafka, Wazuh/OpenSearch, MISP), Linux and cloud security, Identity & Access, and Governance, Risk & Compliance.",
   "start_url": ".",
   "scope": ".",
   "display": "standalone",

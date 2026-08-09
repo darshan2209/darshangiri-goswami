@@ -1,16 +1,16 @@
-# Darshangiri Goswami — 3D Cybersecurity Portfolio
+# Darshangiri Goswami: 3D Cybersecurity Portfolio
 
 A single-file 3D portfolio built with **Three.js** (WebGL + bloom) and an
 **"Ask my AI twin"** chat assistant running on the **Claude API**. Deep navy, teal +
 gold, an animated 3D data-shield, an orbiting monitoring-network graph and a particle
-field. The content leads with **detection engineering** — the labs, the research, the
-stack — and carries governance, identity and compliance as the second half.
+field. The content leads with **detection engineering**, the labs, the research and the
+stack, and carries governance, identity and compliance as the second half.
 
 ## Files
 
 | File | What it is |
 |------|------------|
-| `index.html` | **The website** — everything lives here: markup, CSS, JS, the German translation map, the terminal easter egg and the access-review simulator. Edit directly. |
+| `index.html` | **The website**. Everything lives here: markup, CSS, JS, the German translation map, the terminal easter egg and the access-review simulator. Edit directly. |
 | `assets/portrait.*` · `about.*` · `portrait-cyber.webp` | Hero portrait, About headshot, hologram twin. |
 | `assets/og-image.jpg` | 1200×630 social-share card. |
 | `assets/writing.json` · `ops.json` | Written by the LinkedIn agent; feed the Writing cards and the Live Ops room. |
@@ -22,12 +22,12 @@ stack — and carries governance, identity and compliance as the second half.
 | `generate_assets.py` | Regenerates `portrait.*`, `about.*` and `og-image.jpg`. |
 | `ai_twin_server.py` | Claude backend for the chat and the JD fit-check (keeps the API key server-side). |
 | `Procfile` · `render.yaml` · `requirements.txt` | Backend deploy config and Python deps. |
-| `Darshangiri-Goswami-CV.pdf` | Linked by the "Download CV" buttons. Built from `resume-agent/base/resume.yaml` — regenerate there, then copy it here, so the CV and the site never drift apart. |
+| `Darshangiri-Goswami-CV.pdf` | Linked by the "Download CV" buttons. Built from `resume-agent/base/resume.yaml`. Regenerate there, then copy it here, so the CV and the site never drift apart. |
 
 ## View the site
 
 Open `index.html` in a browser. Fonts and Three.js are served from this repo, so it
-renders fully offline. The AI twin also has an **offline mode** — if the backend is
+renders fully offline. The AI twin also has an **offline mode**: if the backend is
 unreachable, answers come from a built-in CV summary with no network calls and no key.
 
 ## Regenerate the images
@@ -41,7 +41,7 @@ The source photos are read from `Downloads/`; when those are missing,
 `generate_assets.py` falls back to the committed `assets/portrait.jpg` and
 `assets/about.jpg`. That fallback is fine for rebuilding the OG card, which only needs
 a circle crop, but re-point `SRC` / `ABOUT_SRC` at the originals before regenerating
-the hero and about portraits — otherwise it resamples an already-compressed JPEG.
+the hero and about portraits, otherwise it resamples an already-compressed JPEG.
 
 To rebuild only the social card:
 
@@ -72,7 +72,7 @@ python ai_twin_server.py            # http://localhost:8787
    ```js
    const AI_ENDPOINT = 'https://darshangiri-goswami.onrender.com/chat';
    ```
-   No asset rebuild needed — just commit and push `index.html`.
+   No asset rebuild needed, just commit and push `index.html`.
 
 Leave `AI_ENDPOINT = ''` for offline mode. **Never put an API key in `index.html`.**
 When set, the chat header shows **"Online · Claude"** and answers stream live from
@@ -87,14 +87,14 @@ state those plainly rather than soften them. Keep it in sync with the master ré
 - The API key lives only in the host's environment, never in the browser
 
 > Render's free tier sleeps after ~15 min idle, which is what makes the widget show
-> "Offline · from CV". The repo's GitHub Actions `keep-alive.yml` is **not** reliable —
+> "Offline · from CV". The repo's GitHub Actions `keep-alive.yml` is **not** reliable:
 > GitHub throttles scheduled jobs well below the needed interval. An external
 > cron-job.org job pings `/health` every 5 minutes instead. If the twin reads Offline,
 > check that job first.
 
 ## Publish
 
-`index.html`, `assets/`, `site.webmanifest`, `.well-known/`, and the CV are static —
+`index.html`, `assets/`, `site.webmanifest`, `.well-known/`, and the CV are static, so
 host on GitHub Pages / Netlify / Cloudflare Pages. Live URL:
 **https://darshan2209.github.io/darshangiri-goswami/**
 
