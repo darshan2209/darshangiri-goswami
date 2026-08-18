@@ -1629,6 +1629,12 @@ nav.links a::after{content:"";position:absolute;left:14px;right:14px;bottom:7px;
           <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="8" r="6"/><path d="M9 13l-2 8 5-3 5 3-2-8"/></svg>
           View &amp; verify all credentials on Credly
         </a>
+        <!-- Community membership: NOT a Credly cert, kept distinct from the grid above; no public verify link (NDA), so it is intentionally not a link. -->
+        <div class="cert reveal d4" style="margin-top:14px;cursor:default;border-color:var(--border-bright)" data-tip="Selected into the Microsoft Entra Advisors community: a private, NDA-based Microsoft Security group where practitioners test Entra previews and give feedback directly to Microsoft's identity engineering team.">
+          <span class="badge"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg></span>
+          <span><span class="nm">Microsoft Entra Advisors</span><span class="st" id="entraAdvSt">Member · Microsoft Security private community</span></span>
+          <span class="st" style="margin-left:auto;flex:0 0 auto;color:var(--teal)">NDA · 2026</span>
+        </div>
       </div>
       <div>
         <div class="section-head reveal" style="margin-bottom:28px">
@@ -2525,7 +2531,7 @@ const KB = [
   { k:['compliance','governance','grc','risk','conduct','ethic','policy','controls','audit','ism','isms','law'],
     a:"Darshan's GRC (Governance, Risk &amp; Compliance) work spans policy &amp; procedure documentation, Code-of-Conduct / acceptable-use training, controls monitoring, risk assessment, ISMS implementation (ISO 27001), audit support, IT &amp; cyber-law awareness and regulatory training. At NIIT Foundation he trained 4500+ students (95% certified) and kept controls documentation audit-ready in the LMS." },
   { k:['iam','identity','access','entra','sc-300','rbac','privilege','conditional','provision','joiner'],
-    a:"On Identity &amp; Access Management (IAM): access control and access reviews, Joiner–Mover–Leaver, least-privilege / RBAC, conditional access and identity governance, building toward Microsoft SC-300 (Entra ID)." },
+    a:"On Identity &amp; Access Management (IAM): access control and access reviews, Joiner–Mover–Leaver, least-privilege / RBAC, conditional access and identity governance, holding Microsoft SC-300 (Entra ID). He was also selected into the Microsoft Entra Advisors community, a private, NDA-based Microsoft Security group where practitioners test Entra previews and give feedback directly to Microsoft's identity engineering team." },
   { k:['framework','gdpr','dora','nis2','iso','nist','standard','regulation'],
     a:"He works to GDPR, DORA, NIS2, ISO 27001 and NIST CSF, and has awareness of the EU AI Act. He has mapped awareness content directly to ISO 27001 and NIST CSF for non-specialist staff." },
   { k:['ai','automation','python','responsible','copilot','machine'],
@@ -3081,6 +3087,7 @@ if (GOATCOUNTER_CODE){
     ['#opsAgent .ops-d', 'Python-Agent, der meine Security-Beiträge recherchiert, schreibt und veröffentlicht.'],
     /* certifications + education */
     ['.cert-grid a:nth-child(9) .st', 'In Arbeit'],
+    ['#entraAdvSt', 'Mitglied · Private Microsoft-Security-Community'],
     ['#certifications a.btn-ghost', '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="8" r="6"/><path d="M9 13l-2 8 5-3 5 3-2-8"/></svg> Alle Nachweise auf Credly ansehen'],
     ['#certifications .split > div:nth-child(2) .section-head h2', 'Ausbildung'],
     /* fit note */
