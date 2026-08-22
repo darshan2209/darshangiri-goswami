@@ -1,19 +1,19 @@
 {
   "posts": [
     {
-      "title": "Cloud IAM basics: who can do what, to which resource.",
-      "excerpt": "Identity and Access Management in the cloud comes down to policies that answer one question: which identity is allowed to perform which action on whic",
-      "date": "2026-08-05"
+      "title": "Passwords: length beats complexity.",
+      "excerpt": "For the human accounts you still protect with passwords, modern guidance is clear: a long passphrase is stronger and more usable than a short, complex",
+      "date": "2026-08-22"
     },
     {
-      "title": "Service account best practices, in one checklist.",
-      "excerpt": "Service accounts run your applications and jobs. Treat them with more care than human accounts, not less, because they often hold broader access and n",
-      "date": "2026-08-03"
+      "title": "Quietly pleased about this one.",
+      "excerpt": "I've been accepted into the Microsoft Entra Advisors community, a private group where practitioners work directly with Microsoft's identity engineerin",
+      "date": "2026-08-18"
     },
     {
-      "title": "Lifecycle: every identity should have an end, not just a beginning.",
-      "excerpt": "We are good at creating identities and bad at retiring them. Deprovisioning, the act of disabling and removing an identity when it is no longer needed",
-      "date": "2026-08-01"
+      "title": "Passwords: length beats complexity.",
+      "excerpt": "For the human accounts you still protect with passwords, modern guidance is clear: a long passphrase is stronger and more usable than a short, complex",
+      "date": "2026-08-17"
     }
   ]
 }
