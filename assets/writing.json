@@ -1,6 +1,11 @@
 {
   "posts": [
     {
+      "title": "Your supply chain runs on third-party tokens. Govern them.",
+      "excerpt": "Every SaaS integration, webhook, and partner connection involves a credential, often a long-lived token you generated once and forgot. Each one is a d",
+      "date": "2026-08-24"
+    },
+    {
       "title": "Passwords: length beats complexity.",
       "excerpt": "For the human accounts you still protect with passwords, modern guidance is clear: a long passphrase is stronger and more usable than a short, complex",
       "date": "2026-08-22"
@@ -9,11 +14,6 @@
       "title": "Quietly pleased about this one.",
       "excerpt": "I've been accepted into the Microsoft Entra Advisors community, a private group where practitioners work directly with Microsoft's identity engineerin",
       "date": "2026-08-18"
-    },
-    {
-      "title": "Passwords: length beats complexity.",
-      "excerpt": "For the human accounts you still protect with passwords, modern guidance is clear: a long passphrase is stronger and more usable than a short, complex",
-      "date": "2026-08-17"
     }
   ]
 }
