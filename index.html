@@ -1114,6 +1114,7 @@ nav.links a::after{content:"";position:absolute;left:14px;right:14px;bottom:7px;
           <span><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 4h16v16H4z"/><path d="M4 7l8 6 8-6"/></svg><a href="mailto:darshangoswami22922@gmail.com">darshangoswami22922@gmail.com</a></span>
           <span><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M5 4h4l2 5-3 2a12 12 0 0 0 5 5l2-3 5 2v4a2 2 0 0 1-2 2A16 16 0 0 1 3 6a2 2 0 0 1 2-2z"/></svg><a href="tel:+4915510837720">+49 155 1083 7720</a></span>
           <span><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="18" height="18" rx="3"/><path d="M7 10v7M7 7v.01M11 17v-4a2 2 0 0 1 4 0v4"/></svg><a href="https://linkedin.com/in/darshangiri-goswami-033283213" target="_blank" rel="noopener">LinkedIn</a></span>
+          <span><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 19c-4 1.4-4-2.5-6-3m12 5v-3.5a3 3 0 0 0-.9-2.4c2.9-.3 6-1.4 6-6.5a5 5 0 0 0-1.4-3.5 4.6 4.6 0 0 0-.1-3.5s-1.1-.3-3.6 1.4a12.4 12.4 0 0 0-6.6 0C6.4 1.3 5.3 1.6 5.3 1.6a4.6 4.6 0 0 0-.1 3.5A5 5 0 0 0 3.8 8.6c0 5.1 3.1 6.2 6 6.5a3 3 0 0 0-.9 2.4V21"/></svg><a href="https://github.com/darshan2209" target="_blank" rel="noopener">GitHub</a></span>
         </div>
       </div>
 
@@ -1493,8 +1494,25 @@ nav.links a::after{content:"";position:absolute;left:14px;right:14px;bottom:7px;
         </details>
       </div>
 
+      <div class="proj reveal rl d1">
+        <span class="proj-glow"></span>
+        <div class="ph">
+          <div class="ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="8" cy="12" r="3"/><path d="M11 12h10M18 12v3M15 12v2"/><path d="M8 4v3M8 17v3"/></svg></div>
+          <h3>Authorization Concept Toolkit</h3>
+        </div>
+        <p>Turns a raw entitlement export into an audit-ready <b style="color:var(--text)">authorization concept</b> (Berechtigungskonzept), then runs the four checks that keep it true: segregation of duties, candidate business-role mining, per-owner access certification campaigns, and access-hygiene findings. Automated system accounts are treated as first-class identities, because they hold entitlements and breach the same rules but have no manager to review them.</p>
+        <div class="tags"><span>Python</span><span>IGA</span><span>Segregation of Duties</span><span>Role mining</span><span>Access certification</span><span>ISO 27001</span><span>DORA</span></div>
+        <details class="proj-more">
+          <summary><svg class="chev" viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 6l6 6-6 6"/></svg> View details</summary>
+          <p>A written authorization concept is a regulatory expectation in financial services, and it is usually a document that was accurate on the day it was signed. This generates the document from the same export the checks run on, so the concept and the estate cannot drift apart, and regenerating it is one command rather than an annual project.</p>
+          <p>On the sample estate it finds <b style="color:var(--text)">7 segregation-of-duties conflicts</b>, three candidate business roles explaining 78% of all grants, and 13 access-hygiene findings. Two of the seven conflicts sit on service accounts: <code>svc-payment-gateway</code> can both create and release a payment, which is the four-eyes control failing in the population nobody recertifies. Every control is mapped to ISO/IEC 27001:2022, NIST SP 800-53 R5 and DORA, and <b style="color:var(--text)">27 tests</b> pin the behaviour that is easy to get subtly wrong, such as a conflict being per identity rather than per team.</p>
+          <a class="doclink" href="https://github.com/darshan2209/authorization-concept-toolkit" target="_blank" rel="noopener">Repository / write-up
+            <svg viewBox="0 0 24 24" width="13" height="13" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M7 17L17 7M9 7h8v8"/></svg></a>
+        </details>
+      </div>
+
     </div>
-    <p class="fit-note reveal d3" style="margin-top:18px">Every lab above is public on <a href="https://github.com/darshan2209?tab=repositories" target="_blank" rel="noopener" style="color:var(--teal)">GitHub</a> with its configuration, scripts and write-up. <strong>65 automated tests</strong> cover the parts that take input from outside the trust boundary, so you can verify the tooling works without an AWS account or a cluster. Happy to walk through any of it, including the parts that did not work.</p>
+    <p class="fit-note reveal d3" style="margin-top:18px">Every lab above is public on <a href="https://github.com/darshan2209?tab=repositories" target="_blank" rel="noopener" style="color:var(--teal)">GitHub</a> with its configuration, scripts and write-up. <strong>92 automated tests</strong> cover the parts that take input from outside the trust boundary, so you can verify the tooling works without an AWS account or a cluster. Happy to walk through any of it, including the parts that did not work.</p>
   </div>
 </section>
 
@@ -1722,6 +1740,8 @@ nav.links a::after{content:"";position:absolute;left:14px;right:14px;bottom:7px;
       <div class="contact-links">
         <a href="mailto:darshangoswami22922@gmail.com"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 4h16v16H4z"/><path d="M4 7l8 6 8-6"/></svg>darshangoswami22922@gmail.com</a>
         <a href="tel:+4915510837720"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M5 4h4l2 5-3 2a12 12 0 0 0 5 5l2-3 5 2v4a2 2 0 0 1-2 2A16 16 0 0 1 3 6a2 2 0 0 1 2-2z"/></svg>+49 155 1083 7720</a>
+        <a href="https://linkedin.com/in/darshangiri-goswami-033283213" target="_blank" rel="noopener"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="18" height="18" rx="3"/><path d="M7 10v7M7 7v.01M11 17v-4a2 2 0 0 1 4 0v4"/></svg>LinkedIn</a>
+        <a href="https://github.com/darshan2209" target="_blank" rel="noopener"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 19c-4 1.4-4-2.5-6-3m12 5v-3.5a3 3 0 0 0-.9-2.4c2.9-.3 6-1.4 6-6.5a5 5 0 0 0-1.4-3.5 4.6 4.6 0 0 0-.1-3.5s-1.1-.3-3.6 1.4a12.4 12.4 0 0 0-6.6 0C6.4 1.3 5.3 1.6 5.3 1.6a4.6 4.6 0 0 0-.1 3.5A5 5 0 0 0 3.8 8.6c0 5.1 3.1 6.2 6 6.5a3 3 0 0 0-.9 2.4V21"/></svg>GitHub</a>
         <span><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 21s-7-5.5-7-11a7 7 0 0 1 14 0c0 5.5-7 11-7 11z"/><circle cx="12" cy="10" r="2.5"/></svg>Berlin, Germany</span>
       </div>
     </div>
@@ -3054,6 +3074,8 @@ if (GOATCOUNTER_CODE){
     ['.proj-grid .proj:nth-child(5) > p', 'Das segmentierte Netz, in dem das Detection-Lab läuft: Management-, Endpoint- und DMZ-VLANs, der Zeek-Sensor an einem Mirror-Port, Firewall-Zonenregeln dazwischen. Dazu die sichere Entwicklungspraxis für alles oben: Input-Validierung, Credentials in der Umgebung, statische Analyse und Dependency-Scanning.'],
     ['.proj-grid .proj:nth-child(6) h3', 'KI-gestütztes Monitoring &amp; Automatisierung'],
     ['.proj-grid .proj:nth-child(6) > p', 'Ein KI-gestützter Workflow, der einen Event-Stream überwacht, Ausnahmen per Python-Anomalie-Erkennung markiert und sie über REST an eine KI-Plattform zur Triage, Risikobewertung und Playbook-Zuordnung übergibt. Er erzeugt Handlungsempfehlungen, die ein Mensch freigibt, niemals eigenständig ausführt.'],
+    ['.proj-grid .proj:nth-child(7) h3', 'Berechtigungskonzept-Toolkit'],
+    ['.proj-grid .proj:nth-child(7) > p', 'Macht aus einem rohen Berechtigungsexport ein prüffestes <b style="color:var(--text)">Berechtigungskonzept</b> und führt anschließend die vier Kontrollen aus, die es aktuell halten: Funktionstrennung (SoD), Role Mining für fachliche Rollen, Rezertifizierungskampagnen je Anwendungsverantwortlichem und Findings zur Berechtigungshygiene. Technische Benutzerkonten werden dabei wie jede andere Identität behandelt, denn sie halten Berechtigungen und verletzen dieselben Regeln, haben aber keine Führungskraft, die sie überprüft.'],
     /* skills card titles */
     ['.skills-grid .skill-card:nth-child(2) h3', 'Linux, Systeme &amp; Netzwerke'],
     ['.skills-grid .skill-card:nth-child(3) h3', 'Cloud- &amp; Container-Sicherheit'],
