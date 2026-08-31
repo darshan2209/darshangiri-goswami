@@ -163,7 +163,7 @@ body::after{ /* depth vignette */
   background:radial-gradient(120% 80% at 50% -10%, transparent 55%, rgba(0,0,0,.45) 100%);
   mix-blend-mode:multiply;
 }
-canvas#bg{position:fixed;inset:0;width:100vw;height:100svh;z-index:0;display:block}
+canvas#bg{position:fixed;inset:0;width:100%;height:100%;z-index:0;display:block}
 .shell{position:relative;z-index:2}
 
 a{color:inherit;text-decoration:none}
@@ -211,7 +211,7 @@ header.nav.scrolled{
 }
 .nav-inner{max-width:var(--maxw);margin:0 auto;
   padding:10px max(clamp(20px,5vw,48px),env(safe-area-inset-right,0)) 10px max(clamp(20px,5vw,48px),env(safe-area-inset-left,0));
-  display:flex;align-items:center;justify-content:space-between;gap:20px}
+  display:flex;flex-wrap:nowrap;align-items:center;justify-content:space-between;gap:16px}
 .brand{display:flex;align-items:center;gap:12px;font-family:var(--font-display);font-weight:600;min-height:44px}
 .brand .mark{
   width:38px;height:38px;flex:0 0 auto;display:grid;place-items:center;border-radius:11px;
@@ -222,14 +222,16 @@ header.nav.scrolled{
 .brand b{font-weight:600;font-size:1.02rem;letter-spacing:.01em;white-space:nowrap}
 .brand span.sub{display:block;font-family:var(--font-mono);font-size:.62rem;letter-spacing:.22em;
   color:var(--faint);text-transform:uppercase;margin-top:1px}
-nav.links{display:flex;gap:6px;align-items:center}
+nav.links{display:flex;gap:4px;align-items:center;min-width:0}
 nav.links a{
-  font-size:.92rem;color:var(--muted);padding:0 14px;border-radius:9px;min-height:44px;
+  font-size:.92rem;color:var(--muted);padding:0 11px;border-radius:9px;min-height:44px;
   display:inline-flex;align-items:center;white-space:nowrap;transition:color .2s,background .2s;
 }
-/* the horizontal bar carries nine links; the tenth only fits on wide desktops,
-   and below the burger breakpoint the drawer shows every link again. */
-@media (min-width:1011px) and (max-width:1230px){ nav.links a.nav-wide{display:none} }
+/* The bar holds the brand, eight links, the CTA and the language toggle, and it
+   has to hold them in German too, where every label is longer. Anything marked
+   .nav-wide is therefore bar-exempt: above the burger breakpoint it lives in the
+   drawer only, below it the drawer lists every section again. */
+@media (width > 1180px){ nav.links a.nav-wide{display:none} }
 .nav-cta{
   font-family:var(--font-mono);font-size:.8rem;letter-spacing:.04em;
   padding:0 16px;min-height:44px;border:1px solid var(--border-bright);border-radius:10px;color:var(--teal);
@@ -312,15 +314,18 @@ nav.links a{
   51%{transform:scaleY(1);transform-origin:bottom}100%{transform:scaleY(0);transform-origin:bottom}}
 
 /* ============================================================= STATS */
-.stats{display:grid;grid-template-columns:repeat(auto-fit,minmax(160px,1fr));gap:18px;
+.stats{display:grid;grid-template-columns:repeat(5,minmax(0,1fr));gap:18px 24px;
   border-top:1px solid var(--border);border-bottom:1px solid var(--border);padding:34px 0;margin-top:10px}
 .stat{display:flex;flex-direction:column;gap:4px}
 .stat b{font-family:var(--font-display);font-size:var(--step-4);font-weight:600;color:var(--text);line-height:1}
 .stat b .u{color:var(--teal);font-size:.62em}
-.stat span{font-size:.82rem;color:var(--muted);font-family:var(--font-mono);letter-spacing:.02em}
+.stat span{font-size:.82rem;color:var(--muted);font-family:var(--font-mono);letter-spacing:.02em;
+  text-wrap:balance;overflow-wrap:break-word}
 
 /* ============================================================= ABOUT */
-.about-grid{display:grid;grid-template-columns:.85fr 1.15fr;gap:var(--space-xl);align-items:center}
+/* start, not centre: the portrait is ~430px against ~730px of copy, and centring
+   the row dropped it 150px below the heading it is supposed to sit beside. */
+.about-grid{display:grid;grid-template-columns:.85fr 1.15fr;gap:var(--space-xl);align-items:start}
 .about-photo{position:relative;border-radius:var(--r-lg);overflow:hidden;border:1px solid var(--border);box-shadow:var(--shadow)}
 .about-photo img{width:100%;height:auto;aspect-ratio:1/1;object-fit:cover;object-position:center 22%;filter:grayscale(.15) contrast(1.04)}
 .about-photo::after{content:"";position:absolute;inset:0;
@@ -340,7 +345,9 @@ nav.links a{
   border:1px solid var(--border-bright);background:rgba(45,212,191,.05);color:var(--teal-soft);
   display:inline-flex;align-items:center;gap:8px}
 .fw svg{width:14px;height:14px;opacity:.8}
-.skills-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(280px,1fr));gap:18px}
+.skills-grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:18px}
+@media (max-width:1000px){ .skills-grid{grid-template-columns:repeat(2,minmax(0,1fr))} }
+@media (max-width:660px){ .skills-grid{grid-template-columns:1fr} }
 .skill-card{
   container-type:inline-size;container-name:scard;
   border:1px solid var(--border);border-radius:var(--r);padding:24px 24px 22px;
@@ -414,6 +421,18 @@ nav.links a{
 
 /* ============================================================= PROJECTS */
 .proj-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(300px,1fr));gap:22px}
+/* The lab count is odd, so at both three and two columns the last card was left
+   alone on its row with a hole beside it. It spans the row instead and reads as
+   the featured, most recent build. */
+.proj.proj-wide{grid-column:1/-1}
+@container pcard (min-width:640px){
+  .proj-wide .ph{margin-bottom:16px}
+  .proj-wide .ph .ic{width:54px;height:54px;border-radius:15px}
+  .proj-wide .ph .ic svg{width:28px;height:28px}
+  .proj-wide h3{font-size:var(--step-2)}
+  .proj-wide > p{max-width:76ch;font-size:var(--step-0)}
+  .proj-wide .proj-glow{width:280px;height:280px;top:-90px;right:-80px}
+}
 .proj{container-type:inline-size;container-name:pcard;
   border:1px solid var(--border);border-radius:var(--r-lg);background:var(--surface-glass);
   padding:28px;position:relative;overflow:hidden;transition:.3s var(--ease)}
@@ -445,7 +464,7 @@ nav.links a{
 
 /* ============================================================= CERTS + EDU */
 .split{display:grid;grid-template-columns:1.1fr .9fr;gap:var(--space-xl);align-items:start}
-.cert-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(240px,1fr));gap:14px}
+.cert-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(210px,1fr));gap:14px}
 .cert{display:flex;align-items:center;gap:13px;border:1px solid var(--border);border-radius:var(--r-sm);
   padding:14px 16px;min-height:64px;background:var(--surface-glass);transition:.25s var(--ease);color:inherit;position:relative}
 .cert .badge{width:38px;height:38px;border-radius:10px;flex:0 0 auto;display:grid;place-items:center;
@@ -677,7 +696,7 @@ nav.links a.active::after{transform:scaleX(1)}
 @keyframes shine{from{left:-130%}to{left:160%}}
 /* nav link sliding underline */
 nav.links a{position:relative}
-nav.links a::after{content:"";position:absolute;left:14px;right:14px;bottom:7px;height:2px;border-radius:2px;
+nav.links a::after{content:"";position:absolute;left:11px;right:11px;bottom:7px;height:2px;border-radius:2px;
   background:linear-gradient(90deg,var(--teal),var(--gold));transform:scaleX(0);transform-origin:left;transition:transform .28s var(--ease)}
 /* text-link underline grow */
 .hero-meta a,.contact-links a,.proj-more a.doclink,footer a{
@@ -739,17 +758,27 @@ nav.links a::after{content:"";position:absolute;left:14px;right:14px;bottom:7px;
   .portrait-wrap{justify-self:start;width:min(300px,72vw);order:-1}
   #hero::before{background:linear-gradient(180deg,rgba(6,10,20,.6),rgba(6,10,20,.92))}
   .about-grid,.split{grid-template-columns:1fr}
+  /* the split is stacked here, so the cert grid inherits the full width and
+     would fall into three columns: eight certs then a hole. Two keeps it even. */
+  .cert-grid{grid-template-columns:repeat(2,minmax(0,1fr))}
   .about-photo{max-width:340px}
-  .stats{grid-template-columns:repeat(2,1fr);gap:24px}
+  .stats{grid-template-columns:repeat(2,minmax(0,1fr));gap:24px}
 }
-@media (max-width:1120px){
-  nav.links a{padding:0 9px;font-size:.85rem}
-  nav.links a::after{left:9px;right:9px}
+/* Complement of the --maxw switch at 1600px: the roomier link padding applies
+   only where the container itself has widened to 1280. */
+@media (width < 1600px){
+  nav.links a{padding:0 8px;font-size:.86rem}
+  nav.links a::after{left:8px;right:8px}
 }
-@media (max-width:1010px){
+/* The bar appears exactly where the container reaches its 1180px maximum, which
+   is the narrowest point that still fits the longer German labels. */
+@media (max-width:1180px){
   nav.links{display:none;position:fixed;top:70px;right:16px;left:16px;flex-direction:column;align-items:stretch;
     gap:4px;padding:14px;background:rgba(9,14,26,.97);backdrop-filter:blur(14px);border:1px solid var(--border);
-    border-radius:16px;box-shadow:var(--shadow)}
+    border-radius:16px;box-shadow:var(--shadow);
+    max-height:calc(100dvh - 92px);overflow-y:auto;overscroll-behavior:contain;scrollbar-width:thin}
+  nav.links a{font-size:.92rem;padding:0 14px}
+  nav.links a::after{display:none}
   nav.links.show{display:flex}
   .nav-cta{justify-content:center;margin-top:6px}
   .burger{display:grid;place-items:center}
@@ -876,7 +905,8 @@ nav.links a::after{content:"";position:absolute;left:14px;right:14px;bottom:7px;
 }
 
 /* ============================================================= WRITING / LINKEDIN */
-.writing-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(258px,1fr));gap:18px;margin-top:6px}
+.writing-grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:18px;margin-top:6px}
+@media (max-width:860px){ .writing-grid{grid-template-columns:1fr} }
 .post{display:flex;flex-direction:column;gap:10px;border:1px solid var(--border);border-radius:var(--r);
   background:var(--surface-glass);padding:22px 22px;color:inherit;position:relative;overflow:hidden;
   transition:transform .3s var(--ease),border-color .3s var(--ease),box-shadow .3s var(--ease)}
@@ -914,7 +944,8 @@ nav.links a::after{content:"";position:absolute;left:14px;right:14px;bottom:7px;
 .fit-out .blink{display:inline-block;width:7px;height:1em;background:var(--teal);vertical-align:-2px;animation:blink 1s steps(1) infinite}
 
 /* ============================================================= LIVE OPS ROOM */
-.ops-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(250px,1fr));gap:18px}
+.ops-grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:18px}
+@media (max-width:860px){ .ops-grid{grid-template-columns:1fr} }
 .ops-card{border:1px solid var(--border);border-radius:var(--r);background:var(--surface-glass);
   padding:22px;display:flex;flex-direction:column;gap:8px;transition:border-color .3s var(--ease)}
 .ops-card .ops-k{font-family:var(--font-mono);font-size:.68rem;letter-spacing:.14em;text-transform:uppercase;
@@ -951,7 +982,9 @@ nav.links a::after{content:"";position:absolute;left:14px;right:14px;bottom:7px;
 @media print{ .term{display:none !important} }
 
 /* ============================================================= LAB (artifacts + simulator) */
-.lab-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(250px,1fr));gap:18px}
+.lab-grid{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:18px}
+@media (max-width:1150px){ .lab-grid{grid-template-columns:repeat(2,minmax(0,1fr))} }
+@media (max-width:620px){ .lab-grid{grid-template-columns:1fr} }
 .lab-card{display:flex;flex-direction:column;gap:10px;border:1px solid var(--border);border-radius:var(--r);
   background:var(--surface-glass);padding:24px 22px;color:inherit;transition:transform .3s var(--ease),border-color .3s var(--ease),box-shadow .3s var(--ease)}
 .lab-card .lk{font-family:var(--font-mono);font-size:.66rem;letter-spacing:.12em;text-transform:uppercase;color:var(--gold)}
@@ -1068,6 +1101,7 @@ nav.links a::after{content:"";position:absolute;left:14px;right:14px;bottom:7px;
       <a href="#research" data-i18n="nav.research">Research</a>
       <a href="#projects" data-i18n="nav.projects">Labs</a>
       <a href="#lab" class="nav-wide" data-i18n="nav.lab">Samples</a>
+      <a href="#ops" class="nav-wide" data-i18n="nav.ops">Live ops</a>
       <a href="#writing" data-i18n="nav.writing">Writing</a>
       <a href="#certifications" data-i18n="nav.certs">Certs</a>
       <a href="#fit" data-i18n="nav.fit">Fit check</a>
@@ -1494,7 +1528,7 @@ nav.links a::after{content:"";position:absolute;left:14px;right:14px;bottom:7px;
         </details>
       </div>
 
-      <div class="proj reveal rl d1">
+      <div class="proj proj-wide reveal d1">
         <span class="proj-glow"></span>
         <div class="ph">
           <div class="ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="8" cy="12" r="3"/><path d="M11 12h10M18 12v3M15 12v2"/><path d="M8 4v3M8 17v3"/></svg></div>
@@ -1554,6 +1588,37 @@ nav.links a::after{content:"";position:absolute;left:14px;right:14px;bottom:7px;
   </div>
 </section>
 
+<!-- ===================== LIVE OPS ROOM ===================== -->
+<section id="ops">
+  <div class="wrap">
+    <div class="section-head reveal">
+      <p class="eyebrow">// Live ops</p>
+      <h2>My automations, running right now</h2>
+      <p>I don't just list automation as a skill. These cards query my real systems <strong>live from your browser</strong>: the AI backend serving this site, this site's own repository, and my autonomous LinkedIn agent.</p>
+    </div>
+    <div class="ops-grid">
+      <div class="ops-card reveal d1" id="opsTwin">
+        <span class="ops-k"><span class="st-dot"></span> AI twin backend · Render</span>
+        <span class="ops-v" data-v>Checking…</span>
+        <span class="ops-d">Flask + Claude Haiku proxy that powers the chat and fit-check on this page.</span>
+        <span class="ops-m" data-m>querying /health…</span>
+      </div>
+      <div class="ops-card reveal d2" id="opsRepo">
+        <span class="ops-k"><span class="st-dot"></span> This website · GitHub</span>
+        <span class="ops-v" data-v>Checking…</span>
+        <span class="ops-d">Single-file site, hand-built and continuously shipped via GitHub Pages.</span>
+        <span class="ops-m" data-m>querying api.github.com…</span>
+      </div>
+      <div class="ops-card reveal d3" id="opsAgent">
+        <span class="ops-k"><span class="st-dot"></span> LinkedIn agent · autonomous</span>
+        <span class="ops-v" data-v>Checking…</span>
+        <span class="ops-d">Python agent that researches, writes and publishes my daily security post.</span>
+        <span class="ops-m" data-m>reading ops feed…</span>
+      </div>
+    </div>
+  </div>
+</section>
+
 <!-- ===================== WRITING / LINKEDIN ===================== -->
 <section id="writing">
   <div class="wrap">
@@ -1588,37 +1653,6 @@ nav.links a::after{content:"";position:absolute;left:14px;right:14px;bottom:7px;
         See all posts on LinkedIn
       </a>
       <span class="writing-note reveal d2"><span class="dot"></span> New posts Mon · Wed · Sat · 5,000+ followers</span>
-    </div>
-  </div>
-</section>
-
-<!-- ===================== LIVE OPS ROOM ===================== -->
-<section id="ops">
-  <div class="wrap">
-    <div class="section-head reveal">
-      <p class="eyebrow">// Live ops</p>
-      <h2>My automations, running right now</h2>
-      <p>I don't just list automation as a skill. These cards query my real systems <strong>live from your browser</strong>: the AI backend serving this site, this site's own repository, and my autonomous LinkedIn agent.</p>
-    </div>
-    <div class="ops-grid">
-      <div class="ops-card reveal d1" id="opsTwin">
-        <span class="ops-k"><span class="st-dot"></span> AI twin backend · Render</span>
-        <span class="ops-v" data-v>Checking…</span>
-        <span class="ops-d">Flask + Claude Haiku proxy that powers the chat and fit-check on this page.</span>
-        <span class="ops-m" data-m>querying /health…</span>
-      </div>
-      <div class="ops-card reveal d2" id="opsRepo">
-        <span class="ops-k"><span class="st-dot"></span> This website · GitHub</span>
-        <span class="ops-v" data-v>Checking…</span>
-        <span class="ops-d">Single-file site, hand-built and continuously shipped via GitHub Pages.</span>
-        <span class="ops-m" data-m>querying api.github.com…</span>
-      </div>
-      <div class="ops-card reveal d3" id="opsAgent">
-        <span class="ops-k"><span class="st-dot"></span> LinkedIn agent · autonomous</span>
-        <span class="ops-v" data-v>Checking…</span>
-        <span class="ops-d">Python agent that researches, writes and publishes my daily security post.</span>
-        <span class="ops-m" data-m>reading ops feed…</span>
-      </div>
     </div>
   </div>
 </section>
@@ -2434,15 +2468,25 @@ onScrollFrame();
 /* scroll-spy: highlight the nav link for the section in view */
 const navMap = {};
 document.querySelectorAll('nav.links a[href^="#"]').forEach(a => { navMap[a.getAttribute('href').slice(1)] = a; });
+/* Samples and Live ops are drawer-only on desktop, so on the bar they fall back
+   to the link for the section run they belong to; otherwise scrolling through
+   them highlighted nothing at all. */
+const NAV_FALLBACK = { lab:'projects', ops:'projects' };
+function navLinkFor(id){
+  const a = navMap[id];
+  if (a && getComputedStyle(a).display === 'none' && NAV_FALLBACK[id]) return navMap[NAV_FALLBACK[id]];
+  return a;
+}
 const spy = new IntersectionObserver(entries => {
   entries.forEach(e => {
     if (e.isIntersecting){
       Object.values(navMap).forEach(a => a.classList.remove('active'));
-      if (navMap[e.target.id]) navMap[e.target.id].classList.add('active');
+      const a = navLinkFor(e.target.id);
+      if (a) a.classList.add('active');
     }
   });
 }, { rootMargin: '-45% 0px -50% 0px', threshold: 0 });
-['about','skills','experience','research','projects','lab','writing','ops','certifications','fit','contact'].forEach(id => { const s = document.getElementById(id); if (s) spy.observe(s); });
+['about','skills','experience','research','projects','lab','ops','writing','certifications','fit','contact'].forEach(id => { const s = document.getElementById(id); if (s) spy.observe(s); });
 
 /* count-up stats when they scroll into view */
 function animateCount(el){
@@ -3000,6 +3044,7 @@ if (GOATCOUNTER_CODE){
     ['nav.links a[href="#research"]', 'Forschung'],
     ['nav.links a[href="#projects"]', 'Labs'],
     ['nav.links a[href="#lab"]', 'Arbeitsproben'],
+    ['nav.links a[href="#ops"]', 'Live-Betrieb'],
     ['nav.links a[href="#writing"]', 'Beiträge'],
     ['nav.links a[href="#certifications"]', 'Zertifikate'],
     ['nav.links a[href="#fit"]', 'Fit-Check'],
