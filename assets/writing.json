@@ -1,6 +1,11 @@
 {
   "posts": [
     {
+      "title": "A quick map of the major security and compliance frameworks.",
+      "excerpt": "You will hear these names constantly. In plain terms:",
+      "date": "2026-09-02"
+    },
+    {
       "title": "Credential compromise: a calm first-response checklist.",
       "excerpt": "If you suspect a credential, key, or token has leaked, speed and order matter more than panic.",
       "date": "2026-08-29"
@@ -9,11 +14,6 @@
       "title": "Credential compromise: a calm first-response checklist.",
       "excerpt": "If you suspect a credential, key, or token has leaked, speed and order matter more than panic.",
       "date": "2026-08-26"
-    },
-    {
-      "title": "Your supply chain runs on third-party tokens. Govern them.",
-      "excerpt": "Every SaaS integration, webhook, and partner connection involves a credential, often a long-lived token you generated once and forgot. Each one is a d",
-      "date": "2026-08-24"
     }
   ]
 }
