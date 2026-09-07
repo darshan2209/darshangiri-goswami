@@ -1,19 +1,19 @@
 {
   "posts": [
     {
+      "title": "Wrapping this learning series: govern every identity, continuously.",
+      "excerpt": "Across these posts, one theme repeats. Identity is the perimeter, machines now outnumber humans, and the controls that work are not exotic: inventory",
+      "date": "2026-09-07"
+    },
+    {
+      "title": "Wrapping this learning series: govern every identity, continuously.",
+      "excerpt": "Across these posts, one theme repeats. Identity is the perimeter, machines now outnumber humans, and the controls that work are not exotic: inventory",
+      "date": "2026-09-05"
+    },
+    {
       "title": "A quick map of the major security and compliance frameworks.",
       "excerpt": "You will hear these names constantly. In plain terms:",
       "date": "2026-09-02"
-    },
-    {
-      "title": "Credential compromise: a calm first-response checklist.",
-      "excerpt": "If you suspect a credential, key, or token has leaked, speed and order matter more than panic.",
-      "date": "2026-08-29"
-    },
-    {
-      "title": "Credential compromise: a calm first-response checklist.",
-      "excerpt": "If you suspect a credential, key, or token has leaked, speed and order matter more than panic.",
-      "date": "2026-08-26"
     }
   ]
 }
