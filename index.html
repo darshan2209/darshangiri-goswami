@@ -61,7 +61,7 @@
       "email": "mailto:darshangoswami22922@gmail.com",
       "url": "https://darshan2209.github.io/darshangiri-goswami/",
       "image": "https://darshan2209.github.io/darshangiri-goswami/assets/portrait.jpg",
-      "knowsAbout": ["Detection engineering", "Zeek", "Apache Kafka", "OpenSearch", "Wazuh", "MISP", "SIEM", "Security Operations Center (SOC)", "Incident response", "Linux security", "CIS Benchmark", "auditd", "Kubernetes", "AWS security", "Google Cloud Platform", "Oracle Cloud", "Identity & Access Management", "Non-human identity", "GDPR", "DORA", "NIS2", "ISO/IEC 27001", "ISMS", "NIST CSF", "MITRE ATT&CK", "EU AI Act", "Responsible AI"],
+      "knowsAbout": ["Detection engineering", "Zeek", "Apache Kafka", "OpenSearch", "Wazuh", "MISP", "SIEM", "Security Operations Center (SOC)", "Incident response", "Linux security", "CIS Benchmark", "auditd", "Kubernetes", "AWS security", "Google Cloud Platform", "Oracle Cloud", "Identity & Access Management", "Non-human identity", "GDPR", "DORA", "NIS2", "ISO/IEC 27001", "ISMS", "NIST CSF", "MITRE ATT&CK", "EU AI Act", "ISO/IEC 42001", "ISO/IEC 38507", "AI governance", "Agentic AI", "Responsible AI"],
       "alumniOf": [
         { "@type": "CollegeOrUniversity", "name": "GISMA University of Applied Sciences" },
         { "@type": "CollegeOrUniversity", "name": "Swarnim Startup and Innovation University" }
@@ -1414,6 +1414,22 @@ nav.links a::after{content:"";position:absolute;left:11px;right:11px;bottom:7px;
         </ul>
         <div class="tags"><span>MITRE ATT&amp;CK</span><span>UNC6395</span><span>Threat modelling</span><span>Gap analysis</span><span>OAuth</span></div>
       </div>
+      <div class="speak reveal rl d3">
+        <div class="speak-top">
+          <div class="speak-date"><span class="m">Sep</span><span class="d">26</span><span class="y">Brief</span></div>
+          <div>
+            <span class="speak-venue">Research note · thesis extension</span>
+            <h3>Do the AI standards close it?</h3>
+          </div>
+        </div>
+        <p>The first rebuttal I get is that the AI-governance standards must already cover this. I tested both, clause by clause. Neither closes the gap, and <b style="color:var(--text)">ISO/IEC 42001 cannot</b>: not one of its 38 Annex&nbsp;A controls is an access-control, authentication or identity control.</p>
+        <ul class="speak-facts">
+          <li>It is a <b style="color:var(--text)">seam, not a hole</b>. ISO 27001 governs the credential but assumes an owner with a review cycle; ISO 42001 governs the agent but has no credential control. Each defers the other half, so both audits can pass with the step uncovered.</li>
+          <li>NIST's NCCoE reached the same remedy independently in February 2026: RFC 8693 token exchange with nested <b style="color:var(--text)">act</b> claims to carry the delegation chain.</li>
+        </ul>
+        <p style="margin-top:14px"><a href="artifacts/nhi-ai-standards-gap.html" target="_blank" rel="noopener" style="color:var(--teal);font-family:var(--font-mono);font-size:.8rem">Read the clause-by-clause analysis &rarr;</a></p>
+        <div class="tags"><span>ISO/IEC 42001</span><span>ISO/IEC 38507</span><span>Agentic AI</span><span>NIST NCCoE</span><span>RFC 8693</span></div>
+      </div>
     </div>
     <p class="fit-note reveal d3" style="margin-top:16px">I also publish shorter pieces on identity and detection three times a week on LinkedIn. The latest three are further down this page.</p>
   </div>
@@ -2608,8 +2624,10 @@ const KB = [
     a:"On Linux: Ubuntu and Debian administration, hardening to the CIS Benchmark (key-only SSH, PAM policy, sysctl, service minimisation, host firewall), auditd rules for privileged execution and sensitive-file access, systemd services, and Bash scripting, including an idempotent script that applies and re-verifies the whole baseline on a fresh host, measured by Lynis before and after." },
   { k:['cloud','aws','gcp','google cloud','oracle','azure','kubernetes','k3s','container','s3','iam policy','guardduty','cloudtrail'],
     a:"On cloud and containers: AWS (IAM least privilege, CloudTrail, GuardDuty, S3 bucket policy) with a boto3 script that flags wildcard permissions and unused credentials; posture reviews on Google Cloud Platform and Oracle Cloud; Google Workspace and Microsoft 365 admin review (MFA enforcement, OAuth allowlisting, external sharing); Microsoft Azure and Entra ID; and Kubernetes on k3s with RBAC, network policies (Calico, because Flannel silently ignores them) and pod security standards." },
+  { k:['42001','38507','aims','ai management','ai governance','agentic','iso 42','iso 38','nccoe'],
+    a:"He tested both AI-governance standards against his thesis question and neither closes the gap. ISO/IEC 38507 is board-level guidance, not certifiable: its clause on governance of decision-making covers delegation of <i>decisions</i> from humans to a system, not delegation of <i>access</i> from one system to another. ISO/IEC 42001 cannot close it by construction, because not one of its 38 Annex A controls is an access-control, authentication or identity control. The finding is that the gap is a seam: ISO 27001 governs the credential but assumes an owner with a review cycle, ISO 42001 governs the agent but has no credential control, so an organisation can hold both certificates with the delegation step still uncovered. NIST's NCCoE independently arrived at the same remedy in February 2026, RFC 8693 token exchange with nested act claims." },
   { k:['research','thesis','talk','speak','conference','kuppingercole','nhi','delegation','agent','rfc'],
-    a:"Darshan is a selected speaker at KuppingerCole's NHI Impact Day in Munich on 14 October 2026. The talk is a structured gap analysis of non-human identity governance across five frameworks (SOC 2, NIST CSF 2.0, ISO 27001:2022, NIST SP 800-53 R5 and DORA): all five govern machine credentials, none addresses one non-human identity delegating authority to another, which is exactly what an AI agent does. It closes with an RFC 8693 bounded-delegation proof of concept that breaks the attack chain. The underlying MSc thesis is 98 pages with 15 figures and maps the UNC6395 campaign to MITRE ATT&amp;CK." },
+    a:"Darshan is a selected speaker at KuppingerCole's NHI Impact Day in Munich on 14 October 2026. The talk is a structured gap analysis of non-human identity governance across five frameworks (SOC 2, NIST CSF 2.0, ISO 27001:2022, NIST SP 800-53 R5 and DORA): all five govern machine credentials, none addresses one non-human identity delegating authority to another, which is exactly what an AI agent does. It closes with an RFC 8693 bounded-delegation proof of concept that breaks the attack chain. The underlying MSc thesis is 98 pages with 15 figures and maps the UNC6395 campaign to MITRE ATT&amp;CK. He has since extended the analysis to ISO/IEC 42001 and ISO/IEC 38507, and neither closes the gap either." },
   { k:['post','writing','write','linkedin','content','article','nhi','non-human','follower','thought'],
     a:"Darshan publishes a short, practical security lesson three times a week on LinkedIn (5,000+ followers), identity, GRC and SecOps topics. The Writing section on this site always shows his three latest posts automatically." },
   { k:['experience','work','job','niit','cyberdiplomat','analyst','trainer','role'],
@@ -2845,7 +2863,7 @@ function speakReply(text){
     certs(){ print('SC-200 ✔ · Cisco CyberOps ✔ · SC-300 ✔ · Google Cybersecurity ✔ · CTIGA ✔\nTryHackMe Sec1 ✔ · ISO 27001 Associate ✔ · SC-900 ✔ · Security+ SY0-701 ⏳\n<span class="t-dim">(verify: credly.com/users/darshan-goswami.e4c6c92c)</span>'); },
     labs(){ print('1. Detection Engineering, Zeek → Kafka → Wazuh/OpenSearch + MISP, 12 rules authored & tuned\n2. Linux Hardening, CIS baseline via idempotent Bash script, auditd piped into the detection stack\n3. Multi-Cloud Posture, AWS misconfigured on purpose then remediated; repeated on GCP + Oracle\n4. Kubernetes, k3s with RBAC, network policies and pod security standards, audit-log reconstruction\n5. Network Segmentation & Secure Tooling, VLANs/DMZ/SPAN + Bandit and pip-audit on the tooling\n6. AI-Assisted Monitoring, Python anomaly detection + AI triage/risk-scoring via API, human-in-the-loop'); },
     projects(){ CMDS.labs(); },
-    research(){ print('<span class="t-ok">KuppingerCole NHI Impact Day</span> · Munich · 14 Oct 2026 · selected speaker\nGap analysis of non-human identity governance across SOC 2, NIST CSF 2.0, ISO 27001:2022,\nNIST SP 800-53 R5 and DORA. All five govern machine credentials. None covers one machine\ndelegating to another, which is exactly what an AI agent does.\nProof of concept: RFC 8693 bounded delegation, which breaks the attack chain.\n<span class="t-dim">MSc thesis behind it: 98 pages, 15 figures, UNC6395 mapped to MITRE ATT&CK.</span>'); },
+    research(){ print('<span class="t-ok">KuppingerCole NHI Impact Day</span> · Munich · 14 Oct 2026 · selected speaker\nGap analysis of non-human identity governance across SOC 2, NIST CSF 2.0, ISO 27001:2022,\nNIST SP 800-53 R5 and DORA. All five govern machine credentials. None covers one machine\ndelegating to another, which is exactly what an AI agent does.\nProof of concept: RFC 8693 bounded delegation, which breaks the attack chain.\n<span class="t-dim">MSc thesis behind it: 98 pages, 15 figures, UNC6395 mapped to MITRE ATT&CK.</span>\n<span class="t-dim">Extension: ISO 42001 and ISO 38507 do not close it either. 42001 has no identity control at all.</span>'); },
     experience(){ print('2025      Cybersecurity Trainer @ NIIT Foundation (4500+ trained, 95% certified\n2023-24   Cybersecurity Research Analyst @ The CyberDiplomat) 50+ platforms monitored\n2023      Cybersecurity Research Intern @ The CyberDiplomat, crypto threat research, +30% TI quality'); },
     contact(){ print('email: <span class="t-ok">darshangoswami22922@gmail.com</span>\nphone: +49 155 1083 7720\nlocation: Berlin (open to relocation) · full-time from Oct 2026'); },
     linkedin(){ window.open('https://linkedin.com/in/darshangiri-goswami-033283213','_blank'); print('opening LinkedIn…','t-dim'); },
@@ -3074,6 +3092,22 @@ if (GOATCOUNTER_CODE){
     ['#experience .section-head p:nth-of-type(2)', 'Teams in Governance schulen und echte Alerts triagieren, Richtlinien werden zu gelebter Praxis.'],
     ['#research .section-head h2', 'Forschung &amp; Vorträge'],
     ['#research .section-head p:nth-of-type(2)', 'Meine M.Sc.-Forschung stellt eine eng gefasste Frage: Fünf verbreitete Frameworks regeln Identität, aber was passiert, wenn die Identität eine Maschine ist, die an eine andere Maschine delegiert? Die kurze Antwort: Keines von ihnen sagt es.'],
+    ['.speak-grid .speak:nth-child(1) .speak-date .m', 'Okt'],
+    ['.speak-grid .speak:nth-child(1) .speak-venue', 'Ausgewählter Sprecher · München, Deutschland'],
+    ['.speak-grid .speak:nth-child(1) p:nth-of-type(1)', 'Eine strukturierte Gap-Analyse der Non-Human-Identity-Governance über <b style="color:var(--text)">fünf GRC-Frameworks</b>: SOC&nbsp;2, NIST CSF 2.0, ISO/IEC 27001:2022, NIST SP 800-53 R5 und DORA. Jedes davon regelt Maschinen-Credentials kompetent. Keines der fünf behandelt, was geschieht, wenn eine Non-Human Identity ihre Autorität an eine andere delegiert, also genau den Schritt, den ein KI-Agent geht.'],
+    ['.speak-grid .speak:nth-child(1) .speak-facts li:nth-child(1)', 'Der Befund ist nicht, dass Kontrollen fehlen. Die Mechanismen existieren; die Vorgaben nicht.'],
+    ['.speak-grid .speak:nth-child(1) .speak-facts li:nth-child(2)', 'Abgeschlossen mit einem lauffähigen Proof of Concept: <b style="color:var(--text)">RFC 8693 Bounded Delegation</b>, der ein breites Token gegen ein eingegrenztes, audience-gebundenes tauscht und damit die Angriffskette bricht.'],
+    ['.speak-grid .speak:nth-child(2) .speak-venue', 'Masterarbeit · GISMA University'],
+    ['.speak-grid .speak:nth-child(2) p:nth-of-type(1)', 'Die vollständige Studie hinter dem Vortrag: 98 Seiten, 15 Abbildungen, adversariale Validierung. Wo die Framework-Analyse eine Kontrolle als still ausweist, zeigt die Arbeit, was diese Stille kostet, indem sie einen realen Angriff hindurchführt.'],
+    ['.speak-grid .speak:nth-child(2) .speak-facts li:nth-child(1)', 'Die <b style="color:var(--text)">UNC6395</b>-Kampagne Schritt für Schritt auf <b style="color:var(--text)">MITRE ATT&amp;CK</b> gemappt und anschließend gegen die Kontrollen jedes Frameworks gespielt, um zu sehen, welches sie erkannt hätte.'],
+    ['.speak-grid .speak:nth-child(2) .speak-facts li:nth-child(2)', 'Adversariale Validierung jeder Aussage: Jede identifizierte Lücke wurde gegen das Gegenargument geprüft, dass eine bestehende Kontrolle sie bereits abdeckt.'],
+    ['.speak-grid .speak:nth-child(3) .speak-date .y', 'Notiz'],
+    ['.speak-grid .speak:nth-child(3) .speak-venue', 'Forschungsnotiz · Erweiterung der Thesis'],
+    ['.speak-grid .speak:nth-child(3) h3', 'Schließen die KI-Normen die Lücke?'],
+    ['.speak-grid .speak:nth-child(3) p:nth-of-type(1)', 'Der erste Einwand, den ich höre: Die KI-Governance-Normen müssten das doch abdecken. Ich habe beide Klausel für Klausel geprüft. Keine schließt die Lücke, und <b style="color:var(--text)">ISO/IEC 42001 kann es nicht</b>: Keine ihrer 38 Maßnahmen in Anhang&nbsp;A ist eine Zugriffs-, Authentifizierungs- oder Identitätsmaßnahme.'],
+    ['.speak-grid .speak:nth-child(3) .speak-facts li:nth-child(1)', 'Es ist eine <b style="color:var(--text)">Naht, kein Loch</b>. ISO 27001 regelt das Credential, setzt aber einen Eigentümer mit Rezertifizierung voraus; ISO 42001 regelt den Agenten, kennt aber kein Credential. Jede verweist auf die andere Hälfte, sodass beide Audits bestehen können, während der Schritt ungedeckt bleibt.'],
+    ['.speak-grid .speak:nth-child(3) .speak-facts li:nth-child(2)', 'Das NCCoE des NIST kam im Februar 2026 unabhängig zur selben Lösung: RFC 8693 Token Exchange mit verschachtelten <b style="color:var(--text)">act</b>-Claims für die Delegationskette.'],
+    ['.speak-grid .speak:nth-child(3) p:nth-of-type(2) a', 'Zur klauselweisen Analyse &rarr;'],
     ['#projects .section-head h2', 'Engineering-Labs'],
     ['#projects .section-head p:nth-of-type(2)', 'Ich baue das Monitoring und die Infrastruktur, über die ich Richtlinien schreibe. Jedes davon ist eine echte Umgebung, die ich aufgesetzt, absichtlich kaputtgemacht und anschließend dokumentiert habe: was konfiguriert wurde, was gegriffen hat und was nicht.'],
     ['#lab .section-head h2', 'Governance-Arbeitsproben'],

@@ -14,7 +14,7 @@ stack, and carries governance, identity and compliance as the second half.
 | `assets/portrait.*` · `about.*` · `portrait-cyber.webp` | Hero portrait, About headshot, hologram twin. |
 | `assets/og-image.jpg` | 1200×630 social-share card. |
 | `assets/writing.json` · `ops.json` | Written by the LinkedIn agent; feed the Writing cards and the Live Ops room. |
-| `artifacts/` | Three illustrative GRC work samples (risk register, access-review procedure, ISO 27001 SoA excerpt). Fictional company, robots-noindexed. |
+| `artifacts/` | Three illustrative GRC work samples (risk register, access-review procedure, ISO 27001 SoA excerpt) plus `nhi-ai-standards-gap.html`, a research brief testing ISO/IEC 38507 and 42001 against the thesis question. Samples use a fictional company; all are robots-noindexed. |
 | `fonts/` · `vendor/three/` | Self-hosted fonts and a vendored Three.js. No third-party requests at page load except GoatCounter. |
 | `datenschutz.html` · `kolophon.html` | DSGVO Art. 13 privacy notice and the colophon (sub-processor register, AI-system inventory, open items). |
 | `404.html` | RBAC-flavoured "access denied" page with a redirect. |

@@ -78,7 +78,8 @@ SKILLS
   identity governance.
 - Governance, Risk & Compliance (GRC): policy & procedure documentation, risk assessment & registers, ISMS
   implementation (ISO 27001), controls monitoring, audit support, security-awareness and regulatory training,
-  IT & cyber-law awareness; frameworks GDPR, DORA, NIS2, ISO 27001, NIST CSF, BSI IT-Grundschutz, MITRE ATT&CK.
+  IT & cyber-law awareness; frameworks GDPR, DORA, NIS2, ISO 27001, NIST CSF, BSI IT-Grundschutz, MITRE ATT&CK,
+  and AI governance (ISO/IEC 42001, ISO/IEC 38507, EU AI Act).
 - Automation, AI & Secure Development: Python (detection scripting, REST API integration, anomaly detection), Bash,
   PowerShell, AI-driven alert triage and risk scoring, input validation and secrets handling, static analysis (Bandit),
   dependency scanning (pip-audit); EU AI Act awareness and human-in-the-loop, responsible AI practice.
@@ -144,6 +145,22 @@ RESEARCH & SPEAKING
 - MSc thesis, "From Silent Controls to Exploitable Paths: A Structured Gap Analysis of Non-Human Identity Governance
   Across Five GRC Frameworks with Adversarial Validation". 98 pages, 15 figures; the UNC6395 campaign mapped to
   MITRE ATT&CK and replayed against each framework's controls.
+- Extension to that analysis (September 2026): tested the same question against the two AI-governance standards,
+  because "surely ISO 42001 covers this" is the first rebuttal the thesis attracts. Neither closes the gap.
+  ISO/IEC 38507 is board-level guidance, not certifiable, and its clause on governance of decision-making covers
+  delegation of DECISIONS from humans to a system, not delegation of ACCESS from one system to another; the two are
+  different axes. ISO/IEC 42001 cannot close it by construction: none of its 38 Annex A controls is an access-control,
+  authentication, authorization, credential or identity control, because it treats information security as ISO 27001's
+  job. The finding is that the gap is a seam rather than a hole: ISO 27001 governs the credential but assumes a
+  principal with a named owner and a review cycle, ISO 42001 governs the autonomous agent but has no credential
+  control, and each defers the other half, so an organisation can hold both certificates and still have one agent
+  minting a token for another with no scope reduction, audience binding, expiry or record of the chain.
+  Three 2026 developments bear on it: Singapore's IMDA Model AI Governance Framework for Agentic AI (Jan 2026) is the
+  first instrument to require a verifiable agent identity and an audit trail of which agent acted under whose
+  authorisation, though it is voluntary; NIST's CAISI AI Agent Standards Initiative (Feb 2026) names delegated scopes
+  of authority as a core problem; and NIST's NCCoE concept paper on software and AI agent identity independently
+  arrived at RFC 8693 token exchange with nested "act" claims, the same mechanism as the thesis proof of concept.
+  Write-up published on the site at artifacts/nhi-ai-standards-gap.html.
 
 EDUCATION
 - MSc, Business Management & Cyber Security | GISMA University of Applied Sciences, Potsdam, Germany | Sep 2025 to expected Sep 2026.

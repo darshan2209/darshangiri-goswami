@@ -1,0 +1,133 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Do the AI standards close the NHI delegation gap? · Darshangiri Goswami</title>
+<meta name="robots" content="noindex" />
+<style>
+:root{--ink:#141a24;--mut:#4a5568;--line:#d6dce6;--teal:#0c7a6e;--gold:#9a7a1e;--red:#a32b1e;--bg:#fff}
+*{box-sizing:border-box;margin:0;padding:0}
+body{font:15px/1.6 "Segoe UI",system-ui,sans-serif;color:var(--ink);background:#f4f6fa;padding:32px 16px}
+.page{max-width:1060px;margin:0 auto;background:var(--bg);border:1px solid var(--line);border-radius:10px;padding:40px 44px;box-shadow:0 10px 30px -18px rgba(20,30,50,.25)}
+.badge{display:inline-block;font-size:.7rem;letter-spacing:.14em;text-transform:uppercase;color:var(--gold);border:1px solid #e3d9b8;background:#fbf7e9;border-radius:100px;padding:4px 12px;margin-bottom:14px}
+h1{font-size:1.5rem;margin-bottom:4px;line-height:1.25}
+h2{font-size:1.05rem;margin:30px 0 10px;padding-top:18px;border-top:1px solid var(--line)}
+h2:first-of-type{border-top:none;padding-top:0}
+.sub{color:var(--mut);font-size:.9rem;margin-bottom:22px}
+p{margin-bottom:12px}
+table{width:100%;border-collapse:collapse;font-size:.8rem;margin:12px 0}
+th{background:#eef2f7;text-align:left;padding:9px 10px;border:1px solid var(--line);font-size:.7rem;letter-spacing:.06em;text-transform:uppercase;color:var(--mut)}
+td{padding:9px 10px;border:1px solid var(--line);vertical-align:top}
+td.cl{white-space:nowrap;font-weight:600}
+.v-no{color:var(--red);font-weight:600;white-space:nowrap}
+.v-near{color:var(--gold);font-weight:600;white-space:nowrap}
+.verdict{border:1px solid #e0c4bf;background:#fdf3f1;border-radius:8px;padding:16px 18px;margin:18px 0}
+.verdict b{color:var(--red)}
+.key{border:1px solid #b8ddd6;background:#f0f9f7;border-radius:8px;padding:16px 18px;margin:18px 0}
+.key b{color:var(--teal)}
+ul{margin:0 0 12px 20px}
+li{margin-bottom:7px}
+.seam{display:grid;grid-template-columns:1fr 1fr;gap:14px;margin:14px 0}
+.seam div{border:1px solid var(--line);border-radius:8px;padding:14px 16px;font-size:.84rem}
+.seam h3{font-size:.82rem;letter-spacing:.06em;text-transform:uppercase;color:var(--mut);margin-bottom:7px}
+.note{margin-top:26px;font-size:.8rem;color:var(--mut);border-top:1px solid var(--line);padding-top:14px}
+@media (max-width:680px){.page{padding:26px 20px}.seam{grid-template-columns:1fr}}
+@media print{body{background:#fff;padding:0}.page{border:none;box-shadow:none;padding:10mm}}
+</style>
+</head>
+<body>
+<div class="page">
+  <span class="badge">Research extension · M.Sc. gap analysis</span>
+  <h1>Do ISO/IEC 38507 and ISO/IEC 42001 close the NHI delegation gap?</h1>
+  <p class="sub">An extension to "From Silent Controls to Exploitable Paths" · Darshangiri Goswami · reviewed September 2026</p>
+
+  <p>My thesis tests five GRC frameworks (SOC&nbsp;2, NIST CSF 2.0, ISO/IEC 27001:2022, NIST SP 800-53 R5, DORA) against one narrow question: <b>when one non-human identity delegates its authority to another, which is precisely the step an AI agent takes, what does the framework require?</b> All five govern machine credentials. None answers that question.</p>
+
+  <p>The obvious rebuttal is that the AI-governance standards must cover it. This page tests that rebuttal against the two most likely candidates.</p>
+
+  <div class="verdict">
+    <b>Verdict: neither closes the gap.</b> ISO/IEC 38507 names the accountability principle that machine-to-machine delegation strains, but supplies no mechanism and is not certifiable. ISO/IEC 42001 cannot close it by construction: not one of its 38 Annex&nbsp;A controls is an access-control, authentication, authorization, credential, secret or identity control.
+  </div>
+
+  <h2>ISO/IEC 38507:2022 · Governance implications of the use of AI by organizations</h2>
+  <p>Guidance for the governing body, aligned to the ISO/IEC 38500 model. Its stated emphasis is governance performed by humans, explicitly not the technologies that make up an AI system.</p>
+
+  <table>
+    <thead><tr><th>Clause</th><th>What it governs</th><th>Bearing on one NHI delegating to another</th><th>Verdict</th></tr></thead>
+    <tbody>
+      <tr><td class="cl">4.2</td><td>Maintaining governance when introducing AI</td><td>Requires existing governance to keep working as AI is adopted. Says nothing about the authority an AI system holds or passes on.</td><td class="v-no">Silent</td></tr>
+      <tr><td class="cl">4.3</td><td>Maintaining accountability when introducing AI</td><td><b>Closest hit in either standard.</b> Establishes that accountability stays with the governing body and cannot be transferred to a machine. That is the principle an unbounded delegation chain breaks, but the clause answers "who is answerable", not "what is this token allowed to do next".</td><td class="v-near">Principle only</td></tr>
+      <tr><td class="cl">5.3</td><td>AI ecosystem</td><td>Describes the actors around an AI system. Those actors are organizations and roles, not identity principals holding credentials.</td><td class="v-no">Silent</td></tr>
+      <tr><td class="cl">6.2</td><td>Governance oversight of AI</td><td>Assigns oversight responsibility at organizational level.</td><td class="v-no">Silent</td></tr>
+      <tr><td class="cl">6.3</td><td>Governance of decision-making</td><td><b>The near miss that matters.</b> Governs which decisions the organization will let an AI system make or influence, and what human oversight applies. That is delegation of <i>decision authority</i>, from humans to a system, settled once at design time. The gap is delegation of <i>access authority</i>, from one system to another, executed at run time, thousands of times a day, with no human in the loop. Both are called delegation, which is exactly why this clause looks like coverage and is not.</td><td class="v-near">Different axis</td></tr>
+      <tr><td class="cl">6.4</td><td>Governance of data use</td><td>Data provenance and use, not credential provenance.</td><td class="v-no">Silent</td></tr>
+      <tr><td class="cl">6.6 / 6.7</td><td>Compliance and risk</td><td>Generic. Would surface NHI delegation only if some other instrument had already named it as a risk, which is the circularity the thesis documents.</td><td class="v-no">Circular</td></tr>
+    </tbody>
+  </table>
+
+  <p><b>Structural limit:</b> 38507 is guidance, not requirements. It is not certifiable, carries no control set and no Statement of Applicability, and its audience is the board. A token-scoping requirement is out of its scope by design, so its silence here is a design choice rather than an oversight.</p>
+
+  <h2>ISO/IEC 42001:2023 · AI management system</h2>
+  <p>A certifiable management system standard: 38 controls across nine objectives, A.2 to A.10.</p>
+
+  <table>
+    <thead><tr><th>Objective</th><th>Scope</th><th>Bearing on one NHI delegating to another</th><th>Verdict</th></tr></thead>
+    <tbody>
+      <tr><td class="cl">A.2</td><td>Policies related to AI</td><td>A.2.3 requires the AI policy to align with other organizational policies, which is the hook that would pull in the access-control policy. Alignment is a coordination duty, not a control on delegation.</td><td class="v-near">Hook only</td></tr>
+      <tr><td class="cl">A.3</td><td>Internal organization</td><td>AI roles and responsibilities, and reporting of concerns. Human roles throughout.</td><td class="v-no">Silent</td></tr>
+      <tr><td class="cl">A.4</td><td>Resources for AI systems</td><td>A.4.2 documents resources and A.4.5 documents system and computing resources. An inventory hook, but scoped to capacity and provenance. Nothing requires recording what authority a system holds, or what it can pass on.</td><td class="v-near">Inventory only</td></tr>
+      <tr><td class="cl">A.5</td><td>Assessing impacts of AI systems</td><td>Impacts on individuals, groups and society. Not the entitlement graph.</td><td class="v-no">Silent</td></tr>
+      <tr><td class="cl">A.6</td><td>AI system life cycle</td><td>A.6.2.8 requires event-log recording across the life cycle, the second-closest hit. It gives traceability of the system's actions but does not require the log to carry the identity the action was authorized under, nor the chain that granted it. In an NHI incident the forensic question is "which principal did agent B act as, and who granted that", and this control does not require the field to exist.</td><td class="v-near">Logs, not chain</td></tr>
+      <tr><td class="cl">A.7</td><td>Data for AI systems</td><td>Acquisition, quality, provenance and preparation of data. No analogue for credentials.</td><td class="v-no">Silent</td></tr>
+      <tr><td class="cl">A.8</td><td>Information for interested parties</td><td>Documentation, external reporting, incident communication.</td><td class="v-no">Silent</td></tr>
+      <tr><td class="cl">A.9</td><td>Use of AI systems</td><td>A.9.4 requires use consistent with intended use. An agent that acquires and passes on authority beyond what was intended is arguably outside it, but this is a statement of purpose with no enforcement primitive and no notion of a technical scope boundary.</td><td class="v-near">Purpose only</td></tr>
+      <tr><td class="cl">A.10</td><td>Third-party and customer relationships</td><td>A.10.2 allocates responsibilities across the AI value chain and A.10.3 covers suppliers. The trap: this looks like delegation, but the principals are legal entities, not identities. The UNC6395 case sits exactly here. A supplier assessment is required; bounding the token that supplier's integration holds is not.</td><td class="v-near">Wrong principals</td></tr>
+    </tbody>
+  </table>
+
+  <p><b>The decisive observation:</b> ISO/IEC 42001 contains no access-control, authentication, authorization, credential, key, secret or identity control anywhere in Annex&nbsp;A. This is deliberate. The standard treats information security as ISO/IEC 27001's responsibility and expects the two to be run together.</p>
+
+  <h2>The finding: the gap is a seam, not a hole</h2>
+  <p>Stating that a framework is silent understates this. The two standards that between them ought to cover an autonomous agent holding a credential each govern one half and defer the other.</p>
+
+  <div class="seam">
+    <div>
+      <h3>ISO/IEC 27001:2022 governs the credential</h3>
+      A.5.15 access control, A.5.16 identity management, A.5.17 authentication information, A.5.18 access rights. A complete loop, built on an identity model that assumes a principal with a named owner and a review cycle. It has no concept of the holder being an autonomous system that acquires and forwards authority on its own initiative.
+    </div>
+    <div>
+      <h3>ISO/IEC 42001:2023 governs the agent</h3>
+      Impact assessment, life cycle, intended use, value-chain responsibility. A complete loop around the behaviour of an AI system. It has no concept of a credential.
+    </div>
+  </div>
+
+  <div class="key">
+    <b>The consequence.</b> An organization can hold both certificates, pass both audits, and still run agent A minting a token for agent B with no scope reduction, no audience binding, no expiry, and no record of the delegation chain. Neither auditor is out of scope. Each is looking at the half that does not contain the step.
+  </div>
+
+  <h2>What moved in 2026</h2>
+  <p>Three developments postdate the framework set analysed in the thesis. Two corroborate the finding. One qualifies it, and should be stated rather than left for an audience member to raise.</p>
+
+  <table>
+    <thead><tr><th>Instrument</th><th>Date</th><th>Bearing</th></tr></thead>
+    <tbody>
+      <tr><td><b>IMDA Model AI Governance Framework for Agentic AI</b> (Singapore)</td><td>22 Jan 2026, updated 20 May 2026</td><td><b>Qualifies the claim.</b> The first governance framework to require that each agent carry a verifiable digital identity and an audit trail of which agent acted under whose authorisation. That is the gap, addressed directly. It is voluntary and not certifiable, so the thesis claim survives if scoped to certifiable management-system standards, but "no framework addresses this" is no longer accurate without that qualifier.</td></tr>
+      <tr><td><b>NIST CAISI AI Agent Standards Initiative</b></td><td>17 Feb 2026</td><td>Corroborates. Names agent identity and ensuring agents act only within explicitly delegated scopes of authority as core problems, which is the thesis gap stated in a US standards body's own words.</td></tr>
+      <tr><td><b>NIST NCCoE concept paper</b>, "Accelerating the Adoption of Software and AI Agent Identity and Authorization"</td><td>Feb 2026</td><td><b>Independently validates the proof of concept.</b> Proposes a demonstration project built on OAuth 2.0, OIDC, SPIFFE/SPIRE, SCIM, NGAC and MCP, and identifies RFC 8693 token exchange with the <code>act</code> claim, nestable to represent a delegation chain, as the mechanism for preserving delegation across multi-step calls. That is the same mechanism as the thesis proof of concept, reached independently.</td></tr>
+      <tr><td><b>ISO/IEC 27090</b>, AI cybersecurity</td><td>FDIS since Feb 2026, publication expected H2 2026</td><td>Does not close it. Scoped to AI-specific attack surfaces such as adversarial machine learning, data poisoning and model theft, and it is guidance rather than requirements. Delegation of authority between identities is not its subject.</td></tr>
+    </tbody>
+  </table>
+
+  <h2>What this changes in the argument</h2>
+  <ul>
+    <li><b>The five-framework claim stands</b> and gets stronger. Adding these two standards removes the most obvious rebuttal instead of weakening the finding.</li>
+    <li><b>Reframe the two as a distinct column.</b> They are not "silent" in the way SOC&nbsp;2 or DORA are silent. They are <i>out of scope by design</i>, each deferring to the other. A standard that declines the question is a sharper result than one that simply omits it.</li>
+    <li><b>Scope the headline claim to certifiable standards.</b> Singapore's IMDA framework addresses agent identity and delegation directly, so the precise claim is that no certifiable management-system standard requires it.</li>
+    <li><b>Lead the proof of concept with the NCCoE convergence.</b> An independent NIST centre arriving at RFC 8693 token exchange with nested <code>act</code> claims is external corroboration of the remedy, not just the diagnosis.</li>
+  </ul>
+
+  <p class="note"><b>Sourcing note:</b> ISO/IEC 38507:2022 and ISO/IEC 42001:2023 are paywalled. Clause and control structure here was verified against multiple public summaries and standards-body listings, not against licensed copies. Verify exact clause wording against a purchased copy before putting clause numbers on a conference slide. · Authored by Darshangiri Goswami · darshangoswami22922@gmail.com</p>
+</div>
+</body>
+</html>
