@@ -1,6 +1,11 @@
 {
   "posts": [
     {
+      "title": "🛡️ Windows 11 KB5124008 update breaks domain trust for some users",
+      "excerpt": "Microsoft is investigating reports that the Windows 11 KB5124008 security update is breaking domain trust relationships on some enterprise systems, pr",
+      "date": "2026-09-16"
+    },
+    {
       "title": "🛡️ Hackers exploit Tencent app flaw to deploy GrayRabbit malware",
       "excerpt": "Threat actors linked to a China-aligned espionage group are exploiting a critical vulnerability (CVE-2026-51990) in Tencent's Sogou Input Method for W",
       "date": "2026-09-14"
@@ -9,11 +14,6 @@
       "title": "Wrapping this learning series: govern every identity, continuously.",
       "excerpt": "Across these posts, one theme repeats. Identity is the perimeter, machines now outnumber humans, and the controls that work are not exotic: inventory",
       "date": "2026-09-07"
-    },
-    {
-      "title": "Wrapping this learning series: govern every identity, continuously.",
-      "excerpt": "Across these posts, one theme repeats. Identity is the perimeter, machines now outnumber humans, and the controls that work are not exotic: inventory",
-      "date": "2026-09-05"
     }
   ]
 }
