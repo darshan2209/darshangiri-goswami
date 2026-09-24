@@ -1,6 +1,11 @@
 {
   "posts": [
     {
+      "title": "🔐 MFA stops ~99% of automated account attacks.",
+      "excerpt": "Microsoft's own data shows multi-factor authentication blocks the vast",
+      "date": "2026-09-24"
+    },
+    {
       "title": "🛡️ Jade Sleet Linked to Indian IT Provider Breach With FLATROOF and ROOFDECK Backdoors",
       "excerpt": "The North Korean threat actor known as Jade Sleet has been attributed to the compromise of an India-based \"much smaller organization\" in the informati",
       "date": "2026-09-21"
@@ -9,11 +14,6 @@
       "title": "🔐 Passwords are out. Passphrases are in.",
       "excerpt": "A 16-character passphrase like \"purple-tractor-coffee-moon\" is far harder",
       "date": "2026-09-19"
-    },
-    {
-      "title": "🛡️ Windows 11 KB5124008 update breaks domain trust for some users",
-      "excerpt": "Microsoft is investigating reports that the Windows 11 KB5124008 security update is breaking domain trust relationships on some enterprise systems, pr",
-      "date": "2026-09-16"
     }
   ]
 }
