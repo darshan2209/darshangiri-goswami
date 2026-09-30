@@ -1,6 +1,11 @@
 {
   "posts": [
     {
+      "title": "🛡️ South Africa Seeks Help After Cyberattack Targets Air Traffic Control",
+      "excerpt": "As aviation infrastructure suffers more cyberattacks, air traffic systems are the latest target, with a ransomware toolkit installed on at least one o",
+      "date": "2026-09-30"
+    },
+    {
       "title": "🛡️ Bitget resumes Bitcoin withdrawals after $387.5 million crypto heist",
       "excerpt": "Cryptocurrency exchange Bitget has resumed Bitcoin withdrawals suspended after suspected North Korean hackers breached its systems last week and stole",
       "date": "2026-09-28"
@@ -9,11 +14,6 @@
       "title": "🔐 MFA stops ~99% of automated account attacks.",
       "excerpt": "Microsoft's own data shows multi-factor authentication blocks the vast",
       "date": "2026-09-24"
-    },
-    {
-      "title": "🛡️ Jade Sleet Linked to Indian IT Provider Breach With FLATROOF and ROOFDECK Backdoors",
-      "excerpt": "The North Korean threat actor known as Jade Sleet has been attributed to the compromise of an India-based \"much smaller organization\" in the informati",
-      "date": "2026-09-21"
     }
   ]
 }
