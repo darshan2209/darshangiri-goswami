@@ -60,7 +60,7 @@ streaming through Apache Kafka into a Wazuh/OpenSearch indexer, enriched with MI
 Python. Has hardened Ubuntu servers against the CIS Benchmark, secured a k3s cluster with RBAC and network policies, and
 reviewed security posture across AWS, Google Cloud Platform, Oracle Cloud, Google Workspace and Microsoft 365. Alongside
 the engineering, brings real governance depth: policy, risk registers, access reviews and security-awareness training.
-Selected speaker at KuppingerCole's NHI Impact Day (Munich, 14 October 2026) on non-human identity governance.
+Speaker and panellist at KuppingerCole's AIdentity & Non-Human Identity Impact Day (Munich, 6 October 2026) on non-human identity governance.
 English C1, German A2. Seeking a graduate or entry-level role in detection and response, security engineering, GRC or IAM.
 
 SKILLS
@@ -136,14 +136,19 @@ LABS & PROJECTS (nine hands-on labs; the main ones)
    playbook mapping, producing recommendations a human approves rather than the system executing them.
 
 RESEARCH & SPEAKING
-- Selected speaker, KuppingerCole NHI Impact Day, Munich, 14 October 2026. Talk on non-human identity governance: a
-  structured gap analysis across five GRC frameworks (SOC 2, NIST CSF 2.0, ISO 27001:2022, NIST SP 800-53 R5, DORA)
-  showing that all five govern machine credentials but none addresses one non-human identity delegating authority to
-  another, which is exactly what an AI agent does. Closes with an RFC 8693 bounded-delegation proof of concept that
-  breaks the attack chain. The framing: the mechanisms exist, the mandates do not.
+- Speaker, KuppingerCole AIdentity & Non-Human Identity Impact Day, Munich, 6 October 2026, 15:20 to 15:50:
+  "A Reproducible GRC-to-ATT&CK Gap Analysis of Non-Human and AI-Agent Identity". A structured gap analysis across
+  eight security and AI-governance instruments (SOC 2, NIST CSF 2.0, ISO/IEC 27001:2022, NIST SP 800-53 Rev. 5, DORA,
+  Germany's BSIG Section 30, ISO/IEC 42001, ISO/IEC 38507). They govern the machine identity as an account, but none
+  states an assessable requirement for the moment its authority passes to an AI agent. The talk proposes
+  bounded-delegation control language built on OAuth 2.0 Token Exchange (RFC 8693), with one amendment route per
+  instrument. The framing: the mechanisms exist, the mandates do not.
+- Panellist, "Machines Now Outnumber Humans - Is IAM Ready?", same event, 11:10, with Grace Rachmany (Decentralized
+  Identity Foundation), moderated by KuppingerCole analyst Nitish Deshpande.
 - MSc thesis, "From Silent Controls to Exploitable Paths: A Structured Gap Analysis of Non-Human Identity Governance
-  Across Five GRC Frameworks with Adversarial Validation". 98 pages, 15 figures; the UNC6395 campaign mapped to
-  MITRE ATT&CK and replayed against each framework's controls.
+  Across Eight Security and AI-Governance Instruments, with Experimental Validation", submitted September 2026. Maps
+  the UNC6395 campaign to MITRE ATT&CK, finds NIST SP 800-53 controls IA-9 and IA-13 in no SP 800-53B baseline, and
+  includes a lab reconstruction of one attack chain (github.com/darshan2209/bounded-agent-delegation).
 
 EDUCATION
 - MSc, Business Management & Cyber Security | GISMA University of Applied Sciences, Potsdam, Germany | Sep 2025 to expected Sep 2026.

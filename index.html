@@ -71,8 +71,8 @@
     },
     {
       "@type": "Event",
-      "name": "KuppingerCole NHI Impact Day 2026",
-      "startDate": "2026-10-14",
+      "name": "KuppingerCole AIdentity & Non-Human Identity Impact Day 2026",
+      "startDate": "2026-10-06",
       "eventAttendanceMode": "https://schema.org/OfflineEventAttendanceMode",
       "location": { "@type": "Place", "name": "Munich, Germany", "address": { "@type": "PostalAddress", "addressLocality": "Munich", "addressCountry": "DE" } },
       "performer": { "@type": "Person", "name": "Darshangiri Goswami" },
@@ -1381,23 +1381,24 @@ nav.links a::after{content:"";position:absolute;left:11px;right:11px;bottom:7px;
     <div class="section-head reveal">
       <p class="eyebrow">// Research</p>
       <h2>Research &amp; speaking</h2>
-      <p>My M.Sc. research asks a narrow question: five widely-used frameworks all govern identity, so what happens when the identity is a machine that delegates to another machine? The short answer is that none of them say.</p>
+      <p>My M.Sc. research asks a narrow question: eight widely used security and AI-governance instruments all govern identity, so what happens when a machine identity's authority passes to an AI agent? The short answer is that none of them states a requirement an auditor can test.</p>
     </div>
     <div class="speak-grid">
       <div class="speak lead reveal rl d1">
         <div class="speak-top">
-          <div class="speak-date"><span class="m">Oct</span><span class="d">14</span><span class="y">2026</span></div>
+          <div class="speak-date"><span class="m">Oct</span><span class="d">6</span><span class="y">2026</span></div>
           <div>
-            <span class="speak-venue">Selected speaker · Munich, Germany</span>
-            <h3>KuppingerCole NHI Impact Day</h3>
+            <span class="speak-venue">Speaker and panellist · Munich, Germany</span>
+            <h3>KuppingerCole AIdentity &amp; Non-Human Identity Impact Day</h3>
           </div>
         </div>
-        <p>A structured gap analysis of non-human identity governance across <b style="color:var(--text)">five GRC frameworks</b>: SOC&nbsp;2, NIST CSF 2.0, ISO/IEC 27001:2022, NIST SP 800-53 R5 and DORA. Each one governs machine credentials competently. None of the five addresses what happens when one non-human identity delegates its authority to another, which is precisely the step an AI agent takes.</p>
+        <p>A structured gap analysis of non-human identity governance across <b style="color:var(--text)">eight security and AI-governance instruments</b>: SOC&nbsp;2, NIST CSF 2.0, ISO/IEC 27001:2022, NIST SP 800-53 Rev.&nbsp;5, DORA, Germany's BSIG §30, ISO/IEC 42001 and ISO/IEC 38507. Each governs the machine identity as an account. None states an assessable requirement for the moment that identity's authority passes to an AI agent.</p>
         <ul class="speak-facts">
           <li>The finding is not that controls are missing. The mechanisms exist; the mandates do not.</li>
-          <li>Closed with a working proof of concept: <b style="color:var(--text)">RFC 8693 bounded delegation</b>, exchanging a broad token for a narrowed, audience-bound one, which breaks the attack chain.</li>
+          <li>Closes with a proposal: <b style="color:var(--text)">bounded-delegation control language</b> built on OAuth 2.0 Token Exchange (RFC 8693), written so each instrument could adopt it through an amendment route it already has.</li>
+          <li>Also on the 11:10 panel <b style="color:var(--text)">"Machines Now Outnumber Humans - Is IAM Ready?"</b></li>
         </ul>
-        <div class="tags"><span>Non-human identity</span><span>Agentic AI</span><span>RFC 8693</span><span>DORA</span><span>NIST CSF 2.0</span><span>ISO 27001</span></div>
+        <div class="tags"><span>Non-human identity</span><span>Agentic AI</span><span>RFC 8693</span><span>DORA</span><span>NIS2</span><span>ISO/IEC 42001</span></div>
       </div>
       <div class="speak reveal rr d2">
         <div class="speak-top">
@@ -1407,7 +1408,7 @@ nav.links a::after{content:"";position:absolute;left:11px;right:11px;bottom:7px;
             <h3>From Silent Controls to Exploitable Paths</h3>
           </div>
         </div>
-        <p>The full study behind the talk: 98 pages, 15 figures, adversarial validation. Where the framework analysis says a control is silent, the thesis shows what that silence costs by walking a real intrusion through it.</p>
+        <p>The full study behind the talk: eight instruments, five governance dimensions and forty verdicts on a fixed Covered, Partial or Silent decision procedure. Where the analysis finds a control silent, the thesis shows what that silence costs by walking a real intrusion through it.</p>
         <ul class="speak-facts">
           <li>The <b style="color:var(--text)">UNC6395</b> campaign mapped step by step to <b style="color:var(--text)">MITRE ATT&amp;CK</b>, then replayed against each framework's controls to see which would have caught it.</li>
           <li>Adversarial validation on every claim: each identified gap tested against the counter-argument that an existing control already covers it.</li>
@@ -2609,7 +2610,7 @@ const KB = [
   { k:['cloud','aws','gcp','google cloud','oracle','azure','kubernetes','k3s','container','s3','iam policy','guardduty','cloudtrail'],
     a:"On cloud and containers: AWS (IAM least privilege, CloudTrail, GuardDuty, S3 bucket policy) with a boto3 script that flags wildcard permissions and unused credentials; posture reviews on Google Cloud Platform and Oracle Cloud; Google Workspace and Microsoft 365 admin review (MFA enforcement, OAuth allowlisting, external sharing); Microsoft Azure and Entra ID; and Kubernetes on k3s with RBAC, network policies (Calico, because Flannel silently ignores them) and pod security standards." },
   { k:['research','thesis','talk','speak','conference','kuppingercole','nhi','delegation','agent','rfc'],
-    a:"Darshan is a selected speaker at KuppingerCole's NHI Impact Day in Munich on 14 October 2026. The talk is a structured gap analysis of non-human identity governance across five frameworks (SOC 2, NIST CSF 2.0, ISO 27001:2022, NIST SP 800-53 R5 and DORA): all five govern machine credentials, none addresses one non-human identity delegating authority to another, which is exactly what an AI agent does. It closes with an RFC 8693 bounded-delegation proof of concept that breaks the attack chain. The underlying MSc thesis is 98 pages with 15 figures and maps the UNC6395 campaign to MITRE ATT&amp;CK." },
+    a:"Darshan speaks at KuppingerCole's AIdentity &amp; Non-Human Identity Impact Day in Munich on 6 October 2026 (15:20, governance track) and joins the 11:10 panel 'Machines Now Outnumber Humans - Is IAM Ready?'. The talk is a structured gap analysis of non-human identity governance across eight security and AI-governance instruments, from SOC 2, ISO/IEC 27001 and DORA to ISO/IEC 42001: they govern the machine identity as an account, but none states an assessable requirement for the moment its authority passes to an AI agent. It closes with proposed bounded-delegation control language built on RFC 8693. The underlying MSc thesis maps the UNC6395 campaign to MITRE ATT&amp;CK." },
   { k:['post','writing','write','linkedin','content','article','nhi','non-human','follower','thought'],
     a:"Darshan publishes a short, practical security lesson three times a week on LinkedIn (5,000+ followers), identity, GRC and SecOps topics. The Writing section on this site always shows his three latest posts automatically." },
   { k:['experience','work','job','niit','cyberdiplomat','analyst','trainer','role'],
@@ -2617,7 +2618,7 @@ const KB = [
   { k:['cert','sc-900','sc-300','sc-200','security+','google','cisco','cyberops','ctiga','qualif','credential'],
     a:"Certifications: Microsoft SC-200 (Security Operations Analyst), Cisco CyberOps Associate, Microsoft SC-300 (Identity &amp; Access Administrator), Google Cybersecurity, the Certified Threat Intelligence &amp; Governance Analyst (CTIGA) from Red Team Leaders, TryHackMe Sec1, ISO/IEC 27001 Associate and Microsoft SC-900, with CompTIA Security+ SY0-701 in progress. All verifiable on his Credly profile." },
   { k:['education','study','degree','msc','university','gisma','btech','student'],
-    a:"He holds a B.Tech in Information Technology (GPA 8.76/10, German equivalent 1.6) covering operating systems, networks, databases, programming and information security, and completes an MSc in Business Management &amp; Cyber Security at GISMA University of Applied Sciences, Potsdam, in September 2026. His MSc thesis on non-human identity governance was accepted as a talk at KuppingerCole's NHI Impact Day. He's targeting graduate and entry-level roles from October 2026, not internships or working-student positions." },
+    a:"He holds a B.Tech in Information Technology (GPA 8.76/10, German equivalent 1.6) covering operating systems, networks, databases, programming and information security, and completes an MSc in Business Management &amp; Cyber Security at GISMA University of Applied Sciences, Potsdam, in September 2026. His MSc thesis on non-human identity governance was accepted as a talk at KuppingerCole's AIdentity &amp; Non-Human Identity Impact Day (Munich, 6 October 2026). He's targeting graduate and entry-level roles from October 2026, not internships or working-student positions." },
   { k:['available','availability','relocat','frankfurt','berlin','hours','start','location','contact','email','reach'],
     a:"He's based in Berlin, open to relocation, and available full-time from October 2026, he's interviewing now for autumn starts. As a graduate of a German university he holds an 18-month post-study residence permit with unrestricted employment, so no employer sponsorship is needed. Reach him at darshangoswami22922@gmail.com, +49 155 1083 7720, or on LinkedIn." },
   { k:['language','english','german','speak'],
@@ -2840,12 +2841,12 @@ function speakReply(text){
       '  nmap · sudo hire darshan · hack     for the curious\n' +
       '  ls · cat · decode &lt;base64&gt; · submit &lt;flag&gt;     <span class="t-dim">// recon tools</span>\n' +
       '  clear · exit'); },
-    about(){ print('B.Tech Information Technology · MSc Business Management & Cyber Security (GISMA, Sep 2026).\nDetection & response · Linux/cloud security · IAM · GRC. Builds the detection, then proves it is accountable.\nTrained 4500+ people (95% certified). Speaking at KuppingerCole NHI Impact Day, Munich, 14 Oct 2026.'); },
+    about(){ print('B.Tech Information Technology · MSc Business Management & Cyber Security (GISMA, Sep 2026).\nDetection & response · Linux/cloud security · IAM · GRC. Builds the detection, then proves it is accountable.\nTrained 4500+ people (95% certified). Speaking at KuppingerCole AIdentity & NHI Impact Day, Munich, 6 Oct 2026.'); },
     skills(){ print('<span class="t-ok">[Detect]</span> Zeek · Apache Kafka · Wazuh/OpenSearch · MISP · rule authoring & tuning · FIM · triage\n<span class="t-ok">[Linux]</span> Ubuntu/Debian admin · CIS hardening · auditd · Bash · systemd · VLANs/DMZ/SPAN\n<span class="t-ok">[Cloud]</span> AWS IAM/CloudTrail/GuardDuty/S3 · GCP · Oracle · Entra ID · k3s RBAC/NetPol/PSS\n<span class="t-ok">[IAM]</span> access reviews · RBAC · least privilege · JML · NHI governance · RFC 8693\n<span class="t-ok">[GRC]</span> ISO 27001/ISMS · NIST CSF · GDPR · DORA · NIS2 · MITRE ATT&CK · EU AI Act\n<span class="t-ok">[Auto]</span> Python · Bash · PowerShell · AI alert triage · Bandit · pip-audit'); },
     certs(){ print('SC-200 ✔ · Cisco CyberOps ✔ · SC-300 ✔ · Google Cybersecurity ✔ · CTIGA ✔\nTryHackMe Sec1 ✔ · ISO 27001 Associate ✔ · SC-900 ✔ · Security+ SY0-701 ⏳\n<span class="t-dim">(verify: credly.com/users/darshan-goswami.e4c6c92c)</span>'); },
     labs(){ print('1. Detection Engineering, Zeek → Kafka → Wazuh/OpenSearch + MISP, 12 rules authored & tuned\n2. Linux Hardening, CIS baseline via idempotent Bash script, auditd piped into the detection stack\n3. Multi-Cloud Posture, AWS misconfigured on purpose then remediated; repeated on GCP + Oracle\n4. Kubernetes, k3s with RBAC, network policies and pod security standards, audit-log reconstruction\n5. Network Segmentation & Secure Tooling, VLANs/DMZ/SPAN + Bandit and pip-audit on the tooling\n6. AI-Assisted Monitoring, Python anomaly detection + AI triage/risk-scoring via API, human-in-the-loop'); },
     projects(){ CMDS.labs(); },
-    research(){ print('<span class="t-ok">KuppingerCole NHI Impact Day</span> · Munich · 14 Oct 2026 · selected speaker\nGap analysis of non-human identity governance across SOC 2, NIST CSF 2.0, ISO 27001:2022,\nNIST SP 800-53 R5 and DORA. All five govern machine credentials. None covers one machine\ndelegating to another, which is exactly what an AI agent does.\nProof of concept: RFC 8693 bounded delegation, which breaks the attack chain.\n<span class="t-dim">MSc thesis behind it: 98 pages, 15 figures, UNC6395 mapped to MITRE ATT&CK.</span>'); },
+    research(){ print('<span class="t-ok">KuppingerCole AIdentity & NHI Impact Day</span> · Munich · 6 Oct 2026 · speaker + panellist\nGap analysis of non-human identity governance across eight instruments: SOC 2, NIST CSF 2.0,\nISO 27001:2022, NIST SP 800-53 R5, DORA, BSIG §30, ISO 42001 and ISO 38507. All eight govern\nthe machine identity as an account. None states an assessable rule for agent delegation.\nProposal: bounded-delegation control language built on RFC 8693.\n<span class="t-dim">MSc thesis behind it: UNC6395 mapped to MITRE ATT&CK; IA-9 and IA-13 sit in no SP 800-53B baseline.</span>'); },
     experience(){ print('2025      Cybersecurity Trainer @ NIIT Foundation (4500+ trained, 95% certified\n2023-24   Cybersecurity Research Analyst @ The CyberDiplomat) 50+ platforms monitored\n2023      Cybersecurity Research Intern @ The CyberDiplomat, crypto threat research, +30% TI quality'); },
     contact(){ print('email: <span class="t-ok">darshangoswami22922@gmail.com</span>\nphone: +49 155 1083 7720\nlocation: Berlin (open to relocation) · full-time from Oct 2026'); },
     linkedin(){ window.open('https://linkedin.com/in/darshangiri-goswami-033283213','_blank'); print('opening LinkedIn…','t-dim'); },
@@ -3073,7 +3074,7 @@ if (GOATCOUNTER_CODE){
     ['#experience .section-head h2', 'Erfahrung'],
     ['#experience .section-head p:nth-of-type(2)', 'Teams in Governance schulen und echte Alerts triagieren, Richtlinien werden zu gelebter Praxis.'],
     ['#research .section-head h2', 'Forschung &amp; Vorträge'],
-    ['#research .section-head p:nth-of-type(2)', 'Meine M.Sc.-Forschung stellt eine eng gefasste Frage: Fünf verbreitete Frameworks regeln Identität, aber was passiert, wenn die Identität eine Maschine ist, die an eine andere Maschine delegiert? Die kurze Antwort: Keines von ihnen sagt es.'],
+    ['#research .section-head p:nth-of-type(2)', 'Meine M.Sc.-Forschung stellt eine eng gefasste Frage: Acht verbreitete Sicherheits- und KI-Governance-Regelwerke regeln Identität, aber was passiert, wenn die Befugnis einer Maschinenidentität an einen KI-Agenten übergeht? Die kurze Antwort: Keines formuliert eine Anforderung, die ein Auditor prüfen kann.'],
     ['#projects .section-head h2', 'Engineering-Labs'],
     ['#projects .section-head p:nth-of-type(2)', 'Ich baue das Monitoring und die Infrastruktur, über die ich Richtlinien schreibe. Jedes davon ist eine echte Umgebung, die ich aufgesetzt, absichtlich kaputtgemacht und anschließend dokumentiert habe: was konfiguriert wurde, was gegriffen hat und was nicht.'],
     ['#lab .section-head h2', 'Governance-Arbeitsproben'],
