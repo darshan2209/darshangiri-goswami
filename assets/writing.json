@@ -1,6 +1,11 @@
 {
   "posts": [
     {
+      "title": "🛡️ 100+ Compromised Websites Use Fake Cloudflare Checks to Deliver LunexStealer",
+      "excerpt": "The Computer Emergency Response Team of Ukraine (CERT-UA) has identified more than 100 compromised websites that have been injected with malicious Jav",
+      "date": "2026-10-07"
+    },
+    {
       "title": "🔐 Phishing has evolved. So should your instincts.",
       "excerpt": "Modern phishing isn't full of typos anymore - AI writes clean, convincing",
       "date": "2026-10-03"
@@ -9,11 +14,6 @@
       "title": "🛡️ South Africa Seeks Help After Cyberattack Targets Air Traffic Control",
       "excerpt": "As aviation infrastructure suffers more cyberattacks, air traffic systems are the latest target, with a ransomware toolkit installed on at least one o",
       "date": "2026-09-30"
-    },
-    {
-      "title": "🛡️ Bitget resumes Bitcoin withdrawals after $387.5 million crypto heist",
-      "excerpt": "Cryptocurrency exchange Bitget has resumed Bitcoin withdrawals suspended after suspected North Korean hackers breached its systems last week and stole",
-      "date": "2026-09-28"
     }
   ]
 }
