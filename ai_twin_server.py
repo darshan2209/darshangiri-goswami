@@ -66,7 +66,7 @@ English C1, German A2. Seeking a graduate or entry-level role in detection and r
 SKILLS
 - Detection & Incident Response: Zeek network sensors, Apache Kafka log pipelines, Wazuh/OpenSearch SIEM, MISP threat
   intelligence, detection rule authoring and tuning, file integrity monitoring, SOC alert triage and escalation,
-  incident documentation. Certified SC-200 and Cisco CyberOps Associate.
+  incident documentation. Certified Cisco CyberOps Associate; Microsoft SC-200 in progress.
 - Linux, Systems & Networking: Linux/UNIX (Ubuntu, Debian) administration, CIS Benchmark hardening, auditd, SSH and PAM
   configuration, systemd, Bash shell scripting, virtualisation (VirtualBox, KVM), network segmentation (VLANs, DMZ,
   SPAN/mirror ports, firewall zoning), TCP/IP, DNS, HTTP, traffic analysis, IDS/IPS concepts.
@@ -74,7 +74,7 @@ SKILLS
   Oracle Cloud, Google Workspace and Microsoft 365 posture review, Microsoft Azure and Entra ID, Kubernetes/k3s
   (RBAC, NetworkPolicy, pod security standards, Calico).
 - Identity & Access Management (IAM): access control & access reviews, Joiner-Mover-Leaver, least-privilege / RBAC,
-  non-human identity (NHI) governance, bounded delegation (RFC 8693), Microsoft Entra ID (SC-300), conditional access,
+  non-human identity (NHI) governance, bounded delegation (RFC 8693), Microsoft Entra ID, conditional access,
   identity governance.
 - Governance, Risk & Compliance (GRC): policy & procedure documentation, risk assessment & registers, ISMS
   implementation (ISO 27001), controls monitoring, audit support, security-awareness and regulatory training,
@@ -157,10 +157,10 @@ EDUCATION
   programming, information security.
 
 CERTIFICATIONS
-Microsoft SC-200 Security Operations Analyst Associate; Cisco CyberOps Associate; Microsoft SC-300 Identity and Access
-Administrator Associate; Google Cybersecurity Certificate; Certified Threat Intelligence & Governance Analyst (CTIGA,
-Red Team Leaders); TryHackMe Sec1; ISO/IEC 27001 Information Security Associate; Microsoft SC-900;
-CompTIA Security+ SY0-701 (in progress). All verifiable on Credly; more listed on LinkedIn.
+Cisco CyberOps Associate; Google Cybersecurity Certificate; Certified Threat Intelligence & Governance
+Analyst (CTIGA, Red Team Leaders); TryHackMe Sec1; ISO/IEC 27001 Information Security Associate; Microsoft SC-900.
+In progress, not yet held: Microsoft SC-200 Security Operations Analyst. Never say SC-200 is
+held, and do not claim SC-300 or CompTIA Security+. Earned ones are verifiable on Credly; more listed on LinkedIn.
 
 KNOWN GAPS (be honest about these if asked; do not paper over them)
 - Production systems administration: the technical depth above is lab work, not infrastructure run under production load.
