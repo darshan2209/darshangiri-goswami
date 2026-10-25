@@ -547,8 +547,12 @@ footer a{color:var(--muted)}
 .ai-close{background:none;border:1px solid var(--border);border-radius:9px;width:44px;height:44px;color:var(--muted);
   cursor:pointer;display:grid;place-items:center;transition:.2s}
 .ai-close svg{width:18px;height:18px}
-/* EU AI Act Art. 50 machine disclosure, permanent, non-dismissible, shown above
-   the input before any interaction. Applies from 2026-08-02. */
+/* EU AI Act Art. 50 machine disclosure. The Fit check shows the full block above its
+   input; the chat panel, already named "AI twin", carries the one-line .ai-note under
+   its input instead. Applies from 2026-08-02. */
+.ai-note{margin:0;padding:0 14px 10px;background:rgba(7,11,22,.6);text-align:center;
+  font-family:var(--font-mono);font-size:.64rem;line-height:1.4;color:var(--faint)}
+.ai-note a{color:var(--faint);text-decoration:underline;text-underline-offset:2px}
 .ai-disclosure{padding:11px 18px;border-bottom:1px solid var(--border);background:rgba(230,185,79,.06);
   font-family:var(--font-mono);font-size:.7rem;line-height:1.5;color:var(--muted)}
 .ai-disclosure b{display:block;color:var(--gold);font-weight:500;letter-spacing:.04em;text-transform:uppercase;
@@ -1861,17 +1865,6 @@ nav.links a::after{content:"";position:absolute;left:11px;right:11px;bottom:7px;
     <button class="ai-tool" id="aiSpk" aria-label="Toggle spoken replies" aria-pressed="false" title="Speak replies aloud"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M11 5L6 9H3v6h3l5 4V5z"/><path d="M15.5 8.5a5 5 0 0 1 0 7"/><path d="M18.5 5.5a9 9 0 0 1 0 13"/></svg></button>
     <button class="ai-close" id="aiClose" aria-label="Close assistant"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><line x1="6" y1="6" x2="18" y2="18"/><line x1="18" y1="6" x2="6" y2="18"/></svg></button>
   </div>
-  <div class="ai-disclosure">
-    <b>AI system · KI-System</b>
-    You are interacting with an AI system, not a natural person. It answers from Darshangiri's
-    CV and can be wrong. What you type is sent to Anthropic (Claude Haiku 4.5) via a relay
-    server in the USA and is not stored. Please don't enter personal or confidential data.
-    <a href="datenschutz.html">Privacy notice</a>
-    <span class="de">Sie interagieren mit einem KI-System, nicht mit einer natürlichen Person.
-    Es antwortet auf Grundlage des Lebenslaufs und kann Fehler enthalten. Eingaben werden an
-    einen Server in den USA übermittelt und nicht gespeichert. Bitte keine personenbezogenen
-    oder vertraulichen Daten eingeben. <a href="datenschutz.html">Datenschutzerklärung</a></span>
-  </div>
   <div class="ai-msgs" id="aiMsgs"></div>
   <div class="ai-suggest" id="aiSuggest">
     <button>Walk me through his detection lab</button>
@@ -1884,6 +1877,7 @@ nav.links a::after{content:"";position:absolute;left:11px;right:11px;bottom:7px;
     <button type="button" class="ai-tool" id="aiMic" aria-label="Speak your question" title="Speak your question"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="9" y="3" width="6" height="11" rx="3"/><path d="M5 11a7 7 0 0 0 14 0"/><path d="M12 18v3"/></svg></button>
     <button type="submit" id="aiSend" aria-label="Send"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 12l16-8-6 16-3-6-7-2z"/></svg></button>
   </form>
+  <p class="ai-note">AI answers from my CV, can be wrong · <a href="datenschutz.html">Privacy</a></p>
 </div>
 
 <!-- ===================== 3D SCENE ===================== -->
@@ -3136,6 +3130,7 @@ if (GOATCOUNTER_CODE){
     ['#fitGo', '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="7"/><path d="M21 21l-4.3-4.3"/><path d="M8 11l2 2 4-4"/></svg> Fit analysieren'],
     ['#contact h2', 'Offen für Graduate-Stellen in Detection &amp; Response, GRC und Identity'],
     ['#contact .panel > p:nth-of-type(2)', 'In Berlin zuhause, umzugsbereit und ab Oktober 2026 in Vollzeit verfügbar, Gespräche für einen Start im Herbst führe ich bereits jetzt. Keine Sponsorship nötig: als Absolvent einer deutschen Hochschule habe ich eine 18-monatige Aufenthaltserlaubnis zur Arbeitsplatzsuche mit uneingeschränkter Erwerbstätigkeit. Sie besetzen eine Stelle im SOC, in einem Detection- oder Platform-Security-Team oder in GRC und Identity? Sprechen wir.'],
+    ['.ai-note', 'KI-generiert, kann Fehler enthalten · <a href="datenschutz.html">Datenschutz</a>'],
     /* hero + contact buttons */
     ['.hero-actions .btn-gold', '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3v12m0 0l-4-4m4 4l4-4M4 21h16"/></svg> Lebenslauf (CV)'],
     ['.hero-actions .btn-ghost', '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 4h16v16H4z"/><path d="M4 7l8 6 8-6"/></svg> Kontakt'],
