@@ -194,8 +194,8 @@ h1,h2,h3,h4{font-family:var(--font-display);line-height:1.12;font-weight:600;let
 .wrap{max-width:var(--maxw);margin:0 auto;padding:0 clamp(20px,5vw,48px)}
 section{padding:var(--space-2xl) 0;position:relative}
 /* below-fold sections: skip layout/paint until they approach the viewport */
-#skills,#experience,#research,#projects,#lab,#writing,#ops,#certifications,#fit,#contact{content-visibility:auto;contain-intrinsic-size:auto 900px}
-@media print{ #skills,#experience,#research,#projects,#lab,#writing,#ops,#certifications,#fit,#contact{content-visibility:visible} }
+#skills,#experience,#research,#projects,#agents,#lab,#writing,#ops,#certifications,#fit,#contact{content-visibility:auto;contain-intrinsic-size:auto 900px}
+@media print{ #skills,#experience,#research,#projects,#agents,#lab,#writing,#ops,#certifications,#fit,#contact{content-visibility:visible} }
 .section-head{margin-bottom:var(--space-lg);max-width:62ch}
 .section-head h2{font-size:var(--step-3);margin:.5rem 0 .8rem;position:relative;display:inline-block}
 .section-head h2::after{content:"";position:absolute;left:0;bottom:-9px;width:64px;height:3px;border-radius:3px;
@@ -827,7 +827,7 @@ nav.links a::after{content:"";position:absolute;left:11px;right:11px;bottom:7px;
 
 /* ============================================================= PRINT */
 @media print{
-  canvas#bg, #killchain, .kc-feed, .kc-scan, .kc-stamp, header.nav, .ai-fab, .ai-panel, .scroll-hint, .proj-glow, .scan,
+  canvas#bg, #killchain, .kc-feed, .kc-scan, .kc-stamp, header.nav, .ai-fab, .ai-panel, .scroll-hint, .proj-glow, .scan, #agents,
   .portrait-corner, .skip, body::after, #contact .panel::before, .skill-card::before{ display:none !important; }
   :root{ --bg:#fff; --text:#101418; --muted:#2c3340; --faint:#4a5360; --surface-glass:#fff; --border:#cfd6e0; --border-bright:#9fb0c8; }
   html,body{background:#fff !important;color:#101418}
@@ -1068,6 +1068,109 @@ nav.links a::after{content:"";position:absolute;left:11px;right:11px;bottom:7px;
 .rt-glitch{animation:rtShake .3s steps(3) 3}
 @keyframes rtShake{0%,100%{transform:none;filter:none}30%{transform:translateX(-3px);filter:hue-rotate(-30deg) saturate(1.4)}70%{transform:translateX(3px);filter:hue-rotate(15deg)}}
 @media (prefers-reduced-motion:reduce){ .rt-overlay,.rt-glitch{display:none !important;animation:none !important} }
+
+/* ============================================================= AGENT ROOM */
+/* Replays real agent-consult runs (assets/agent-room.js). Red is the terminal's
+   error colour, so a refusal reads the same here as anywhere else on the page. */
+#agents{--ar-no:#ff7a55}
+.ar{border:1px solid var(--border-bright);border-radius:var(--r-lg);background:var(--surface-glass);overflow:hidden}
+.ar-bar{display:flex;flex-wrap:wrap;align-items:center;gap:10px 14px;padding:12px 16px;border-bottom:1px solid var(--border);background:rgba(7,11,22,.35)}
+.ar-case{font-family:var(--font-mono);font-size:.78rem;color:var(--muted)}
+.ar-case b{color:var(--text);font-weight:500}
+.ar-state{font-family:var(--font-mono);font-size:.66rem;letter-spacing:.1em;text-transform:uppercase;padding:3px 10px;
+  border-radius:99px;border:1px solid var(--border);color:var(--faint)}
+.ar-state[data-s="run"]{color:var(--teal);border-color:rgba(45,212,191,.4)}
+.ar-state[data-s="wait"]{color:var(--gold);border-color:rgba(230,185,79,.5);animation:arBlink 1.6s ease-in-out infinite}
+.ar-state[data-s="done"]{color:var(--text)}
+.ar-ctrl{margin-left:auto;display:flex;flex-wrap:wrap;gap:8px}
+.ar-btn{min-height:40px;padding:0 14px;border-radius:10px;border:1px solid var(--border);background:rgba(255,255,255,.03);
+  color:var(--muted);font-family:var(--font-mono);font-size:.76rem;cursor:pointer;transition:color .2s,border-color .2s}
+.ar-btn:hover{color:var(--text);border-color:var(--border-bright)}
+.ar-btn:disabled{opacity:.4;cursor:not-allowed}
+.ar-btn.ar-go{color:#04241f;background:linear-gradient(135deg,var(--teal),#1ab3a3);border-color:transparent;font-weight:600}
+.ar-btn[aria-pressed="true"]{color:var(--teal);border-color:rgba(45,212,191,.45)}
+.ar-body{display:grid;grid-template-columns:minmax(0,1.3fr) minmax(0,1fr)}
+.ar-stage{padding:14px 16px 16px;border-right:1px solid var(--border);display:flex;flex-direction:column;gap:12px;min-width:0}
+.ar-map{width:100%;height:auto;display:block;overflow:visible}
+.ar-ed{stroke:rgba(120,150,200,.16);stroke-width:1.2;transition:stroke .3s}
+.ar-ed.on{stroke:rgba(45,212,191,.6)}
+.ar-ed.gold{stroke:rgba(230,185,79,.7)}
+.ar-ed.bad{stroke:var(--ar-no);stroke-dasharray:4 4}
+.ar-nb{fill:rgba(12,19,34,.94);stroke:var(--border-bright);stroke-width:1.2;transition:stroke .3s,fill .3s}
+.ar-n.coord .ar-nb{stroke:rgba(45,212,191,.5)}
+.ar-n.auth .ar-nb{stroke:rgba(230,185,79,.5)}
+.ar-n.you .ar-nb{stroke:var(--gold);fill:rgba(230,185,79,.12)}
+.ar-n.you{opacity:0;transition:opacity .6s}
+.ar-n.you.show{opacity:1}
+.ar-nm{fill:var(--text);font-family:var(--font-display);font-weight:600;text-anchor:middle}
+.ar-nr{fill:var(--faint);font-family:var(--font-mono);text-anchor:middle}
+.ar-st{fill:var(--teal);font-family:var(--font-mono);font-size:9.5px;text-anchor:middle}
+.ar-n.sup .ar-nb{stroke:var(--teal);stroke-width:2}
+.ar-n.opp .ar-nb{stroke:var(--ar-no);stroke-width:2}
+.ar-n.off{opacity:.5}
+.ar-n.off .ar-nb{stroke-dasharray:4 4}
+.ar-n.ping .ar-nb{animation:arPing .9s var(--ease)}
+.ar-n.hit .ar-nb{stroke:var(--ar-no);fill:rgba(255,122,85,.14)}
+.ar-bd{opacity:0;transition:opacity .3s}
+.ar-bd.show{opacity:1}
+.ar-bd rect{fill:rgba(9,14,26,.96);stroke-width:1}
+.ar-bd text{font-family:var(--font-mono);font-size:8.5px;font-weight:500;letter-spacing:.06em;text-anchor:middle}
+.ar-bd.yes rect{stroke:var(--teal)} .ar-bd.yes text{fill:var(--teal)}
+.ar-bd.no rect{stroke:var(--ar-no)} .ar-bd.no text{fill:var(--ar-no)}
+.ar-bd.abs rect{stroke:var(--faint)} .ar-bd.abs text{fill:var(--faint)}
+.ar-bd.gold rect{stroke:var(--gold)} .ar-bd.gold text{fill:var(--gold)}
+.ar-pk{fill:var(--teal)}
+.ar-pk.gold{fill:var(--gold)}
+.ar-pk.bad{fill:var(--ar-no)}
+.ar-x{fill:var(--ar-no);font-family:var(--font-mono);font-size:18px;font-weight:700;text-anchor:middle}
+.ar-grant{font-family:var(--font-mono);font-size:.72rem;line-height:1.6;color:var(--muted);border:1px dashed rgba(230,185,79,.45);
+  border-radius:10px;padding:8px 10px;background:rgba(230,185,79,.05)}
+.ar-grant b{color:var(--gold);font-weight:500;letter-spacing:.06em;margin-right:4px}
+.ar-grant .drop{color:var(--faint)}
+.ar-grant .drop s{color:var(--ar-no)}
+.ar-grant .ref{display:block;color:var(--ar-no);margin-top:4px}
+.ar-cap{margin:0;min-height:4.8em;font-size:.95rem;line-height:1.55;color:var(--text);border-left:2px solid var(--teal);padding:2px 0 2px 12px}
+.ar-log{display:flex;flex-direction:column;min-width:0;min-height:0}
+.ar-log-h{display:flex;justify-content:space-between;gap:10px;padding:12px 16px;border-bottom:1px solid var(--border);
+  font-family:var(--font-mono);font-size:.68rem;letter-spacing:.08em;text-transform:uppercase;color:var(--faint)}
+.ar-list{list-style:none;margin:0;padding:10px 12px 14px;overflow-y:auto;max-height:470px;display:flex;flex-direction:column;
+  gap:7px;scrollbar-width:thin}
+.ar-sep{font-family:var(--font-mono);font-size:.64rem;letter-spacing:.1em;text-transform:uppercase;color:var(--faint);text-align:center;padding:2px 0 4px}
+.ar-e{font-family:var(--font-mono);font-size:.72rem;line-height:1.5;color:var(--muted);padding:7px 9px;border:1px solid var(--border);
+  border-radius:9px;background:rgba(255,255,255,.02)}
+.ar-e.new{animation:arIn .4s var(--ease)}
+.ar-e .h{display:flex;flex-wrap:wrap;gap:4px 8px;align-items:baseline;margin-bottom:2px}
+.ar-e .id{color:var(--teal);font-weight:500}
+.ar-e .k{color:var(--faint);font-size:.64rem;letter-spacing:.06em;text-transform:uppercase}
+.ar-e .tg{margin-left:auto;color:var(--gold);font-size:.64rem}
+.ar-e.denied{border-color:rgba(255,122,85,.45)} .ar-e.denied .k{color:var(--ar-no)}
+.ar-e.escalation,.ar-e.contest,.ar-e.override,.ar-e.decision{border-color:rgba(230,185,79,.45)}
+.ar-e.escalation .k,.ar-e.contest .k,.ar-e.override .k,.ar-e.decision .k{color:var(--gold)}
+.ar-e.unavailable{border-style:dashed}
+.ar-e.sup .tx{text-decoration:line-through;text-decoration-color:rgba(230,185,79,.75);opacity:.7}
+.ar-decide,.ar-end{padding:16px 18px;border-top:1px solid var(--border)}
+.ar-decide{background:linear-gradient(160deg,rgba(230,185,79,.10),rgba(230,185,79,.02))}
+.ar-lbl{font-family:var(--font-mono);font-size:.72rem;letter-spacing:.1em;text-transform:uppercase;color:var(--gold);margin:0 0 6px;outline:none}
+.ar-hint{font-size:.82rem;color:var(--faint);margin:0 0 10px}
+.ar-q{margin:0 0 14px;font-family:var(--font-mono);font-size:.8rem;line-height:1.6;color:var(--text);border-left:2px solid var(--gold);padding-left:12px}
+.ar-opts{display:flex;flex-wrap:wrap;gap:10px}
+.ar-end-t{margin:0 0 12px;color:var(--text);font-size:.95rem;line-height:1.6}
+.ar-end ul{margin:0 0 12px;padding-left:18px;color:var(--muted);font-size:.9rem;line-height:1.6}
+.ar-end details{margin:0 0 14px}
+.ar-end summary{cursor:pointer;font-family:var(--font-mono);font-size:.76rem;color:var(--teal);min-height:32px;display:inline-flex;align-items:center}
+.ar-end pre{white-space:pre-wrap;font-family:var(--font-mono);font-size:.7rem;line-height:1.55;color:var(--muted);background:rgba(0,0,0,.25);
+  border:1px solid var(--border);border-radius:10px;padding:10px 12px;max-height:280px;overflow:auto;margin:8px 0 0}
+.ar-src{margin-top:14px}
+@keyframes arIn{from{opacity:0;transform:translateY(6px)}to{opacity:1;transform:none}}
+@keyframes arBlink{50%{opacity:.55}}
+@keyframes arPing{0%{stroke:var(--teal);stroke-width:3.2}100%{stroke-width:1.2}}
+@media (max-width:860px){
+  .ar-body{grid-template-columns:1fr}
+  .ar-stage{border-right:0;border-bottom:1px solid var(--border)}
+  .ar-list{max-height:340px}
+  .ar-ctrl{margin-left:0;width:100%}
+}
+@media (prefers-reduced-motion:reduce){ .ar-e.new,.ar-state[data-s="wait"],.ar-n.ping .ar-nb{animation:none} }
 </style>
 </head>
 <body>
@@ -1114,6 +1217,7 @@ nav.links a::after{content:"";position:absolute;left:11px;right:11px;bottom:7px;
       <a href="#experience">Experience</a>
       <a href="#research" data-i18n="nav.research">Research</a>
       <a href="#projects" data-i18n="nav.projects">Labs</a>
+      <a href="#agents" class="nav-wide" data-i18n="nav.agents">Agent room</a>
       <a href="#lab" class="nav-wide" data-i18n="nav.lab">Samples</a>
       <a href="#ops" class="nav-wide" data-i18n="nav.ops">Live ops</a>
       <a href="#writing" data-i18n="nav.writing">Writing</a>
@@ -1560,6 +1664,8 @@ nav.links a::after{content:"";position:absolute;left:11px;right:11px;bottom:7px;
           <p>The reference agents are deterministic on purpose: the properties under test belong to the coordination layer, and a sampling temperature deciding whether a test passes would make the evaluation worthless. The same interface takes a model-backed agent. <b style="color:var(--text)">26 tests</b> run in milliseconds with no network and no API key, and the README says plainly what the design does not yet do.</p>
           <a class="doclink" href="https://github.com/darshan2209/agent-consult" target="_blank" rel="noopener">Repository / write-up
             <svg viewBox="0 0 24 24" width="13" height="13" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M7 17L17 7M9 7h8v8"/></svg></a>
+          <a class="doclink" href="#agents">Watch it run in the agent room
+            <svg viewBox="0 0 24 24" width="13" height="13" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 5v14M6 13l6 6 6-6"/></svg></a>
         </details>
       </div>
 
@@ -1599,6 +1705,60 @@ nav.links a::after{content:"";position:absolute;left:11px;right:11px;bottom:7px;
 
     </div>
     <p class="fit-note reveal d3" style="margin-top:18px">Every lab above is public on <a href="https://github.com/darshan2209?tab=repositories" target="_blank" rel="noopener" style="color:var(--teal)">GitHub</a> with its configuration, scripts and write-up. <strong>118 automated tests</strong> cover the parts that take input from outside the trust boundary, so you can verify the tooling works without an AWS account, a cluster or an API key. Happy to walk through any of it, including the parts that did not work.</p>
+  </div>
+</section>
+
+<!-- ===================== AGENT ROOM ===================== -->
+<section id="agents">
+  <div class="wrap">
+    <div class="section-head reveal">
+      <p class="eyebrow">// Agents at work</p>
+      <h2>The agent room</h2>
+      <p>Five agents have to decide whether a grid operator can connect 250 kW of new solar without a reinforcement study. Watch them pass on permissions that can only get narrower, get refused personal data, disagree, and hand the case to a person. <strong>That person is you</strong>: you are the duty engineer, and your call goes into a record nobody can edit.</p>
+    </div>
+    <div class="ar reveal d1" id="agentRoom">
+      <div class="ar-bar">
+        <span class="ar-case"><b>Case CR-2291</b> · 250 kW solar · feeder F-12</span>
+        <span class="ar-state" id="arState" data-s="ready">Ready</span>
+        <div class="ar-ctrl">
+          <button type="button" class="ar-btn ar-go" id="arGo">▶ Run the case</button>
+          <button type="button" class="ar-btn" id="arSkip">Skip to your call</button>
+          <button type="button" class="ar-btn" id="arSpeed" aria-pressed="false" aria-label="Double speed">2×</button>
+          <button type="button" class="ar-btn" id="arReset" aria-label="Restart">↺</button>
+        </div>
+      </div>
+      <div class="ar-body">
+        <div class="ar-stage">
+          <svg class="ar-map" id="arMap" viewBox="0 0 600 372" role="img" aria-labelledby="arMapT"><title id="arMapT">Map of the room: the operator, a coordinator, five specialist agents and, once the case is escalated, you</title></svg>
+          <div class="ar-grant" id="arGrant" hidden></div>
+          <p class="ar-cap" id="arCap" aria-live="polite">Case CR-2291 is on the desk: 250 kW of new solar on feeder F-12. Press run and watch the agents work it.</p>
+        </div>
+        <div class="ar-log">
+          <div class="ar-log-h"><span id="arLogH">Append-only record</span><span id="arCount">0 entries</span></div>
+          <ol class="ar-list" id="arLog" aria-label="Record entries"></ol>
+        </div>
+      </div>
+      <div class="ar-decide" id="arDecide" hidden>
+        <p class="ar-lbl" id="arDecLbl" tabindex="-1">Your call, duty engineer</p>
+        <p class="ar-hint" id="arHint">This is word for word the question the coordinator sent.</p>
+        <blockquote class="ar-q" id="arQ"></blockquote>
+        <div class="ar-opts">
+          <button type="button" class="btn btn-gold" id="arOverrule">Overrule e08: the switchgear was uprated in August</button>
+          <button type="button" class="btn btn-ghost" id="arUphold">Let it stand: order a reinforcement study</button>
+        </div>
+      </div>
+      <div class="ar-end" id="arEnd" hidden>
+        <p class="ar-lbl" id="arEndLbl" tabindex="-1">Case closed</p>
+        <p class="ar-end-t" id="arEndT"></p>
+        <ul id="arEndL" hidden></ul>
+        <details><summary id="arRecS">The record as the library prints it</summary><pre id="arRec"></pre></details>
+        <div class="ar-opts">
+          <button type="button" class="btn btn-ghost" id="arOutage">Replay with the protection agent offline</button>
+          <button type="button" class="btn btn-ghost" id="arAgain">Run the case again</button>
+        </div>
+      </div>
+    </div>
+    <p class="fit-note reveal d2 ar-src">A replay of real runs of my <a href="https://github.com/darshan2209/agent-consult" target="_blank" rel="noopener" style="color:var(--teal)">agent-consult</a> code, recorded step by step by <code>tools/export_agent_trace.py</code>. The agents are deterministic rule agents, the stand-in the repo uses so that every run reproduces exactly; the same interface takes a model-backed agent. Every entry in the record is text the code wrote.</p>
   </div>
 </section>
 
@@ -2511,7 +2671,7 @@ document.querySelectorAll('nav.links a[href^="#"]').forEach(a => { navMap[a.getA
 /* Samples and Live ops are drawer-only on desktop, so on the bar they fall back
    to the link for the section run they belong to; otherwise scrolling through
    them highlighted nothing at all. */
-const NAV_FALLBACK = { lab:'projects', ops:'projects' };
+const NAV_FALLBACK = { agents:'projects', lab:'projects', ops:'projects' };
 function navLinkFor(id){
   const a = navMap[id];
   if (a && getComputedStyle(a).display === 'none' && NAV_FALLBACK[id]) return navMap[NAV_FALLBACK[id]];
@@ -2526,7 +2686,7 @@ const spy = new IntersectionObserver(entries => {
     }
   });
 }, { rootMargin: '-45% 0px -50% 0px', threshold: 0 });
-['about','skills','experience','research','projects','lab','ops','writing','certifications','fit','contact'].forEach(id => { const s = document.getElementById(id); if (s) spy.observe(s); });
+['about','skills','experience','research','projects','agents','lab','ops','writing','certifications','fit','contact'].forEach(id => { const s = document.getElementById(id); if (s) spy.observe(s); });
 
 /* count-up stats when they scroll into view */
 function animateCount(el){
@@ -2875,8 +3035,8 @@ function speakReply(text){
   const CMDS = {
     help(){ print(
       '<span class="t-ok">Available commands</span>\n' +
-      '  about · skills · certs · labs · research · experience · contact · linkedin · github · cv\n' +
-      '  open &lt;section&gt;   jump to a section (about/skills/research/projects/lab/writing/ops/fit/contact)\n' +
+      '  about · skills · certs · labs · agents · research · experience · contact · linkedin · github · cv\n' +
+      '  open &lt;section&gt;   jump to a section (about/skills/research/projects/agents/lab/writing/ops/fit/contact)\n' +
       '  nmap · sudo hire darshan · hack     for the curious\n' +
       '  ls · cat · decode &lt;base64&gt; · submit &lt;flag&gt;     <span class="t-dim">// recon tools</span>\n' +
       '  clear · exit'); },
@@ -2885,6 +3045,7 @@ function speakReply(text){
     certs(){ print('Cisco CyberOps ✔ · Google Cybersecurity ✔ · CTIGA ✔ · TryHackMe Sec1 ✔\nISO 27001 Associate ✔ · SC-900 ✔ · SC-200 ⏳\n<span class="t-dim">(verify: credly.com/users/darshan-goswami.e4c6c92c)</span>'); },
     labs(){ print('1. Detection Engineering, Zeek → Kafka → Wazuh/OpenSearch + MISP, 12 rules authored & tuned\n2. Linux Hardening, CIS baseline via idempotent Bash script, auditd piped into the detection stack\n3. Multi-Cloud Posture, AWS misconfigured on purpose then remediated; repeated on GCP + Oracle\n4. Kubernetes, k3s with RBAC, network policies and pod security standards, audit-log reconstruction\n5. Network Segmentation & Secure Tooling, VLANs/DMZ/SPAN + Bandit and pip-audit on the tooling\n6. AI-Assisted Monitoring, Python anomaly detection + AI triage/risk-scoring via API, human-in-the-loop\n7. Multi-Agent Consultation, attenuating grants + RFC 8693-style actor chain + contestable ledger, 26 tests\n8. Post-Quantum TLS, ML-KEM vs RSA-2048/X25519 benchmark: hybrid X25519MLKEM768 adds ~2.2 kB per handshake\n9. Authorization Concept Toolkit, Berechtigungskonzept from an entitlement export: SoD, role mining, recertification'); },
     projects(){ CMDS.labs(); },
+    agents(){ print('<span class="t-ok">agent room</span> · five agents, one coordinator, and you as the duty engineer\nA replay of real agent-consult runs: narrowed grants, a refused request, a typed split, an escalation.\n<span class="t-dim">opening #agents…</span>'); const t = document.getElementById('agents'); if (t){ close(); t.scrollIntoView({ behavior:'smooth' }); } },
     research(){ print('<span class="t-ok">KuppingerCole AIdentity & NHI Impact Day</span> · Munich · 6 Oct 2026 · speaker + panellist\nGap analysis of non-human identity governance across eight instruments: SOC 2, NIST CSF 2.0,\nISO 27001:2022, NIST SP 800-53 R5, DORA, BSIG §30, ISO 42001 and ISO 38507. All eight govern\nthe machine identity as an account. None states an assessable rule for agent delegation.\nProposal: bounded-delegation control language built on RFC 8693.\n<span class="t-dim">MSc thesis behind it: UNC6395 mapped to MITRE ATT&CK; IA-9 and IA-13 sit in no SP 800-53B baseline.</span>\n<span class="t-dim">slides: talks/kuppingercole-nhi-impact-day-2026.pdf</span>'); },
     experience(){ print('2025      Cybersecurity Trainer @ NIIT Foundation (4500+ trained, 95% certified\n2023-24   Cybersecurity Research Analyst @ The CyberDiplomat) 50+ platforms monitored\n2023      Cybersecurity Research Intern @ The CyberDiplomat, crypto threat research, +30% TI quality'); },
     contact(){ print('email: <span class="t-ok">darshangoswami22922@gmail.com</span>\nphone: +49 155 1083 7720\nlocation: Berlin (open to relocation) · full-time from Oct 2026'); },
@@ -3131,6 +3292,12 @@ if (GOATCOUNTER_CODE){
     ['#contact h2', 'Offen für Graduate-Stellen in Detection &amp; Response, GRC und Identity'],
     ['#contact .panel > p:nth-of-type(2)', 'In Berlin zuhause, umzugsbereit und ab Oktober 2026 in Vollzeit verfügbar, Gespräche für einen Start im Herbst führe ich bereits jetzt. Keine Sponsorship nötig: als Absolvent einer deutschen Hochschule habe ich eine 18-monatige Aufenthaltserlaubnis zur Arbeitsplatzsuche mit uneingeschränkter Erwerbstätigkeit. Sie besetzen eine Stelle im SOC, in einem Detection- oder Platform-Security-Team oder in GRC und Identity? Sprechen wir.'],
     ['.ai-note', 'KI-generiert, kann Fehler enthalten · <a href="datenschutz.html">Datenschutz</a>'],
+    /* agent room: static text here, the replay's own captions switch inside its script */
+    ['nav.links a[href="#agents"]', 'Agentenraum'],
+    ['#agents .section-head h2', 'Der Agentenraum'],
+    ['#agents .section-head p:nth-of-type(2)', 'Fünf Agenten sollen entscheiden, ob ein Netzbetreiber 250 kW neue Photovoltaik ohne Verstärkungsstudie anschließen darf. Sehen Sie zu, wie sie Berechtigungen weitergeben, die nur enger werden können, wie ihnen personenbezogene Daten verweigert werden, wie sie sich uneinig werden und den Fall an einen Menschen übergeben. <strong>Dieser Mensch sind Sie</strong>: Sie haben Bereitschaftsdienst, und Ihre Entscheidung landet in einem Protokoll, das niemand ändern kann.'],
+    ['#agents .ar-case', '<b>Fall CR-2291</b> · 250 kW Photovoltaik · Abgang F-12'],
+    ['#agents .ar-src', 'Eine Wiedergabe echter Läufe meines Codes <a href="https://github.com/darshan2209/agent-consult" target="_blank" rel="noopener" style="color:var(--teal)">agent-consult</a>, Schritt für Schritt aufgezeichnet von <code>tools/export_agent_trace.py</code>. Die Agenten sind deterministische Regel-Agenten, der Platzhalter, den das Repository nutzt, damit jeder Lauf exakt reproduzierbar ist; dieselbe Schnittstelle nimmt auch einen modellbasierten Agenten auf. Jeder Eintrag im Protokoll ist Text, den der Code geschrieben hat.'],
     /* hero + contact buttons */
     ['.hero-actions .btn-gold', '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3v12m0 0l-4-4m4 4l4-4M4 21h16"/></svg> Lebenslauf (CV)'],
     ['.hero-actions .btn-ghost', '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 4h16v16H4z"/><path d="M4 7l8 6 8-6"/></svg> Kontakt'],
@@ -3491,7 +3658,7 @@ KillChain = (() => {
 
   const CONTROL = {
     ABOUT:'ISO 27001 A.5', METRICS:'continuous monitoring', SKILLS:'NIST CSF PR.AC',
-    EXPERIENCE:'GDPR Art.32', PROJECTS:'Wazuh IDS rule', LAB:'ISO 27001 A.5.18', WRITING:'ISO 27001 A.9', OPS:'SOC 2 availability', CERTIFICATIONS:'Microsoft SC-900', FIT:'ISO 27001 A.7 screening', CONTACT:'MFA challenge'
+    EXPERIENCE:'GDPR Art.32', PROJECTS:'Wazuh IDS rule', AGENTS:'EU AI Act Art. 14 oversight', LAB:'ISO 27001 A.5.18', WRITING:'ISO 27001 A.9', OPS:'SOC 2 availability', CERTIFICATIONS:'Microsoft SC-900', FIT:'ISO 27001 A.7 screening', CONTACT:'MFA challenge'
   };
 
   // feed lives after this <script> in the DOM, so resolve it lazily (null at init time)
@@ -3678,6 +3845,488 @@ KillChain = (() => {
 
   init();
   return { setIntensity, addVelocity, onSectionEnter };
+})();
+</script>
+
+<script>
+/* ============================================================= AGENT ROOM */
+/* Replays real runs of agent-consult, recorded by tools/export_agent_trace.py into
+   assets/agent-room.js. The record column shows only the library's own ledger
+   entries; captions explain them and never add a step. The trace loads when the
+   section nears the viewport, so visitors who never scroll this far never fetch it. */
+(function(){
+  const room = document.getElementById('agentRoom');
+  if (!room) return;
+  const $ = id => document.getElementById(id);
+  const svg = $('arMap'), cap = $('arCap'), logEl = $('arLog'), grantEl = $('arGrant'), stateEl = $('arState'),
+        goBtn = $('arGo'), skipBtn = $('arSkip'), speedBtn = $('arSpeed'), resetBtn = $('arReset'),
+        decide = $('arDecide'), endEl = $('arEnd'), stage = room.querySelector('.ar-stage');
+  const reduce = matchMedia('(prefers-reduced-motion: reduce)').matches;
+  const NS = 'http://www.w3.org/2000/svg';
+  const de = () => (document.documentElement.lang || '').slice(0, 2) === 'de';
+  const L = (en, d) => (de() ? d : en);
+  const esc = s => String(s).replace(/[&<>"]/g, c => ({ '&':'&amp;', '<':'&lt;', '>':'&gt;', '"':'&quot;' }[c]));
+
+  /* ---------- copy: captions per recorded step, in English and German ---------- */
+  const CAP = {
+    'intro': ["Case CR-2291 is on the desk: 250 kW of new solar on feeder F-12. Press run and watch the agents work it.",
+              "Fall CR-2291 liegt auf dem Tisch: 250 kW neue Photovoltaik an Abgang F-12. Starten Sie und sehen Sie den Agenten bei der Arbeit zu."],
+    'o:intro': ["New case file, same request. This time the protection agent is offline.",
+                "Neue Fallakte, gleicher Antrag. Diesmal ist der Agent protection nicht erreichbar."],
+    'grant:operator>regulatory': ["The operator grants regulatory read access to the meter summary and the customer record, and states why: to check the metering history.",
+                                  "Der Betreiber gibt regulatory Lesezugriff auf Zählerübersicht und Kundendatensatz und nennt den Zweck: die Messhistorie prüfen."],
+    'narrow:regulatory': ["Before spending it, regulatory narrows the grant to the meter summary alone. A grant can only ever get narrower.",
+                          "Vor der Nutzung verengt regulatory die Berechtigung auf die Zählerübersicht. Eine Berechtigung kann nur enger werden."],
+    'consult:regulatory>records': ["regulatory asks records for the meter summary: 24 months, no gaps. The record says on whose authority: operator, then regulatory.",
+                                   "regulatory fragt records nach der Zählerübersicht: 24 Monate, keine Lücken. Das Protokoll nennt den Auftrag: operator, dann regulatory."],
+    'grant:regulatory>capacity': ["regulatory hands a slice of that authority to capacity. The chain grows instead of starting over.",
+                                  "regulatory gibt einen Teil dieser Befugnis an capacity weiter. Die Kette wächst, statt neu zu beginnen."],
+    'consult:capacity>records': ["capacity reads the same summary under the delegated grant.",
+                                 "capacity liest dieselbe Übersicht mit der weitergegebenen Berechtigung."],
+    'denied:regulatory>records': ["regulatory reaches for the customer record, which its narrowed grant no longer covers. Refused, and the refusal is recorded too.",
+                                  "regulatory greift nach dem Kundendatensatz, den die verengte Berechtigung nicht mehr abdeckt. Abgelehnt, und auch das wird protokolliert."],
+    'widen:regulatory>capacity': ["It tries to pass the customer record on to capacity instead. Impossible: a delegation can only narrow.",
+                                  "Stattdessen will es den Kundendatensatz an capacity weitergeben. Unmöglich: Eine Delegation kann nur verengen."],
+    'question': ["Now the real question goes to the panel: can CR-2291 be approved without a reinforcement study?",
+                 "Jetzt geht die eigentliche Frage an das Gremium: Kann CR-2291 ohne Verstärkungsstudie genehmigt werden?"],
+    'o:question': ["Same question, new case file. The protection agent is offline this time.",
+                   "Gleiche Frage, neue Fallakte. Der Agent protection ist diesmal nicht erreichbar."],
+    'verdict:capacity': ["capacity says no: 180 kW spare, 250 kW needed. But its figures are from 2026-Q1.",
+                         "capacity sagt nein: 180 kW frei, 250 kW benötigt. Seine Zahlen stammen aber aus 2026-Q1."],
+    'scope:capacity': ["capacity also names what it cannot judge: voltage rise at the connection point.",
+                       "capacity nennt auch, was es nicht beurteilen kann: den Spannungsanstieg am Anschlusspunkt."],
+    'verdict:planning': ["planning says yes: this summer's reinforcement lifted spare capacity to 410 kW on the 2026-Q3 figures.",
+                         "planning sagt ja: Die Netzverstärkung in diesem Sommer hat die freie Kapazität laut 2026-Q3 auf 410 kW erhöht."],
+    'verdict:protection': ["protection says no: the fault level would end up 0.4 kA over the switchgear rating.",
+                           "protection sagt nein: Der Kurzschlussstrom läge 0,4 kA über der Bemessung der Schaltanlage."],
+    'unavailable:protection': ["protection does not answer, and the record says what that leaves uncovered: whether the switchgear ratings still hold.",
+                               "protection antwortet nicht, und das Protokoll sagt, was damit offen bleibt: ob die Bemessung der Schaltanlage noch reicht."],
+    'verdict:regulatory': ["regulatory says yes: 250 kW is below the 500 kW threshold that forces a study.",
+                           "regulatory sagt ja: 250 kW liegen unter der 500-kW-Schwelle, ab der eine Studie Pflicht ist."],
+    'scope:regulatory': ["regulatory declares the physics outside its remit.",
+                         "regulatory erklärt die Physik für außerhalb seiner Zuständigkeit."],
+    'verdict:records': ["records abstains: it serves data and takes no position, and says so rather than leaving a gap.",
+                        "records enthält sich: Es liefert Daten, bezieht keine Position und sagt das offen, statt eine Lücke zu lassen."],
+    'split': ["Two against two. Instead of averaging, the coordinator types the split: both sides used headroom, from different quarters.",
+              "Zwei gegen zwei. Statt zu mitteln, bestimmt der Koordinator die Art des Dissenses: Beide nutzten Kapazitätszahlen aus verschiedenen Quartalen."],
+    'o:split': ["Two against one, again because of the stale 2026-Q1 figures.",
+                "Zwei gegen eins, wieder wegen der veralteten Zahlen aus 2026-Q1."],
+    'reconcile': ["So it asks again with the current figures pinned. It never invents a tie-break.",
+                  "Also fragt er erneut, mit den aktuellen Zahlen. Einen Stichentscheid erfindet er nie."],
+    'restate': ["On current figures capacity flips to yes. One objection survives: protection, on fault level, which nobody else checked.",
+                "Mit aktuellen Zahlen wechselt capacity zu ja. Ein Einwand bleibt: protection, zum Kurzschlussstrom, den sonst niemand geprüft hat."],
+    'reconciled': ["On current figures everyone who answered agrees, so no person needs to be asked.",
+                   "Mit aktuellen Zahlen sind sich alle einig, die geantwortet haben. Niemand muss gefragt werden."],
+    'escalation': ["Data cannot settle that, so the coordinator sends one specific question to a person. That person is you.",
+                   "Das können Daten nicht klären, also schickt der Koordinator eine konkrete Frage an einen Menschen. Dieser Mensch sind Sie."],
+    'outcome': ["The panel's own answer: not settled, escalated. Your call.",
+                "Die Antwort des Gremiums: nicht entschieden, eskaliert. Jetzt sind Sie dran."],
+    'o:outcome': ["Yes, but the answer says out loud that it is narrower than usual and lists what it does not cover.",
+                  "Ja, aber die Antwort sagt offen, dass sie enger ist als sonst, und listet, was sie nicht abdeckt."],
+    'contest': ["You dispute step {prot} first: the switchgear at F-12 was uprated in August, so the rating on file is old.",
+                "Sie bestreiten zuerst Schritt {prot}: Die Schaltanlage an F-12 wurde im August ertüchtigt, die hinterlegte Bemessung ist veraltet."],
+    'override': ["Then you overrule it, citing uprate certificate SG-4471. Step {prot} is not deleted: it stays, marked superseded.",
+                 "Dann überstimmen Sie ihn mit Verweis auf das Zertifikat SG-4471. Schritt {prot} wird nicht gelöscht: Er bleibt, als überholt markiert."],
+    'uphold': ["You let the objection stand: CR-2291 needs a reinforcement study first. Your decision is recorded against step {prot}.",
+               "Sie lassen den Einwand stehen: CR-2291 braucht zuerst eine Verstärkungsstudie. Ihre Entscheidung wird zu Schritt {prot} protokolliert."]
+  };
+  const END = {
+    overrule: ["Closed on your authority. With protection's objection overruled, the remaining verdicts support approval without a study. Anyone auditing this later sees what the system said, what you changed and why.",
+               "Auf Ihre Verantwortung abgeschlossen. Mit überstimmtem Einwand stützen die übrigen Voten die Genehmigung ohne Studie. Wer das später prüft, sieht, was das System sagte, was Sie geändert haben und warum."],
+    uphold: ["Closed on your authority: a reinforcement study comes first. The split, its reason and your decision are all in the record, ready for an audit.",
+             "Auf Ihre Verantwortung abgeschlossen: Zuerst kommt eine Verstärkungsstudie. Der Dissens, sein Grund und Ihre Entscheidung stehen im Protokoll, bereit für ein Audit."],
+    outage: ["The panel said yes, and said out loud what its yes does not cover:",
+             "Das Gremium sagt ja und benennt offen, was dieses Ja nicht abdeckt:"]
+  };
+  const UI = {
+    ready: ['Ready', 'Bereit'], run: ['Running', 'Läuft'], paused: ['Paused', 'Pausiert'],
+    wait: ['Waiting for you', 'Wartet auf Sie'], done: ['Closed', 'Abgeschlossen']
+  };
+  const COORD = {
+    ask: ['asking the panel', 'fragt das Gremium'], split: ['split: stale evidence', 'Dissens: veraltete Daten'],
+    reask: ['asking again, current figures', 'fragt neu, aktuelle Zahlen'], scope: ['split: scope conflict', 'Dissens: Zuständigkeit'],
+    esc: ['escalated to you', 'an Sie eskaliert'], wait: ['waiting for your call', 'wartet auf Sie'],
+    agreed: ['agreed', 'einig'], narrow: ['yes, but narrower', 'ja, aber enger'],
+    closedA: ['closed: overruled', 'abgeschlossen: überstimmt'], closedB: ['closed: study first', 'abgeschlossen: erst Studie']
+  };
+  const BADGE = {
+    yes: ['YES', 'JA', 'yes'], no: ['NO', 'NEIN', 'no'], abs: ['ABSTAINS', 'ENTHÄLT SICH', 'abs'], off: ['OFFLINE', 'OFFLINE', 'abs'],
+    disputed: ['DISPUTED', 'BESTRITTEN', 'gold'], overruled: ['OVERRULED', 'ÜBERSTIMMT', 'gold'], upheld: ['UPHELD', 'BESTÄTIGT', 'gold']
+  };
+
+  /* ---------- the map: two layouts, wide for desktop and tall for phones ---------- */
+  const NODES = [
+    ['operator', ['issues grants', 'erteilt Rechte'], 'auth'], ['regulatory', ['connection rules', 'Anschlussregeln']],
+    ['protection', ['fault level', 'Kurzschluss']], ['capacity', ['thermal headroom', 'Kapazität']],
+    ['coordinator', ['runs the panel', 'leitet das Gremium'], 'coord'], ['you', ['duty engineer', 'Bereitschaft'], 'you'],
+    ['records', ['data, under grant', 'Daten, mit Recht']], ['planning', ['network plan', 'Netzplanung']]
+  ];
+  const EDGES = [['operator','regulatory'], ['operator','coordinator'], ['regulatory','records'], ['regulatory','capacity'],
+    ['capacity','records'], ['coordinator','capacity'], ['coordinator','planning'], ['coordinator','protection'],
+    ['coordinator','regulatory'], ['coordinator','records'], ['coordinator','you'], ['you','protection']];
+  const LAYOUT = {
+    wide: { vb: [600, 372], w: 118, h: 44, cw: 136, ch: 50, fs: 12.5, rs: 9.5,
+      pos: { operator: [70, 46], regulatory: [220, 46], protection: [480, 46], capacity: [88, 190], coordinator: [318, 190],
+             you: [530, 190], records: [205, 322], planning: [430, 322] } },
+    tall: { vb: [360, 344], w: 104, h: 42, cw: 112, ch: 46, fs: 13, rs: 9.5,
+      pos: { operator: [62, 40], regulatory: [180, 40], protection: [298, 40], capacity: [62, 172], coordinator: [180, 172],
+             you: [298, 172], records: [62, 304], planning: [298, 304] } }
+  };
+  const attrs = (n, a) => { for (const k in a) n.setAttribute(k, a[k]); return n; };
+  const el = (tag, a) => attrs(document.createElementNS(NS, tag), a || {});
+  const gE = el('g'), gN = el('g'), gP = el('g');
+  svg.append(gE, gN, gP);
+  const edgeEls = {};
+  EDGES.forEach(([a, b]) => { const l = el('line', { class: 'ar-ed' }); gE.append(l); edgeEls[a + '|' + b] = l; });
+  const nodeEls = {};
+  NODES.forEach(([id, role, cls]) => {
+    const g = el('g', { class: 'ar-n' + (cls ? ' ' + cls : '') }), r = el('rect', { class: 'ar-nb', rx: 12 });
+    const nm = el('text', { class: 'ar-nm' }), rl = el('text', { class: 'ar-nr' });
+    const bd = el('g', { class: 'ar-bd' }), br = el('rect', { rx: 8 }), bt = el('text');
+    bd.append(br, bt); g.append(r, nm, rl, bd);
+    const st = id === 'coordinator' ? el('text', { class: 'ar-st' }) : null;
+    if (st) g.append(st);
+    gN.append(g);
+    nodeEls[id] = { g, r, nm, rl, bd, br, bt, st, role };
+  });
+  let LY = null;
+  function layout(){
+    const next = stage.clientWidth && stage.clientWidth < 520 ? LAYOUT.tall : LAYOUT.wide;
+    if (next === LY) return;
+    LY = next;
+    svg.setAttribute('viewBox', '0 0 ' + LY.vb[0] + ' ' + LY.vb[1]);
+    for (const id in nodeEls){
+      const n = nodeEls[id], [x, y] = LY.pos[id], c = id === 'coordinator', w = c ? LY.cw : LY.w, h = c ? LY.ch : LY.h;
+      n.g.setAttribute('transform', 'translate(' + x + ' ' + y + ')');
+      attrs(n.r, { x: -w / 2, y: -h / 2, width: w, height: h });
+      attrs(n.nm, { y: -3, 'font-size': LY.fs }); attrs(n.rl, { y: 12, 'font-size': LY.rs });
+      n.bd.setAttribute('transform', 'translate(0 ' + (-h / 2 - 1) + ')');
+      if (n.st) n.st.setAttribute('y', h / 2 + 15);
+    }
+    for (const k in edgeEls){
+      const [a, b] = k.split('|'), p = LY.pos[a], q = LY.pos[b];
+      attrs(edgeEls[k], { x1: p[0], y1: p[1], x2: q[0], y2: q[1] });
+    }
+  }
+  layout();
+  if ('ResizeObserver' in window) new ResizeObserver(layout).observe(stage);
+
+  /* ---------- state ---------- */
+  let D = null;
+  const S = { run: 'case', branch: null, beats: [], i: 0, done: 0, phase: 'ready', playing: false, active: false,
+              speed: 1, token: 0, timer: 0, wake: null, instant: false, visible: false, auto: false,
+              badges: {}, rings: {}, offline: {}, you: false, coord: null, grant: null, logged: [], capKey: 'intro' };
+  const prot = () => (D ? D.case.protection : 'e08');
+  const capText = key => (CAP[key] ? L(CAP[key][0], CAP[key][1]) : '').replace(/\{prot\}/g, prot());
+
+  function paint(){
+    for (const id in nodeEls){
+      const n = nodeEls[id];
+      n.nm.textContent = id === 'you' ? L('you', 'Sie') : id;
+      n.rl.textContent = L(n.role[0], n.role[1]);
+      n.g.classList.toggle('sup', S.rings[id] === 'sup');
+      n.g.classList.toggle('opp', S.rings[id] === 'opp');
+      n.g.classList.toggle('off', !!S.offline[id]);
+      if (id === 'you') n.g.classList.toggle('show', S.you);
+      const b = BADGE[S.badges[id]];
+      if (b){
+        const t = L(b[0], b[1]), w = 14 + t.length * 5.8;
+        n.bt.textContent = t;
+        attrs(n.br, { x: -w / 2, y: -8, width: w, height: 16 }); n.bt.setAttribute('y', 3.2);
+        n.bd.setAttribute('class', 'ar-bd show ' + b[2]);
+      } else n.bd.setAttribute('class', 'ar-bd');
+    }
+    nodeEls.coordinator.st.textContent = S.coord ? L(COORD[S.coord][0], COORD[S.coord][1]) : '';
+    if (S.grant){
+      const g = S.grant;
+      grantEl.hidden = false;
+      grantEl.innerHTML = '<b>' + L('GRANT', 'BERECHTIGUNG') + '</b>' + esc(g.text) +
+        (g.dropped && g.dropped.length ? ' <span class="drop">' + L('dropped', 'entfernt') + ': <s>' + esc(g.dropped.join(', ')) + '</s></span>' : '') +
+        (g.refused ? '<span class="ref">' + esc(g.refused) + '</span>' : '');
+    } else grantEl.hidden = true;
+  }
+  function controls(){
+    const p = S.phase;
+    stateEl.dataset.s = p === 'paused' ? 'ready' : p;
+    stateEl.textContent = L(UI[p][0], UI[p][1]);
+    goBtn.textContent = p === 'run' ? '❚❚ ' + L('Pause', 'Pause') : p === 'paused' ? '▶ ' + L('Resume', 'Weiter')
+      : p === 'done' ? '↻ ' + L('Run again', 'Neu starten') : '▶ ' + L('Run the case', 'Fall starten');
+    goBtn.disabled = p === 'wait';
+    skipBtn.textContent = S.run === 'case' && !S.branch ? L('Skip to your call', 'Zu Ihrer Entscheidung') : L('Skip to the end', 'Zum Ende');
+    skipBtn.disabled = p === 'wait' || p === 'done';
+    speedBtn.setAttribute('aria-label', L('Double speed', 'Doppelte Geschwindigkeit'));
+    resetBtn.setAttribute('aria-label', L('Restart', 'Neu starten'));
+    $('arLogH').textContent = L('Append-only record', 'Protokoll, nur anhängend');
+    const n = S.logged.length;
+    $('arCount').textContent = n + ' ' + (n === 1 ? L('entry', 'Eintrag') : L('entries', 'Einträge'));
+  }
+  function setPhase(p){ S.phase = p; controls(); }
+  function setCaption(key){ S.capKey = key; cap.textContent = capText(key); }
+
+  /* ---------- the record column: only the library's own entries ---------- */
+  function entryLi(b, anim){
+    const li = document.createElement('li');
+    li.className = 'ar-e ' + b.kind + (anim ? ' new' : '');
+    li.dataset.id = b.id;
+    li.innerHTML = '<div class="h"><span class="id">' + esc(b.id) + '</span><span class="k">' + esc(b.kind + ' · ' + b.actor) +
+      '</span></div><div class="tx">' + esc(b.text) + '</div>';
+    return li;
+  }
+  function tagTarget(b){
+    if (!b.refers) return;
+    const t = logEl.querySelector('[data-id="' + b.refers + '"]');
+    if (!t) return;
+    const words = { contest: ['disputed in', 'bestritten in'], override: ['superseded by', 'überholt durch'], decision: ['upheld in', 'bestätigt in'] }[b.kind];
+    if (!words) return;
+    const old = t.querySelector('.tg[data-by="' + b.id + '"]'); if (old) old.remove();
+    const s = document.createElement('span');
+    s.className = 'tg'; s.dataset.by = b.id; s.textContent = L(words[0], words[1]) + ' ' + b.id;
+    t.querySelector('.h').append(s);
+    if (b.kind === 'override') t.classList.add('sup');
+  }
+  function sepLi(){
+    const li = document.createElement('li');
+    li.className = 'ar-sep';
+    li.textContent = S.run === 'case' ? L('case file CR-2291', 'Fallakte CR-2291') : L('case file CR-2291 · protection offline', 'Fallakte CR-2291 · protection offline');
+    return li;
+  }
+  function renderLog(){
+    logEl.textContent = '';
+    logEl.append(sepLi());
+    S.logged.forEach(b => logEl.append(entryLi(b, false)));
+    S.logged.forEach(tagTarget);
+    logEl.scrollTop = logEl.scrollHeight;
+  }
+  function addEntry(b){
+    S.logged.push(b);
+    logEl.append(entryLi(b, !S.instant && !reduce));
+    tagTarget(b);
+    logEl.scrollTop = logEl.scrollHeight;
+    controls();
+  }
+
+  /* ---------- motion ---------- */
+  function flash(id, cls, ms){
+    const g = nodeEls[id] && nodeEls[id].g; if (!g || S.instant) return;
+    g.classList.remove(cls); void g.getBoundingClientRect(); g.classList.add(cls);
+    setTimeout(() => g.classList.remove(cls), ms);
+  }
+  function fly(a, b, cls, ms, tok){
+    return new Promise(done => {
+      if (reduce || S.instant || !LY) return done();
+      const p = LY.pos[a], q = LY.pos[b], stop = cls === 'bad' ? 0.8 : 1;
+      const edge = edgeEls[a + '|' + b] || edgeEls[b + '|' + a];
+      const c = el('circle', { class: 'ar-pk' + (cls ? ' ' + cls : ''), r: 4.5, cx: p[0], cy: p[1] });
+      gP.append(c);
+      if (edge) edge.classList.add(cls || 'on');
+      const t0 = performance.now(), dur = ms / S.speed;
+      let over = false;
+      const end = () => {
+        if (over) return;
+        over = true; clearTimeout(guard); c.remove();
+        if (cls === 'bad' && tok === S.token){
+          const x = el('text', { class: 'ar-x', x: p[0] + (q[0] - p[0]) * stop, y: p[1] + (q[1] - p[1]) * stop + 6 });
+          x.textContent = '×'; gP.append(x); setTimeout(() => x.remove(), 1500);
+        }
+        if (edge) setTimeout(() => edge.classList.remove('on', 'gold', 'bad'), 600);
+        done();
+      };
+      // Browsers stop animation frames in throttled or occluded views; the timer
+      // keeps the story moving there, minus the travelling dot.
+      const guard = setTimeout(end, dur + 400);
+      (function f(now){
+        if (over) return;
+        if (tok !== S.token) return end();
+        const k = Math.min(1, (now - t0) / dur), e = (k < 0.5 ? 2 * k * k : 1 - Math.pow(-2 * k + 2, 2) / 2) * stop;
+        attrs(c, { cx: p[0] + (q[0] - p[0]) * e, cy: p[1] + (q[1] - p[1]) * e });
+        if (k < 1) requestAnimationFrame(f); else end();
+      })(t0);
+    });
+  }
+  const yesNo = p => (p === 'supports' ? 'yes' : p === 'opposes' ? 'no' : 'abs');
+  function setRings(sup, opp){ S.rings = {}; sup.forEach(a => S.rings[a] = 'sup'); opp.forEach(a => S.rings[a] = 'opp'); }
+
+  // Every await is followed by a token check: a step cancelled by skip or restart
+  // must not write its state after the newer run has already moved on.
+  async function apply(b, tok){
+    const gone = () => tok !== S.token;
+    setCaption(b.cue);
+    if (b.t === 'grant'){
+      await fly(b.from, b.to, 'gold', 700, tok); if (gone()) return;
+      S.grant = { text: b.text }; flash(b.to, 'ping', 900);
+    } else if (b.t === 'narrow'){
+      S.grant = { text: b.text, dropped: b.dropped }; flash(b.holder, 'ping', 900);
+    } else if (b.t === 'widen'){
+      await fly(b.from, b.to, 'bad', 700, tok); if (gone()) return;
+      S.grant = Object.assign({}, S.grant, { refused: b.text });
+    } else {
+      const k = b.kind;
+      if (k === 'consult'){ await fly(b.actor, b.to, '', 600, tok); if (gone()) return; await fly(b.to, b.actor, '', 480, tok); }
+      else if (k === 'denied'){ await fly(b.actor, b.to, 'bad', 700, tok); if (gone()) return; flash(b.to, 'hit', 1200); }
+      else if (k === 'question'){ S.grant = null; S.coord = 'ask'; paint(); await fly('operator', 'coordinator', 'gold', 650, tok); }
+      else if (k === 'verdict'){
+        await fly('coordinator', b.actor, '', 480, tok); if (gone()) return;
+        await fly(b.actor, 'coordinator', '', 440, tok); if (gone()) return;
+        S.badges[b.actor] = yesNo(b.pos);
+      }
+      else if (k === 'scope') flash(b.actor, 'ping', 900);
+      else if (k === 'unavailable'){ await fly('coordinator', b.actor, 'bad', 650, tok); if (gone()) return; S.offline[b.actor] = true; S.badges[b.actor] = 'off'; }
+      else if (k === 'disagreement'){
+        setRings(b.sup, b.opp);
+        if (b.cue === 'restate'){ S.coord = 'scope'; b.sup.forEach(a => S.badges[a] = 'yes'); } else S.coord = 'split';
+      }
+      else if (k === 'reconcile'){ S.coord = 'reask'; paint(); await Promise.all(Object.keys(S.rings).map(a => fly('coordinator', a, '', 650, tok))); }
+      else if (k === 'reconciled'){ setRings(b.sup, []); b.sup.forEach(a => S.badges[a] = 'yes'); S.coord = 'agreed'; }
+      else if (k === 'escalation'){ S.coord = 'esc'; S.you = true; paint(); await fly('coordinator', 'you', 'gold', 800, tok); }
+      else if (k === 'outcome') S.coord = b.cue === 'o:outcome' ? 'narrow' : 'wait';
+      else if (k === 'contest'){ await fly('you', 'protection', 'gold', 650, tok); if (gone()) return; S.badges.protection = 'disputed'; }
+      else if (k === 'override'){ await fly('you', 'protection', 'gold', 650, tok); if (gone()) return; S.badges.protection = 'overruled'; S.coord = 'closedA'; }
+      else if (k === 'decision'){ await fly('you', 'protection', 'gold', 650, tok); if (gone()) return; S.badges.protection = 'upheld'; S.coord = 'closedB'; }
+      if (gone()) return;
+      addEntry(b);
+    }
+    if (gone()) return;
+    S.done = S.beats.indexOf(b) + 1;
+    paint();
+  }
+  const dwell = b => Math.max(1800, 700 + capText(b.cue).length * 28);
+  function wait(ms){ return new Promise(r => { S.wake = r; S.timer = setTimeout(r, ms / S.speed); }); }
+
+  async function loop(){
+    if (S.active) return;
+    S.active = true;
+    const tok = S.token;
+    try {
+      while (S.playing && tok === S.token){
+        if (S.i >= S.beats.length){ finish(tok); return; }
+        const b = S.beats[S.i++];
+        await apply(b, tok);
+        if (tok !== S.token || !S.playing) return;
+        await wait(dwell(b));
+      }
+    } finally { if (tok === S.token) S.active = false; }
+  }
+  function play(){ if (!D || S.phase === 'wait') return; S.playing = true; S.auto = false; setPhase('run'); loop(); }
+  function pause(auto){ S.playing = false; S.auto = !!auto; clearTimeout(S.timer); if (S.wake) S.wake(); setPhase('paused'); }
+  function finish(tok){
+    S.playing = false; S.active = false;
+    if (tok !== S.token) return;
+    if (S.run === 'case' && !S.branch){ setPhase('wait'); showDecision(); }
+    else { setPhase('done'); showEnd(); }
+  }
+  async function skip(){
+    if (!D) return;
+    S.token++; S.active = false; S.playing = false; clearTimeout(S.timer); if (S.wake) S.wake();
+    gP.textContent = '';
+    const tok = S.token;
+    S.i = S.done; S.instant = true;
+    while (S.i < S.beats.length) await apply(S.beats[S.i++], tok);
+    S.instant = false;
+    finish(tok);
+  }
+  function reset(run){
+    S.token++; S.active = false; S.playing = false; clearTimeout(S.timer); if (S.wake) S.wake();
+    gP.textContent = '';
+    for (const k in edgeEls) edgeEls[k].setAttribute('class', 'ar-ed');
+    Object.assign(S, { run, branch: null, i: 0, done: 0, badges: {}, rings: {}, offline: {}, you: false, coord: null, grant: null, logged: [] });
+    S.beats = D ? (run === 'case' ? D.case.beats : D.outage.beats) : [];
+    decide.hidden = true; endEl.hidden = true;
+    renderLog(); setPhase('ready'); setCaption(run === 'case' ? 'intro' : 'o:intro'); paint();
+  }
+
+  /* ---------- the person's call, and the endings ---------- */
+  function texts(){
+    $('arDecLbl').textContent = L('Your call, duty engineer', 'Ihre Entscheidung im Bereitschaftsdienst');
+    $('arHint').textContent = L('This is word for word the question the coordinator sent.', 'Das ist wörtlich die Frage, die der Koordinator geschickt hat.');
+    $('arOverrule').textContent = L('Overrule ' + prot() + ': the switchgear was uprated in August', prot() + ' überstimmen: Schaltanlage im August ertüchtigt');
+    $('arUphold').textContent = L('Let it stand: order a reinforcement study', 'Stehen lassen: Verstärkungsstudie anordnen');
+    $('arEndLbl').textContent = L('Case closed', 'Fall abgeschlossen');
+    $('arRecS').textContent = L('The record as the library prints it', 'Das Protokoll, wie die Bibliothek es ausgibt');
+    $('arOutage').textContent = L('Replay with the protection agent offline', 'Noch einmal, mit protection offline');
+    $('arAgain').textContent = L('Run the case again', 'Fall erneut starten');
+    if (!endEl.hidden && D){
+      const k = S.run === 'outage' ? 'outage' : S.branch;
+      $('arEndT').textContent = L(END[k][0], END[k][1]);
+    }
+  }
+  function bring(box){
+    if (!S.visible) return;
+    const lbl = box.querySelector('.ar-lbl');
+    box.scrollIntoView({ block: 'nearest', behavior: reduce ? 'auto' : 'smooth' });
+    try { lbl.focus({ preventScroll: true }); } catch (_){}
+  }
+  function showDecision(){
+    $('arQ').textContent = D.case.question;
+    texts(); decide.hidden = false; bring(decide);
+  }
+  function showEnd(){
+    const k = S.run === 'outage' ? 'outage' : S.branch, list = $('arEndL');
+    endEl.hidden = false; texts();
+    list.hidden = k !== 'outage'; list.textContent = '';
+    if (k === 'outage') D.outage.unsupported.forEach(u => { const li = document.createElement('li'); li.textContent = u; list.append(li); });
+    $('arRec').textContent = k === 'outage' ? D.outage.record : D.case.record[k];
+    endEl.querySelector('details').open = false;
+    bring(endEl);
+  }
+  function choose(branch){
+    if (!D || S.phase !== 'wait') return;
+    decide.hidden = true;
+    S.branch = branch; S.beats = D.case.branches[branch]; S.i = 0; S.done = 0;
+    setPhase('ready'); play();
+  }
+
+  /* ---------- wiring ---------- */
+  let loading = null;
+  function load(){
+    if (window.AGENT_ROOM) return Promise.resolve(window.AGENT_ROOM);
+    if (!loading) loading = new Promise((ok, fail) => {
+      const s = document.createElement('script');
+      s.src = 'assets/agent-room.js'; s.async = true;
+      s.onload = () => (window.AGENT_ROOM ? ok(window.AGENT_ROOM) : fail(new Error('empty trace')));
+      s.onerror = () => { loading = null; fail(new Error('trace did not load')); };
+      document.head.append(s);
+    });
+    return loading;
+  }
+  function ready(data){ if (D) return; D = data; reset('case'); texts(); }
+  async function ensure(){
+    if (D) return true;
+    try { ready(await load()); return true; }
+    catch (_){
+      cap.textContent = L('The replay could not load. The code itself is on GitHub.', 'Die Wiedergabe konnte nicht laden. Der Code liegt auf GitHub.');
+      return false;
+    }
+  }
+  goBtn.addEventListener('click', async () => {
+    if (!(await ensure())) return;
+    if (S.phase === 'run') return pause();
+    if (S.phase === 'done') reset('case');
+    play();
+  });
+  skipBtn.addEventListener('click', async () => { if (await ensure()) skip(); });
+  resetBtn.addEventListener('click', async () => { if (await ensure()) reset('case'); });
+  speedBtn.addEventListener('click', () => {
+    S.speed = S.speed === 1 ? 2 : 1;
+    speedBtn.setAttribute('aria-pressed', String(S.speed === 2));
+  });
+  $('arOverrule').addEventListener('click', () => choose('overrule'));
+  $('arUphold').addEventListener('click', () => choose('uphold'));
+  $('arOutage').addEventListener('click', () => { reset('outage'); play(); });
+  $('arAgain').addEventListener('click', () => { reset('case'); play(); });
+
+  new IntersectionObserver((es, ob) => {
+    if (es.some(e => e.isIntersecting)){ ob.disconnect(); load().then(ready).catch(() => {}); }
+  }, { rootMargin: '800px 0px' }).observe(room);
+  // Pause when the room leaves the screen, carry on when it comes back.
+  new IntersectionObserver(es => {
+    S.visible = es[es.length - 1].isIntersecting;
+    if (!S.visible && S.playing) pause(true);
+    else if (S.visible && S.auto && S.phase === 'paused') play();
+  }, { threshold: 0.15 }).observe(room);
+  new MutationObserver(() => { controls(); paint(); setCaption(S.capKey); renderLog(); texts(); })
+    .observe(document.documentElement, { attributes: true, attributeFilter: ['lang'] });
+
+  controls(); paint(); texts();
 })();
 </script>
 

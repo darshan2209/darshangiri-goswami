@@ -16,6 +16,7 @@ stack, and carries governance, identity and compliance as the second half.
 | `assets/writing.json` · `ops.json` | Written by the LinkedIn agent; feed the Writing cards and the Live Ops room. |
 | `artifacts/` | Three illustrative GRC work samples (risk register, access-review procedure, ISO 27001 SoA excerpt). Fictional company, robots-noindexed. |
 | `talks/` | Published slides: the KuppingerCole AIdentity & NHI Impact Day talk (Munich, 6 Oct 2026), linked from the Research section. |
+| `assets/agent-room.js` · `tools/export_agent_trace.py` | The agent room's data: real runs of [agent-consult](https://github.com/darshan2209/agent-consult), recorded step by step. Regenerate with `python tools/export_agent_trace.py --agent-consult <path to a checkout>`. |
 | `fonts/` · `vendor/three/` | Self-hosted fonts and a vendored Three.js. No third-party requests at page load except GoatCounter. |
 | `datenschutz.html` · `kolophon.html` | DSGVO Art. 13 privacy notice and the colophon (sub-processor register, AI-system inventory, open items). |
 | `404.html` | RBAC-flavoured "access denied" page with a redirect. |

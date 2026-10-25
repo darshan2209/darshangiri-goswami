@@ -122,6 +122,9 @@ listed because a register that only contains solved problems is not a register.<
       rasterised to a 180&times;90 bitmask (2.7 KB) rather than a texture. <strong>The traffic it shows is
       simulated</strong>, see O-06 below</dd>
     <dt>AI backend</dt><dd>Flask + gunicorn on Render, proxying the Anthropic API so the key never reaches the browser</dd>
+    <dt>Agent room</dt><dd>Replays real runs of my agent-consult library, recorded by <code>tools/export_agent_trace.py</code>
+      into <code>assets/agent-room.js</code> and loaded only when the section comes near the screen. No model calls and
+      nothing simulated: the record column shows the library's own ledger entries</dd>
     <dt>Cookies</dt><dd>None</dd>
     <dt>Analytics</dt><dd>GoatCounter, cookieless, EU-hosted, no IP stored. No Google Analytics, no tag manager, no pixel, no heatmap</dd>
     <dt>Third-party CDN</dt><dd>None at load time</dd>
