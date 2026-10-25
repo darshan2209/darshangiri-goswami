@@ -4,7 +4,7 @@
 <meta charset="UTF-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
 <title>Darshangiri Goswami | Detection &amp; Response · GRC · Identity</title>
-<meta name="description" content="Darshangiri Goswami | Cybersecurity graduate (MSc Sep 2026) working across detection engineering (Zeek, Kafka, Wazuh/OpenSearch, MISP), Linux and cloud security, GRC and Identity &amp; Access. Speaking on non-human identity at KuppingerCole NHI Impact Day, Munich, October 2026. Berlin, full-time from October 2026." />
+<meta name="description" content="Darshangiri Goswami | Cybersecurity graduate (MSc Sep 2026) working across detection engineering (Zeek, Kafka, Wazuh/OpenSearch, MISP), Linux and cloud security, GRC and Identity &amp; Access. Spoke on non-human identity at KuppingerCole NHI Impact Day, Munich, October 2026. Berlin, full-time from October 2026." />
 <meta name="theme-color" content="#060a14" />
 
 <!-- Canonical + SEO -->
@@ -76,7 +76,13 @@
       "eventAttendanceMode": "https://schema.org/OfflineEventAttendanceMode",
       "location": { "@type": "Place", "name": "Munich, Germany", "address": { "@type": "PostalAddress", "addressLocality": "Munich", "addressCountry": "DE" } },
       "performer": { "@type": "Person", "name": "Darshangiri Goswami" },
-      "description": "Talk on non-human identity governance: a structured gap analysis across SOC 2, NIST CSF 2.0, ISO 27001:2022, NIST SP 800-53 R5 and DORA, with an RFC 8693 bounded-delegation proof of concept."
+      "description": "Talk: A Reproducible GRC-to-ATT&CK Gap Analysis of Non-Human and AI-Agent Identity. A structured gap analysis of non-human identity governance across eight security and AI-governance instruments, closing with proposed bounded-delegation control language built on OAuth 2.0 Token Exchange (RFC 8693).",
+      "workPerformed": {
+        "@type": "PresentationDigitalDocument",
+        "name": "A Reproducible GRC-to-ATT&CK Gap Analysis of Non-Human and AI-Agent Identity",
+        "encodingFormat": "application/pdf",
+        "url": "https://darshan2209.github.io/darshangiri-goswami/talks/kuppingercole-nhi-impact-day-2026.pdf"
+      }
     },
     {
       "@type": "WebSite",
@@ -420,11 +426,14 @@ nav.links a{
 @media (max-width:520px){ .speak{padding:22px} .speak-top{gap:12px} }
 
 /* ============================================================= PROJECTS */
-.proj-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(300px,1fr));gap:22px}
-/* The lab count is odd, so at both three and two columns the last card was left
-   alone on its row with a hole beside it. It spans the row instead and reads as
-   the featured, most recent build. */
+.proj-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(300px,1fr));gap:22px;
+  container-type:inline-size;container-name:projgrid}
+/* Nine labs: eight cards plus a featured one. At two columns the eight fill four
+   rows and the featured card spans the row beneath them. At three columns (a grid
+   of 944px = 3 x 300px + 2 gaps) all nine fill three rows exactly, so the featured
+   card takes a single cell like the rest instead of leaving a hole above it. */
 .proj.proj-wide{grid-column:1/-1}
+@container projgrid (min-width:944px) and (max-width:1265.98px){ .proj.proj-wide{grid-column:auto} }
 @container pcard (min-width:640px){
   .proj-wide .ph{margin-bottom:16px}
   .proj-wide .ph .ic{width:54px;height:54px;border-radius:15px}
@@ -454,8 +463,9 @@ nav.links a{
 .proj-more summary .chev{transition:transform .25s var(--ease)}
 .proj-more[open] summary .chev{transform:rotate(90deg)}
 .proj-more p{font-size:.9rem;color:var(--muted);margin:12px 0 10px}
-.proj-more a.doclink{font-family:var(--font-mono);font-size:.8rem;color:var(--gold);
+.proj-more a.doclink,.speak a.doclink{font-family:var(--font-mono);font-size:.8rem;color:var(--gold);
   display:inline-flex;align-items:center;gap:6px;min-height:34px}
+.speak a.doclink{margin:0 0 14px}
 @container pcard (max-width:340px){
   .proj{padding:22px}
   .proj h3{font-size:1.12rem}
@@ -699,7 +709,7 @@ nav.links a{position:relative}
 nav.links a::after{content:"";position:absolute;left:11px;right:11px;bottom:7px;height:2px;border-radius:2px;
   background:linear-gradient(90deg,var(--teal),var(--gold));transform:scaleX(0);transform-origin:left;transition:transform .28s var(--ease)}
 /* text-link underline grow */
-.hero-meta a,.contact-links a,.proj-more a.doclink,footer a{
+.hero-meta a,.contact-links a,.proj-more a.doclink,.speak a.doclink,footer a{
   background-image:linear-gradient(var(--teal),var(--teal));background-repeat:no-repeat;
   background-position:0 100%;background-size:0% 1.5px;transition:color .2s,background-size .28s var(--ease)}
 /* card spotlight + tilt */
@@ -723,7 +733,7 @@ nav.links a::after{content:"";position:absolute;left:11px;right:11px;bottom:7px;
 @media (hover:hover) and (pointer:fine){
   nav.links a:hover{color:var(--text);background:rgba(255,255,255,.04)}
   nav.links a:hover::after{transform:scaleX(1)}
-  .hero-meta a:hover,.contact-links a:hover,.proj-more a.doclink:hover,footer a:hover{background-size:100% 1.5px}
+  .hero-meta a:hover,.contact-links a:hover,.proj-more a.doclink:hover,.speak a.doclink:hover,footer a:hover{background-size:100% 1.5px}
   .btn:hover::after{animation:shine .85s var(--ease)}
   .skill-card:hover::after,.proj:hover::after{opacity:1}
   .fw:hover{border-color:var(--teal);color:#fff;transform:translateY(-2px);
@@ -744,7 +754,7 @@ nav.links a::after{content:"";position:absolute;left:11px;right:11px;bottom:7px;
   .cert:hover .ext{color:var(--teal);transform:translate(2px,-2px)}
   .edu-item:hover{border-color:var(--border-bright)}
   .contact-links a:hover{color:var(--teal)}
-  .proj-more a.doclink:hover{color:var(--teal-soft)}
+  .proj-more a.doclink:hover,.speak a.doclink:hover{color:var(--teal-soft)}
   footer a:hover{color:var(--teal)}
   .ai-fab:hover{transform:translateY(-3px);border-color:var(--teal)}
   .ai-close:hover{color:var(--text);border-color:var(--border-bright)}
@@ -1121,7 +1131,7 @@ nav.links a::after{content:"";position:absolute;left:11px;right:11px;bottom:7px;
     <div class="hero-grid">
       <div class="hero-copy" data-parallax="0.12">
         <div class="status-row reveal">
-          <a class="chip" href="#research"><span class="dot gold"></span> Speaker · KuppingerCole NHI Impact Day · Munich, Oct 2026</a>
+          <a class="chip" href="#research"><span class="dot gold"></span> Spoke at KuppingerCole NHI Impact Day · Munich, Oct 2026</a>
           <span class="chip"><span class="dot"></span> M.Sc. Sep 2026 · full-time from October</span>
           <span class="chip"><span class="dot"></span> Berlin → open to relocation</span>
           <span class="chip"><span class="dot"></span> Post-study work permit · no sponsorship needed</span>
@@ -1129,7 +1139,7 @@ nav.links a::after{content:"";position:absolute;left:11px;right:11px;bottom:7px;
         <p class="eyebrow reveal d1">B.Tech Information Technology · M.Sc. Cyber Security (Sep 2026)</p>
         <h1 class="reveal d1">I build the detection, then I prove it's <span class="grad">accountable.</span></h1>
         <p class="hero-role mono reveal d2" id="role"></p>
-        <p class="hero-lead reveal d2">I work both halves of security: the <strong>detection pipeline</strong> (Zeek, Apache Kafka, Wazuh/OpenSearch and MISP on hardened Linux, AWS and Kubernetes) and the <strong>governance around it</strong> (GRC, Identity &amp; Access, and responsible AI). My research on <strong>non-human identity governance</strong> is a conference talk this October.</p>
+        <p class="hero-lead reveal d2">I work both halves of security: the <strong>detection pipeline</strong> (Zeek, Apache Kafka, Wazuh/OpenSearch and MISP on hardened Linux, AWS and Kubernetes) and the <strong>governance around it</strong> (GRC, Identity &amp; Access, and responsible AI). In October 2026 I presented my research on <strong>non-human identity governance</strong> at KuppingerCole's NHI Impact Day in Munich.</p>
         <div class="hero-actions reveal d3">
           <button class="btn btn-primary" id="askHero">
             <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2a9 9 0 0 0-9 9c0 1.6.4 3.1 1.1 4.4L3 21l5.6-1.1A9 9 0 1 0 12 2z"/><circle cx="8.5" cy="11" r="1" fill="currentColor" stroke="none"/><circle cx="12" cy="11" r="1" fill="currentColor" stroke="none"/><circle cx="15.5" cy="11" r="1" fill="currentColor" stroke="none"/></svg>
@@ -1190,7 +1200,7 @@ nav.links a::after{content:"";position:absolute;left:11px;right:11px;bottom:7px;
         <p class="eyebrow">// About</p>
         <h2 style="font-size:var(--step-3);margin:.5rem 0 1rem">Compliance instinct, engineer's toolkit.</h2>
         <p>I hold a <strong>B.Tech in Information Technology</strong> and complete an <strong>M.Sc. in Business Management &amp; Cyber Security</strong> in September 2026. Most of my hands-on time goes into <strong>detection engineering</strong>: Zeek sensors streaming through Apache Kafka into a Wazuh/OpenSearch indexer, enriched with MISP threat intelligence, running on Ubuntu hosts I hardened to the CIS Benchmark and a k3s cluster I locked down with RBAC and network policies.</p>
-        <p>The other half is <strong>governance</strong>, and I think the two belong together. I have taught access control and secure configuration to 4,500+ learners, triaged alerts across 50+ platforms, and written the policy, risk and access-review documentation that has to hold up in an audit. My M.Sc. research on <strong>non-human identity</strong> sits exactly on that seam, and it is a talk at KuppingerCole's NHI Impact Day in Munich this October. I'm looking for a <strong>graduate or entry-level role</strong> in detection and response, security engineering, GRC or IAM, from October 2026.</p>
+        <p>The other half is <strong>governance</strong>, and I think the two belong together. I have taught access control and secure configuration to 4,500+ learners, triaged alerts across 50+ platforms, and written the policy, risk and access-review documentation that has to hold up in an audit. My M.Sc. research on <strong>non-human identity</strong> sits exactly on that seam, and in October 2026 I presented it at KuppingerCole's NHI Impact Day in Munich. I'm looking for a <strong>graduate or entry-level role</strong> in detection and response, security engineering, GRC or IAM, from October 2026.</p>
         <div class="about-langs">
           <div class="lang"><b>English</b> <span class="lvl mono">C1 · Fluent</span><div class="bar"><i style="width:90%"></i></div></div>
           <div class="lang"><b>German</b> <span class="lvl mono">A2 · Conversational</span><div class="bar"><i style="width:38%"></i></div></div>
@@ -1394,10 +1404,13 @@ nav.links a::after{content:"";position:absolute;left:11px;right:11px;bottom:7px;
         </div>
         <p>A structured gap analysis of non-human identity governance across <b style="color:var(--text)">eight security and AI-governance instruments</b>: SOC&nbsp;2, NIST CSF 2.0, ISO/IEC 27001:2022, NIST SP 800-53 Rev.&nbsp;5, DORA, Germany's BSIG §30, ISO/IEC 42001 and ISO/IEC 38507. Each governs the machine identity as an account. None states an assessable requirement for the moment that identity's authority passes to an AI agent.</p>
         <ul class="speak-facts">
+          <li>Talk: <b style="color:var(--text)">"A Reproducible GRC-to-ATT&amp;CK Gap Analysis of Non-Human and AI-Agent Identity"</b></li>
           <li>The finding is not that controls are missing. The mechanisms exist; the mandates do not.</li>
-          <li>Closes with a proposal: <b style="color:var(--text)">bounded-delegation control language</b> built on OAuth 2.0 Token Exchange (RFC 8693), written so each instrument could adopt it through an amendment route it already has.</li>
-          <li>Also on the 11:10 panel <b style="color:var(--text)">"Machines Now Outnumber Humans - Is IAM Ready?"</b></li>
+          <li>Closed with a proposal: <b style="color:var(--text)">bounded-delegation control language</b> built on OAuth 2.0 Token Exchange (RFC 8693), written so each instrument could adopt it through an amendment route it already has.</li>
+          <li>Also spoke on the 11:10 panel <b style="color:var(--text)">"Machines Now Outnumber Humans - Is IAM Ready?"</b></li>
         </ul>
+        <a class="doclink" href="talks/kuppingercole-nhi-impact-day-2026.pdf" target="_blank" rel="noopener">Slides (PDF, 23 slides)
+          <svg viewBox="0 0 24 24" width="13" height="13" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M7 17L17 7M9 7h8v8"/></svg></a>
         <div class="tags"><span>Non-human identity</span><span>Agentic AI</span><span>RFC 8693</span><span>DORA</span><span>NIS2</span><span>ISO/IEC 42001</span></div>
       </div>
       <div class="speak reveal rr d2">
@@ -1529,6 +1542,40 @@ nav.links a::after{content:"";position:absolute;left:11px;right:11px;bottom:7px;
         </details>
       </div>
 
+      <div class="proj reveal rl d1">
+        <span class="proj-glow"></span>
+        <div class="ph">
+          <div class="ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="6" cy="12" r="2.5"/><circle cx="18" cy="6" r="2.5"/><circle cx="18" cy="18" r="2.5"/><path d="M8.2 10.9l7.6-3.8M8.2 13.1l7.6 3.8"/></svg></div>
+          <h3>Governed Multi-Agent Consultation</h3>
+        </div>
+        <p>A reference implementation of what a team of LLM agents needs before it can be trusted in a regulated operation: consultation only under an explicit grant that can only narrow, with an <b style="color:var(--text)">RFC 8693-style actor chain</b> showing on whose authority each step ran; disagreement typed and escalated instead of averaged away; an answer that says what it no longer covers when a specialist is down; and an append-only record a person can contest and overrule.</p>
+        <div class="tags"><span>Python</span><span>Multi-agent AI</span><span>RFC 8693</span><span>Delegation</span><span>Explainable AI</span><span>Audit trail</span></div>
+        <details class="proj-more">
+          <summary><svg class="chev" viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 6l6 6-6 6"/></svg> View details</summary>
+          <p>The worked scenario is a distribution grid operator deciding whether to approve 250 kW of new solar on one feeder without a reinforcement study, with five agents each holding part of the answer. Every fact carries a vintage, which lets the coordinator tell a split caused by stale data, reconcilable without a person, from a genuine difference of judgement, which always goes to one.</p>
+          <p>The reference agents are deterministic on purpose: the properties under test belong to the coordination layer, and a sampling temperature deciding whether a test passes would make the evaluation worthless. The same interface takes a model-backed agent. <b style="color:var(--text)">26 tests</b> run in milliseconds with no network and no API key, and the README says plainly what the design does not yet do.</p>
+          <a class="doclink" href="https://github.com/darshan2209/agent-consult" target="_blank" rel="noopener">Repository / write-up
+            <svg viewBox="0 0 24 24" width="13" height="13" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M7 17L17 7M9 7h8v8"/></svg></a>
+        </details>
+      </div>
+
+      <div class="proj reveal rr d2">
+        <span class="proj-glow" style="background:rgba(230,185,79,.18)"></span>
+        <div class="ph">
+          <div class="ic" style="color:var(--gold);border-color:var(--border)"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="1.6"/><ellipse cx="12" cy="12" rx="9.5" ry="3.8"/><ellipse cx="12" cy="12" rx="9.5" ry="3.8" transform="rotate(60 12 12)"/><ellipse cx="12" cy="12" rx="9.5" ry="3.8" transform="rotate(120 12 12)"/></svg></div>
+          <h3>Post-Quantum TLS Benchmark</h3>
+        </div>
+        <p>A reproducible benchmark of <b style="color:var(--text)">ML-KEM (FIPS 203)</b> against RSA-2048 and X25519: key and ciphertext sizes, median timings over 30 runs, and the wire overhead of the hybrid X25519MLKEM768 group that TLS 1.3 deployments use. The finding is that for this migration, message size rather than computation is the binding cost, at about 2.2 kB extra per handshake.</p>
+        <div class="tags"><span>ML-KEM</span><span>FIPS 203</span><span>TLS 1.3</span><span>X25519</span><span>Python</span><span>Post-quantum</span></div>
+        <details class="proj-more">
+          <summary><svg class="chev" viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 6l6 6-6 6"/></svg> View details</summary>
+          <p>The hybrid group's key shares are 1,216 bytes from the client and 1,120 from the server, against 32 bytes each for plain X25519. Those sizes are fixed by the specifications, so they hold for any implementation, and they are what the protocol-level analysis rests on.</p>
+          <p>An honesty note on the timings: ML-KEM ran on a pure-Python reference implementation while RSA and X25519 went through OpenSSL's optimised C, so the ML-KEM times are pessimistic upper bounds, not a speed comparison. The benchmark comes with a research paper I wrote for my MSc Cryptology module.</p>
+          <a class="doclink" href="https://github.com/darshan2209/pqc-hybrid-tls-research" target="_blank" rel="noopener">Repository / paper
+            <svg viewBox="0 0 24 24" width="13" height="13" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M7 17L17 7M9 7h8v8"/></svg></a>
+        </details>
+      </div>
+
       <div class="proj proj-wide reveal d1">
         <span class="proj-glow"></span>
         <div class="ph">
@@ -1547,7 +1594,7 @@ nav.links a::after{content:"";position:absolute;left:11px;right:11px;bottom:7px;
       </div>
 
     </div>
-    <p class="fit-note reveal d3" style="margin-top:18px">Every lab above is public on <a href="https://github.com/darshan2209?tab=repositories" target="_blank" rel="noopener" style="color:var(--teal)">GitHub</a> with its configuration, scripts and write-up. <strong>92 automated tests</strong> cover the parts that take input from outside the trust boundary, so you can verify the tooling works without an AWS account or a cluster. Happy to walk through any of it, including the parts that did not work.</p>
+    <p class="fit-note reveal d3" style="margin-top:18px">Every lab above is public on <a href="https://github.com/darshan2209?tab=repositories" target="_blank" rel="noopener" style="color:var(--teal)">GitHub</a> with its configuration, scripts and write-up. <strong>118 automated tests</strong> cover the parts that take input from outside the trust boundary, so you can verify the tooling works without an AWS account, a cluster or an API key. Happy to walk through any of it, including the parts that did not work.</p>
   </div>
 </section>
 
@@ -1696,7 +1743,7 @@ nav.links a::after{content:"";position:absolute;left:11px;right:11px;bottom:7px;
           <div class="deg">MSc, Business Management &amp; Cyber Security</div>
           <div class="sch">GISMA University of Applied Sciences</div>
           <div class="meta"><span>Potsdam, Germany</span><span>Sep 2025 – Expected Sep 2026</span></div>
-          <div class="meta" style="margin-top:6px"><span>Thesis on non-human identity governance · <a href="#research" style="color:var(--teal)">accepted as a conference talk</a></span></div>
+          <div class="meta" style="margin-top:6px"><span>Thesis on non-human identity governance · <a href="#research" style="color:var(--teal)">presented at KuppingerCole NHI Impact Day</a></span></div>
         </div>
         <div class="edu-item reveal d2">
           <div class="deg">B.Tech, Information Technology</div>
@@ -2599,8 +2646,8 @@ const KB = [
     a:"He works to GDPR, DORA, NIS2, ISO 27001 and NIST CSF, and has awareness of the EU AI Act. He has mapped awareness content directly to ISO 27001 and NIST CSF for non-specialist staff." },
   { k:['ai','automation','python','responsible','copilot','machine'],
     a:"On the automation side: Python (detection scripting, REST API integration, anomaly detection), Bash and PowerShell, plus AI-driven alert triage and risk scoring, always human-in-the-loop and framed around responsible AI and EU AI Act awareness. He also applies secure-development practice to his own tooling: input validation, environment-held credentials, Bandit static analysis and pip-audit dependency scanning." },
-  { k:['project','wazuh','homelab','siem','detection','monitor','anomaly','zeek','kafka','opensearch','misp','lab'],
-    a:"Nine hands-on labs, the main four being: (1) Detection Engineering, Zeek sensors streaming through Apache Kafka into a Wazuh/OpenSearch indexer with MISP threat intel and 12 detection rules he wrote and tuned; (2) Linux Hardening, an Ubuntu baseline hardened to the CIS Benchmark with an idempotent Bash script and auditd rules feeding the detection pipeline; (3) Multi-Cloud Posture, a deliberately misconfigured AWS account remediated to least privilege with CloudTrail, GuardDuty and a boto3 audit script, repeated on GCP and Oracle Cloud; (4) Kubernetes, a k3s cluster with RBAC, network policies and pod security standards, plus a vulnerable workload reconstructed from audit logs. Also an AI-assisted monitoring workflow in Python." },
+  { k:['project','wazuh','homelab','siem','detection','monitor','anomaly','zeek','kafka','opensearch','misp','lab','quantum','pqc','ml-kem','kyber','multi-agent','consult','authorization'],
+    a:"Nine hands-on labs, the main four being: (1) Detection Engineering, Zeek sensors streaming through Apache Kafka into a Wazuh/OpenSearch indexer with MISP threat intel and 12 detection rules he wrote and tuned; (2) Linux Hardening, an Ubuntu baseline hardened to the CIS Benchmark with an idempotent Bash script and auditd rules feeding the detection pipeline; (3) Multi-Cloud Posture, a deliberately misconfigured AWS account remediated to least privilege with CloudTrail, GuardDuty and a boto3 audit script, repeated on GCP and Oracle Cloud; (4) Kubernetes, a k3s cluster with RBAC, network policies and pod security standards, plus a vulnerable workload reconstructed from audit logs. The other five: an AI-assisted monitoring workflow in Python; network segmentation and secure tooling; an authorization concept toolkit (segregation of duties, role mining, access certification); agent-consult, governed consultation between LLM agents with attenuating grants, an RFC 8693-style actor chain and an append-only record; and a post-quantum TLS benchmark of ML-KEM against RSA-2048 and X25519." },
   { k:['secops','soc','operations','triage','alert','escalat','incident','respond','response'],
     a:"On detection and response: Zeek, Apache Kafka, Wazuh/OpenSearch and MISP in his own lab, writing and tuning detection rules, file integrity monitoring, SOC-style alert triage and escalation, and incident documentation. Certified Cisco CyberOps Associate, with Microsoft SC-200 (Security Operations Analyst) in progress. At The CyberDiplomat he monitored 50+ platforms and worked flags and alerts to closure." },
   { k:['linux','unix','ubuntu','harden','cis','bash','shell','auditd','server','sysadmin','administration'],
@@ -2608,7 +2655,7 @@ const KB = [
   { k:['cloud','aws','gcp','google cloud','oracle','azure','kubernetes','k3s','container','s3','iam policy','guardduty','cloudtrail'],
     a:"On cloud and containers: AWS (IAM least privilege, CloudTrail, GuardDuty, S3 bucket policy) with a boto3 script that flags wildcard permissions and unused credentials; posture reviews on Google Cloud Platform and Oracle Cloud; Google Workspace and Microsoft 365 admin review (MFA enforcement, OAuth allowlisting, external sharing); Microsoft Azure and Entra ID; and Kubernetes on k3s with RBAC, network policies (Calico, because Flannel silently ignores them) and pod security standards." },
   { k:['research','thesis','talk','speak','conference','kuppingercole','nhi','delegation','agent','rfc'],
-    a:"Darshan speaks at KuppingerCole's AIdentity &amp; Non-Human Identity Impact Day in Munich on 6 October 2026 (15:20, governance track) and joins the 11:10 panel 'Machines Now Outnumber Humans - Is IAM Ready?'. The talk is a structured gap analysis of non-human identity governance across eight security and AI-governance instruments, from SOC 2, ISO/IEC 27001 and DORA to ISO/IEC 42001: they govern the machine identity as an account, but none states an assessable requirement for the moment its authority passes to an AI agent. It closes with proposed bounded-delegation control language built on RFC 8693. The underlying MSc thesis maps the UNC6395 campaign to MITRE ATT&amp;CK." },
+    a:"Darshan spoke at KuppingerCole's AIdentity &amp; Non-Human Identity Impact Day in Munich on 6 October 2026 and joined the 11:10 panel 'Machines Now Outnumber Humans - Is IAM Ready?'. The talk was a structured gap analysis of non-human identity governance across eight security and AI-governance instruments, from SOC 2, ISO/IEC 27001 and DORA to ISO/IEC 42001: they govern the machine identity as an account, but none states an assessable requirement for the moment its authority passes to an AI agent. It closed with proposed bounded-delegation control language built on RFC 8693, and the slides are in the Research section of this site. The underlying MSc thesis maps the UNC6395 campaign to MITRE ATT&amp;CK." },
   { k:['post','writing','write','linkedin','content','article','nhi','non-human','follower','thought'],
     a:"Darshan publishes a short, practical security lesson three times a week on LinkedIn (5,000+ followers), identity, GRC and SecOps topics. The Writing section on this site always shows his three latest posts automatically." },
   { k:['experience','work','job','niit','cyberdiplomat','analyst','trainer','role'],
@@ -2616,7 +2663,7 @@ const KB = [
   { k:['cert','sc-900','sc-200','google','cisco','cyberops','ctiga','qualif','credential'],
     a:"Certifications: Cisco CyberOps Associate, Google Cybersecurity, the Certified Threat Intelligence &amp; Governance Analyst (CTIGA) from Red Team Leaders, TryHackMe Sec1, ISO/IEC 27001 Associate and Microsoft SC-900, with Microsoft SC-200 (Security Operations Analyst) in progress. The earned ones are verifiable on his Credly profile." },
   { k:['education','study','degree','msc','university','gisma','btech','student'],
-    a:"He holds a B.Tech in Information Technology (GPA 8.76/10, German equivalent 1.6) covering operating systems, networks, databases, programming and information security, and completes an MSc in Business Management &amp; Cyber Security at GISMA University of Applied Sciences, Potsdam, in September 2026. His MSc thesis on non-human identity governance was accepted as a talk at KuppingerCole's AIdentity &amp; Non-Human Identity Impact Day (Munich, 6 October 2026). He's targeting graduate and entry-level roles from October 2026, not internships or working-student positions." },
+    a:"He holds a B.Tech in Information Technology (GPA 8.76/10, German equivalent 1.6) covering operating systems, networks, databases, programming and information security, and completes an MSc in Business Management &amp; Cyber Security at GISMA University of Applied Sciences, Potsdam, in September 2026. He presented his MSc research on non-human identity governance at KuppingerCole's AIdentity &amp; Non-Human Identity Impact Day (Munich, 6 October 2026). He's targeting graduate and entry-level roles from October 2026, not internships or working-student positions." },
   { k:['available','availability','relocat','frankfurt','berlin','hours','start','location','contact','email','reach'],
     a:"He's based in Berlin, open to relocation, and available full-time from October 2026, he's interviewing now for autumn starts. As a graduate of a German university he holds an 18-month post-study residence permit with unrestricted employment, so no employer sponsorship is needed. Reach him at darshangoswami22922@gmail.com, +49 155 1083 7720, or on LinkedIn." },
   { k:['language','english','german','speak'],
@@ -2839,12 +2886,12 @@ function speakReply(text){
       '  nmap · sudo hire darshan · hack     for the curious\n' +
       '  ls · cat · decode &lt;base64&gt; · submit &lt;flag&gt;     <span class="t-dim">// recon tools</span>\n' +
       '  clear · exit'); },
-    about(){ print('B.Tech Information Technology · MSc Business Management & Cyber Security (GISMA, Sep 2026).\nDetection & response · Linux/cloud security · IAM · GRC. Builds the detection, then proves it is accountable.\nTrained 4500+ people (95% certified). Speaking at KuppingerCole AIdentity & NHI Impact Day, Munich, 6 Oct 2026.'); },
+    about(){ print('B.Tech Information Technology · MSc Business Management & Cyber Security (GISMA, Sep 2026).\nDetection & response · Linux/cloud security · IAM · GRC. Builds the detection, then proves it is accountable.\nTrained 4500+ people (95% certified). Spoke at KuppingerCole AIdentity & NHI Impact Day, Munich, 6 Oct 2026.'); },
     skills(){ print('<span class="t-ok">[Detect]</span> Zeek · Apache Kafka · Wazuh/OpenSearch · MISP · rule authoring & tuning · FIM · triage\n<span class="t-ok">[Linux]</span> Ubuntu/Debian admin · CIS hardening · auditd · Bash · systemd · VLANs/DMZ/SPAN\n<span class="t-ok">[Cloud]</span> AWS IAM/CloudTrail/GuardDuty/S3 · GCP · Oracle · Entra ID · k3s RBAC/NetPol/PSS\n<span class="t-ok">[IAM]</span> access reviews · RBAC · least privilege · JML · NHI governance · RFC 8693\n<span class="t-ok">[GRC]</span> ISO 27001/ISMS · NIST CSF · GDPR · DORA · NIS2 · MITRE ATT&CK · EU AI Act\n<span class="t-ok">[Auto]</span> Python · Bash · PowerShell · AI alert triage · Bandit · pip-audit'); },
     certs(){ print('Cisco CyberOps ✔ · Google Cybersecurity ✔ · CTIGA ✔ · TryHackMe Sec1 ✔\nISO 27001 Associate ✔ · SC-900 ✔ · SC-200 ⏳\n<span class="t-dim">(verify: credly.com/users/darshan-goswami.e4c6c92c)</span>'); },
-    labs(){ print('1. Detection Engineering, Zeek → Kafka → Wazuh/OpenSearch + MISP, 12 rules authored & tuned\n2. Linux Hardening, CIS baseline via idempotent Bash script, auditd piped into the detection stack\n3. Multi-Cloud Posture, AWS misconfigured on purpose then remediated; repeated on GCP + Oracle\n4. Kubernetes, k3s with RBAC, network policies and pod security standards, audit-log reconstruction\n5. Network Segmentation & Secure Tooling, VLANs/DMZ/SPAN + Bandit and pip-audit on the tooling\n6. AI-Assisted Monitoring, Python anomaly detection + AI triage/risk-scoring via API, human-in-the-loop'); },
+    labs(){ print('1. Detection Engineering, Zeek → Kafka → Wazuh/OpenSearch + MISP, 12 rules authored & tuned\n2. Linux Hardening, CIS baseline via idempotent Bash script, auditd piped into the detection stack\n3. Multi-Cloud Posture, AWS misconfigured on purpose then remediated; repeated on GCP + Oracle\n4. Kubernetes, k3s with RBAC, network policies and pod security standards, audit-log reconstruction\n5. Network Segmentation & Secure Tooling, VLANs/DMZ/SPAN + Bandit and pip-audit on the tooling\n6. AI-Assisted Monitoring, Python anomaly detection + AI triage/risk-scoring via API, human-in-the-loop\n7. Multi-Agent Consultation, attenuating grants + RFC 8693-style actor chain + contestable ledger, 26 tests\n8. Post-Quantum TLS, ML-KEM vs RSA-2048/X25519 benchmark: hybrid X25519MLKEM768 adds ~2.2 kB per handshake\n9. Authorization Concept Toolkit, Berechtigungskonzept from an entitlement export: SoD, role mining, recertification'); },
     projects(){ CMDS.labs(); },
-    research(){ print('<span class="t-ok">KuppingerCole AIdentity & NHI Impact Day</span> · Munich · 6 Oct 2026 · speaker + panellist\nGap analysis of non-human identity governance across eight instruments: SOC 2, NIST CSF 2.0,\nISO 27001:2022, NIST SP 800-53 R5, DORA, BSIG §30, ISO 42001 and ISO 38507. All eight govern\nthe machine identity as an account. None states an assessable rule for agent delegation.\nProposal: bounded-delegation control language built on RFC 8693.\n<span class="t-dim">MSc thesis behind it: UNC6395 mapped to MITRE ATT&CK; IA-9 and IA-13 sit in no SP 800-53B baseline.</span>'); },
+    research(){ print('<span class="t-ok">KuppingerCole AIdentity & NHI Impact Day</span> · Munich · 6 Oct 2026 · speaker + panellist\nGap analysis of non-human identity governance across eight instruments: SOC 2, NIST CSF 2.0,\nISO 27001:2022, NIST SP 800-53 R5, DORA, BSIG §30, ISO 42001 and ISO 38507. All eight govern\nthe machine identity as an account. None states an assessable rule for agent delegation.\nProposal: bounded-delegation control language built on RFC 8693.\n<span class="t-dim">MSc thesis behind it: UNC6395 mapped to MITRE ATT&CK; IA-9 and IA-13 sit in no SP 800-53B baseline.</span>\n<span class="t-dim">slides: talks/kuppingercole-nhi-impact-day-2026.pdf</span>'); },
     experience(){ print('2025      Cybersecurity Trainer @ NIIT Foundation (4500+ trained, 95% certified\n2023-24   Cybersecurity Research Analyst @ The CyberDiplomat) 50+ platforms monitored\n2023      Cybersecurity Research Intern @ The CyberDiplomat, crypto threat research, +30% TI quality'); },
     contact(){ print('email: <span class="t-ok">darshangoswami22922@gmail.com</span>\nphone: +49 155 1083 7720\nlocation: Berlin (open to relocation) · full-time from Oct 2026'); },
     linkedin(){ window.open('https://linkedin.com/in/darshangiri-goswami-033283213','_blank'); print('opening LinkedIn…','t-dim'); },
@@ -3048,17 +3095,17 @@ if (GOATCOUNTER_CODE){
     ['nav.links a[href="#certifications"]', 'Zertifikate'],
     ['nav.links a[href="#fit"]', 'Fit-Check'],
     ['nav.links a.nav-cta', 'Kontakt'],
-    ['.status-row .chip:nth-child(1)', '<span class="dot gold"></span> Sprecher · KuppingerCole NHI Impact Day · München, Okt. 2026'],
+    ['.status-row .chip:nth-child(1)', '<span class="dot gold"></span> Vortrag beim KuppingerCole NHI Impact Day · München, Okt. 2026'],
     ['.status-row .chip:nth-child(2)', '<span class="dot"></span> M.Sc. Sep 2026 · Vollzeit ab Oktober'],
     ['.status-row .chip:nth-child(3)', '<span class="dot"></span> Berlin → umzugsbereit'],
     ['.status-row .chip:nth-child(4)', '<span class="dot"></span> Aufenthaltserlaubnis nach dem Studium · keine Sponsorship nötig'],
     ['#hero .eyebrow', 'B.Tech Informationstechnologie · M.Sc. Cyber Security (Sep 2026)'],
     ['#hero h1', 'Ich baue die Detection und weise ihre <span class="grad">Nachvollziehbarkeit</span> nach.'],
-    ['.hero-lead', 'Ich arbeite an beiden Hälften der Security: an der <strong>Detection-Pipeline</strong> (Zeek, Apache Kafka, Wazuh/OpenSearch und MISP auf gehärtetem Linux, AWS und Kubernetes) und an der <strong>Governance darum herum</strong> (GRC, Identity &amp; Access, verantwortungsvolle KI). Meine Forschung zu <strong>Non-Human Identity</strong> wird im Oktober zum Konferenzvortrag.'],
+    ['.hero-lead', 'Ich arbeite an beiden Hälften der Security: an der <strong>Detection-Pipeline</strong> (Zeek, Apache Kafka, Wazuh/OpenSearch und MISP auf gehärtetem Linux, AWS und Kubernetes) und an der <strong>Governance darum herum</strong> (GRC, Identity &amp; Access, verantwortungsvolle KI). Im Oktober 2026 habe ich meine Forschung zu <strong>Non-Human Identity</strong> beim KuppingerCole NHI Impact Day in München vorgestellt.'],
     ['#askHero', '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2a9 9 0 0 0-9 9c0 1.6.4 3.1 1.1 4.4L3 21l5.6-1.1A9 9 0 1 0 12 2z"/><circle cx="8.5" cy="11" r="1" fill="currentColor" stroke="none"/><circle cx="12" cy="11" r="1" fill="currentColor" stroke="none"/><circle cx="15.5" cy="11" r="1" fill="currentColor" stroke="none"/></svg> Frag meinen KI-Zwilling'],
     ['#about .about-body h2', 'Compliance-Instinkt, Engineering-Werkzeugkasten.'],
     ['#about .about-body p:nth-of-type(2)', 'Ich habe einen <strong>B.Tech in Informationstechnologie</strong> und schließe im September 2026 meinen <strong>M.Sc. in Business Management &amp; Cyber Security</strong> ab. Der größte Teil meiner praktischen Arbeit liegt im <strong>Detection Engineering</strong>: Zeek-Sensoren, die über Apache Kafka in einen Wazuh/OpenSearch-Indexer streamen, angereichert mit MISP-Threat-Intelligence, auf Ubuntu-Hosts, die ich nach CIS-Benchmark gehärtet habe, und einem k3s-Cluster mit RBAC und Network Policies.'],
-    ['#about .about-body p:nth-of-type(3)', 'Die andere Hälfte ist <strong>Governance</strong>, und ich halte beides für zusammengehörig. Ich habe 4.500+ Lernenden Zugriffskontrolle und sichere Konfiguration vermittelt, Alerts auf 50+ Plattformen triagiert und die Richtlinien-, Risiko- und Access-Review-Dokumentation geschrieben, die einem Audit standhalten muss. Meine M.Sc.-Forschung zu <strong>Non-Human Identity</strong> liegt genau auf dieser Naht und wird im Oktober zum Vortrag beim KuppingerCole NHI Impact Day in München. Ich suche eine <strong>Einstiegs- oder Graduate-Stelle</strong> in Detection &amp; Response, Security Engineering, GRC oder IAM, ab Oktober 2026.'],
+    ['#about .about-body p:nth-of-type(3)', 'Die andere Hälfte ist <strong>Governance</strong>, und ich halte beides für zusammengehörig. Ich habe 4.500+ Lernenden Zugriffskontrolle und sichere Konfiguration vermittelt, Alerts auf 50+ Plattformen triagiert und die Richtlinien-, Risiko- und Access-Review-Dokumentation geschrieben, die einem Audit standhalten muss. Meine M.Sc.-Forschung zu <strong>Non-Human Identity</strong> liegt genau auf dieser Naht; im Oktober 2026 habe ich sie beim KuppingerCole NHI Impact Day in München vorgestellt. Ich suche eine <strong>Einstiegs- oder Graduate-Stelle</strong> in Detection &amp; Response, Security Engineering, GRC oder IAM, ab Oktober 2026.'],
     /* Direct-child selector matters: `.stat span` matches the <span class="u">
        unit inside <b> first, so the German label was replacing the "+"/"×"
        superscript and stretching the metrics row past the viewport. */
@@ -3118,8 +3165,12 @@ if (GOATCOUNTER_CODE){
     ['.proj-grid .proj:nth-child(5) > p', 'Das segmentierte Netz, in dem das Detection-Lab läuft: Management-, Endpoint- und DMZ-VLANs, der Zeek-Sensor an einem Mirror-Port, Firewall-Zonenregeln dazwischen. Dazu die sichere Entwicklungspraxis für alles oben: Input-Validierung, Credentials in der Umgebung, statische Analyse und Dependency-Scanning.'],
     ['.proj-grid .proj:nth-child(6) h3', 'KI-gestütztes Monitoring &amp; Automatisierung'],
     ['.proj-grid .proj:nth-child(6) > p', 'Ein KI-gestützter Workflow, der einen Event-Stream überwacht, Ausnahmen per Python-Anomalie-Erkennung markiert und sie über REST an eine KI-Plattform zur Triage, Risikobewertung und Playbook-Zuordnung übergibt. Er erzeugt Handlungsempfehlungen, die ein Mensch freigibt, niemals eigenständig ausführt.'],
-    ['.proj-grid .proj:nth-child(7) h3', 'Berechtigungskonzept-Toolkit'],
-    ['.proj-grid .proj:nth-child(7) > p', 'Macht aus einem rohen Berechtigungsexport ein prüffestes <b style="color:var(--text)">Berechtigungskonzept</b> und führt anschließend die vier Kontrollen aus, die es aktuell halten: Funktionstrennung (SoD), Role Mining für fachliche Rollen, Rezertifizierungskampagnen je Anwendungsverantwortlichem und Findings zur Berechtigungshygiene. Technische Benutzerkonten werden dabei wie jede andere Identität behandelt, denn sie halten Berechtigungen und verletzen dieselben Regeln, haben aber keine Führungskraft, die sie überprüft.'],
+    ['.proj-grid .proj:nth-child(7) h3', 'Kontrollierte Multi-Agenten-Konsultation'],
+    ['.proj-grid .proj:nth-child(7) > p', 'Eine Referenzimplementierung dessen, was ein Team aus LLM-Agenten braucht, bevor man ihm in einem regulierten Betrieb vertrauen kann: Konsultation nur mit einer ausdrücklichen Berechtigung, die sich nur verengen lässt, wobei eine <b style="color:var(--text)">Akteurskette im Stil von RFC 8693</b> zeigt, in wessen Auftrag jeder Schritt lief; Dissens, der typisiert und eskaliert statt gemittelt wird; eine Antwort, die offen sagt, was sie nicht mehr abdeckt, wenn ein Spezialist ausfällt; und ein Append-only-Protokoll, das ein Mensch anfechten und überstimmen kann.'],
+    ['.proj-grid .proj:nth-child(8) h3', 'Post-Quanten-TLS-Benchmark'],
+    ['.proj-grid .proj:nth-child(8) > p', 'Ein reproduzierbarer Benchmark von <b style="color:var(--text)">ML-KEM (FIPS 203)</b> gegen RSA-2048 und X25519: Schlüssel- und Chiffratgrößen, Median-Laufzeiten über 30 Durchläufe und der Mehraufwand auf der Leitung für die hybride Gruppe X25519MLKEM768, die TLS-1.3-Deployments nutzen. Das Ergebnis: Bei dieser Migration ist die Nachrichtengröße, nicht die Rechenzeit, der begrenzende Kostenfaktor, mit rund 2,2 kB zusätzlich pro Handshake.'],
+    ['.proj-grid .proj:nth-child(9) h3', 'Berechtigungskonzept-Toolkit'],
+    ['.proj-grid .proj:nth-child(9) > p', 'Macht aus einem rohen Berechtigungsexport ein prüffestes <b style="color:var(--text)">Berechtigungskonzept</b> und führt anschließend die vier Kontrollen aus, die es aktuell halten: Funktionstrennung (SoD), Role Mining für fachliche Rollen, Rezertifizierungskampagnen je Anwendungsverantwortlichem und Findings zur Berechtigungshygiene. Technische Benutzerkonten werden dabei wie jede andere Identität behandelt, denn sie halten Berechtigungen und verletzen dieselben Regeln, haben aber keine Führungskraft, die sie überprüft.'],
     /* skills card titles */
     ['.skills-grid .skill-card:nth-child(2) h3', 'Linux, Systeme &amp; Netzwerke'],
     ['.skills-grid .skill-card:nth-child(3) h3', 'Cloud- &amp; Container-Sicherheit'],

@@ -101,7 +101,7 @@ EXPERIENCE
    - Conducted security research across 50+ cryptocurrency platforms and threat landscapes, improving the quality of
      threat-intelligence and risk-analysis deliverables by 30%.
 
-LABS & PROJECTS (nine hands-on labs; the main ones)
+LABS & PROJECTS (nine hands-on labs)
 1) Detection Engineering Lab (Zeek, Apache Kafka, Wazuh/OpenSearch, MISP, Ubuntu): deployed Zeek as a network sensor and
    streamed its connection, DNS and HTTP logs through a Kafka topic into a Wazuh/OpenSearch indexer, decoupling
    collection from indexing so a slow consumer queues instead of dropping events. Authored and tuned 12 custom detection
@@ -134,17 +134,40 @@ LABS & PROJECTS (nine hands-on labs; the main ones)
 6) AI-Assisted Monitoring & Automation (Python, AI Platform API, REST API): monitors an event stream, flags exceptions
    with a Python anomaly-detection step, then sends them to an AI platform over REST for triage, risk scoring and
    playbook mapping, producing recommendations a human approves rather than the system executing them.
+7) Governed Multi-Agent Consultation (Python, standard library only; github.com/darshan2209/agent-consult): a reference
+   implementation of four properties a team of LLM agents needs before it can be trusted in a regulated operation.
+   One agent may consult another only under an explicit grant that can only narrow, with an RFC 8693-style actor
+   chain recording on whose authority each step ran; disagreement is typed (stale evidence, scope conflict,
+   judgement), reconciled on the evidence the agents cited, and escalated to a person if it survives; when a
+   specialist is unavailable the answer narrows and says what it no longer covers; every step lands in an
+   append-only record a person can contest and overrule. Worked scenario: a grid operator deciding a 250 kW solar
+   connection request with five agents. Deterministic rule agents on purpose, so tests are reproducible; 26 tests.
+8) Post-Quantum TLS Benchmark (Python, ML-KEM, RSA-2048, X25519; github.com/darshan2209/pqc-hybrid-tls-research):
+   benchmarked ML-KEM (FIPS 203) against RSA-2048 and X25519 on key and ciphertext sizes and median timings over 30
+   runs, plus the wire overhead of the hybrid X25519MLKEM768 TLS 1.3 group: key shares of 1,216 bytes (client) and
+   1,120 bytes (server) against 32 bytes each for X25519, about 2.2 kB extra per handshake. Finding: message size,
+   not computation, is the binding migration cost. Honest note: ML-KEM ran on a pure-Python reference
+   implementation, so its timings are pessimistic upper bounds. Written up as a research paper for the MSc
+   Cryptology module.
+9) Authorization Concept Toolkit (Python; github.com/darshan2209/authorization-concept-toolkit): generates an
+   audit-ready authorization concept (Berechtigungskonzept) from an entitlement export and runs segregation-of-duties
+   checks, business-role mining, per-owner access certification campaigns and access-hygiene findings, treating
+   service accounts as first-class identities. On the sample estate it finds 7 SoD conflicts, three candidate roles
+   explaining 78% of grants and 13 hygiene findings; controls mapped to ISO/IEC 27001:2022, NIST SP 800-53 R5 and
+   DORA; 27 tests.
 
 RESEARCH & SPEAKING
-- Speaker, KuppingerCole AIdentity & Non-Human Identity Impact Day, Munich, 6 October 2026, 15:20 to 15:50:
+- Gave a talk at KuppingerCole's AIdentity & Non-Human Identity Impact Day, Munich, on 6 October 2026 (it took
+  place; the 23-slide deck is published on the portfolio's Research section):
   "A Reproducible GRC-to-ATT&CK Gap Analysis of Non-Human and AI-Agent Identity". A structured gap analysis across
   eight security and AI-governance instruments (SOC 2, NIST CSF 2.0, ISO/IEC 27001:2022, NIST SP 800-53 Rev. 5, DORA,
   Germany's BSIG Section 30, ISO/IEC 42001, ISO/IEC 38507). They govern the machine identity as an account, but none
-  states an assessable requirement for the moment its authority passes to an AI agent. The talk proposes
+  states an assessable requirement for the moment its authority passes to an AI agent. The talk proposed
   bounded-delegation control language built on OAuth 2.0 Token Exchange (RFC 8693), with one amendment route per
   instrument. The framing: the mechanisms exist, the mandates do not.
 - Panellist, "Machines Now Outnumber Humans - Is IAM Ready?", same event, 11:10, with Grace Rachmany (Decentralized
-  Identity Foundation), moderated by KuppingerCole analyst Nitish Deshpande.
+  Identity Foundation), Dr. Angelika Steinacker (Women in Identity) and Gerhard Zehethofer (Curity), moderated by
+  KuppingerCole Lead Analyst Alejandro Leal.
 - MSc thesis, "From Silent Controls to Exploitable Paths: A Structured Gap Analysis of Non-Human Identity Governance
   Across Eight Security and AI-Governance Instruments, with Experimental Validation", submitted September 2026. Maps
   the UNC6395 campaign to MITRE ATT&CK, finds NIST SP 800-53 controls IA-9 and IA-13 in no SP 800-53B baseline, and
