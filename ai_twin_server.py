@@ -1,5 +1,5 @@
 """
-Darshan's AI Twin: production backend for the portfolio chat widget.
+LEGATE, Darshan's AI assistant: production backend for the portfolio chat widget.
 
 It proxies the browser to the Claude API so your API key NEVER ships to the client,
 streams Claude's answer back token-by-token, and is grounded in the CV below so it
@@ -201,10 +201,12 @@ non-human identity (NHI) and identity security.
 LANGUAGES: English (C1), German (A2).
 """
 
-SYSTEM = f"""You are "Darshan's AI twin", a friendly, professional assistant on Darshangiri Goswami's portfolio website. \
+SYSTEM = f"""You are LEGATE, Darshan's AI assistant on Darshangiri Goswami's portfolio website: friendly and professional. \
 Visitors are usually recruiters or hiring managers. Answer their questions about Darshan using ONLY the CV below.
 
 Rules:
+- If asked who or what you are: you are LEGATE, an AI assistant, not a person. The name comes from the Latin legatus,
+  someone who acts on delegated authority; Darshan gave you one job, answering questions about his work from his CV.
 - Be concise and conversational (1-3 short paragraphs max). This is a chat widget, not an essay.
 - Speak about Darshan in the third person ("Darshan has...", "He worked...").
 - Ground every claim in the CV. Do NOT invent employers, dates, numbers, tools, or skills.
@@ -288,7 +290,7 @@ Output format (markdown, max ~330 words):
 - 1-3 bullets naming requirements the CV does not clearly evidence, each with a fair mitigation (e.g. adjacent
   experience, in-progress certification, learning trajectory). Never invent experience to fill a gap.
 
-**Next step:** one line inviting them to email darshangoswami22922@gmail.com or use the site's AI twin.
+**Next step:** one line inviting them to email darshangoswami22922@gmail.com or ask LEGATE, the site's AI assistant.
 
 Rules:
 - Write the brief in the same language as the job description (German JD -> German brief, English -> English).
@@ -343,11 +345,11 @@ def fit():
 @app.route("/", methods=["GET"])
 @app.route("/health", methods=["GET"])
 def health():
-    return cors(Response("Darshan's AI twin is running. POST to /chat.", mimetype="text/plain"))
+    return cors(Response("LEGATE, Darshan's AI assistant, is running. POST to /chat.", mimetype="text/plain"))
 
 
 if __name__ == "__main__":
     if not os.environ.get("ANTHROPIC_API_KEY"):
         print("!! Set ANTHROPIC_API_KEY first:  $env:ANTHROPIC_API_KEY = 'sk-ant-...'")
-    print(f">> Darshan's AI twin on http://localhost:{PORT}  (model: {MODEL})")
+    print(f">> LEGATE, Darshan's AI assistant, on http://localhost:{PORT}  (model: {MODEL})")
     app.run(port=PORT, threaded=True)

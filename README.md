@@ -1,36 +1,40 @@
-# Darshangiri Goswami: 3D Cybersecurity Portfolio
+# Darshangiri Goswami: Cybersecurity Portfolio
 
-A single-file 3D portfolio built with **Three.js** (WebGL + bloom) and an
-**"Ask my AI twin"** chat assistant running on the **Claude API**. Deep navy, teal +
-gold, an animated 3D data-shield, an orbiting monitoring-network graph and a particle
-field. The content leads with **detection engineering**, the labs, the research and the
-stack, and carries governance, identity and compliance as the second half.
+A single-file portfolio in a dark editorial design (near-black, one red accent, Anton,
+Manrope and Caveat) with **LEGATE**, an AI assistant running on the **Claude API**. As you
+scroll, labelled build agents assemble the page: each write carries a short-lived,
+ES256-signed delegated token, every action lands in a hash-chained ledger, and the Agent
+console lets you inspect the tokens, tamper with the ledger and run a scripted red-vs-blue
+token-replay attack. Behind it, a 2D canvas globe shows simulated attack traffic, labelled
+as simulated. The content leads with **detection engineering**, the labs, the research and
+the stack, and carries governance, identity and compliance as the second half.
 
 ## Files
 
 | File | What it is |
 |------|------------|
-| `index.html` | **The website**. Everything lives here: markup, CSS, JS, the German translation map, the terminal easter egg and the access-review simulator. Edit directly. |
-| `assets/portrait.*` · `about.*` · `portrait-cyber.webp` | Hero portrait, About headshot, hologram twin. |
+| `index.html` | **The website**. Everything lives here: markup, CSS, JS, the build agents and Agent console, the terminal easter egg and the access-review simulator. Edit directly. |
+| `assets/portrait-hero*` · `about.*` · `portrait.*` | Hero portrait (cropped, with a vignette), the About headshot, and the original portrait, which the JSON-LD and the social card still use. `portrait-cyber.webp` belongs to the pre-November 2026 design and is no longer shown. |
 | `assets/og-image.jpg` | 1200×630 social-share card. |
 | `assets/writing.json` · `ops.json` | Written by the LinkedIn agent; feed the Writing cards and the Live Ops room. |
 | `artifacts/` | Three illustrative GRC work samples (risk register, access-review procedure, ISO 27001 SoA excerpt). Fictional company, robots-noindexed. |
 | `talks/` | Published slides: the KuppingerCole AIdentity & NHI Impact Day talk (Munich, 6 Oct 2026), linked from the Research section. |
 | `assets/agent-room.js` · `tools/export_agent_trace.py` | The agent room's data: real runs of [agent-consult](https://github.com/darshan2209/agent-consult), recorded step by step. Regenerate with `python tools/export_agent_trace.py --agent-consult <path to a checkout>`. |
-| `fonts/` · `vendor/three/` | Self-hosted fonts and a vendored Three.js. No third-party requests at page load except GoatCounter. |
+| `fonts/` | Self-hosted fonts: Anton, Manrope, Caveat and IBM Plex Mono (Space Grotesk and IBM Plex Sans are left over from the old design). No third-party fonts or script libraries at page load; the only outside script is GoatCounter's counter. |
+| `vendor/three/` | Three.js, used by the pre-November 2026 design. Nothing loads it now. |
 | `datenschutz.html` · `kolophon.html` | DSGVO Art. 13 privacy notice and the colophon (sub-processor register, AI-system inventory, open items). |
 | `404.html` | RBAC-flavoured "access denied" page with a redirect. |
 | `site.webmanifest` · `sitemap.xml` · `robots.txt` · `.well-known/security.txt` | PWA manifest, SEO, security contact (RFC 9116). |
 | `generate_assets.py` | Regenerates `portrait.*`, `about.*` and `og-image.jpg`. |
-| `ai_twin_server.py` | Claude backend for the chat and the JD fit-check (keeps the API key server-side). |
+| `ai_twin_server.py` | Claude backend for LEGATE (the chat) and the JD fit-check (keeps the API key server-side). |
 | `Procfile` · `render.yaml` · `requirements.txt` | Backend deploy config and Python deps. |
 | `Darshangiri-Goswami-CV.pdf` | Linked by the "Download CV" buttons. Built from `resume-agent/base/resume.yaml`. Regenerate there, then copy it here, so the CV and the site never drift apart. |
 
 ## View the site
 
-Open `index.html` in a browser. Fonts and Three.js are served from this repo, so it
-renders fully offline. The AI twin also has an **offline mode**: if the backend is
-unreachable, answers come from a built-in CV summary with no network calls and no key.
+Open `index.html` in a browser. Fonts are served from this repo, so it renders fully
+offline. LEGATE also has an **offline mode**: if the backend is unreachable, answers come
+from a built-in CV summary with no network calls and no key.
 
 ## Regenerate the images
 
@@ -54,7 +58,7 @@ python -c "import generate_assets as g; g.make_og()"
 Both text lines on that card have to clear the portrait circle at x=800; longer strings
 run under the photo instead of wrapping, so look at the result after editing.
 
-## Enable the live Claude AI twin
+## Enable LEGATE's live Claude answers
 
 ### Run locally
 ```powershell
@@ -77,9 +81,9 @@ python ai_twin_server.py            # http://localhost:8787
    No asset rebuild needed, just commit and push `index.html`.
 
 Leave `AI_ENDPOINT = ''` for offline mode. **Never put an API key in `index.html`.**
-When set, the chat header shows **"Online · Claude"** and answers stream live from
+When set, the chat header shows **"Online"** and answers stream live from
 `claude-haiku-4-5` (override with the `AI_TWIN_MODEL` env var), grounded in the CV
-block at the top of `ai_twin_server.py`. That block is the twin's whole world: it also
+block at the top of `ai_twin_server.py`. That block is LEGATE's whole world: it also
 carries a **KNOWN GAPS** section, and both the chat and the fit-check are instructed to
 state those plainly rather than soften them. Keep it in sync with the master résumé.
 
@@ -91,7 +95,7 @@ state those plainly rather than soften them. Keep it in sync with the master ré
 > Render's free tier sleeps after ~15 min idle, which is what makes the widget show
 > "Offline · from CV". The repo's GitHub Actions `keep-alive.yml` is **not** reliable:
 > GitHub throttles scheduled jobs well below the needed interval. An external
-> cron-job.org job pings `/health` every 5 minutes instead. If the twin reads Offline,
+> cron-job.org job pings `/health` every 5 minutes instead. If LEGATE reads Offline,
 > check that job first.
 
 ## Publish
@@ -101,4 +105,4 @@ host on GitHub Pages / Netlify / Cloudflare Pages. Live URL:
 **https://darshan2209.github.io/darshangiri-goswami/**
 
 ---
-Built with Three.js & the Claude API.
+Built with plain HTML, CSS and JavaScript, and the Claude API.
