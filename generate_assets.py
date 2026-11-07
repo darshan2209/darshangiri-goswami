@@ -3,13 +3,16 @@ Run:  python generate_assets.py
 Produces: assets/portrait.jpg, assets/portrait.webp, assets/portrait-cyber.jpg,
           assets/portrait-cyber.webp, assets/og-image.jpg
 (favicon.svg, site.webmanifest, .well-known/security.txt are static, not generated here.)
+The social card is drawn with the site's own self-hosted fonts from fonts/.
 """
 import pathlib
 import random
+import tempfile
 from PIL import Image, ImageDraw, ImageFont, ImageFilter, ImageChops, ImageOps
 
 HERE = pathlib.Path(__file__).parent
 ASSETS = HERE / "assets"; ASSETS.mkdir(exist_ok=True)
+FONTS = HERE / "fonts"
 # Original imports from Downloads. Those files are gone from this machine, so each
 # falls back to the committed asset it originally produced — enough to regenerate
 # the OG card (which only needs a circle crop) without the source photos on hand.
@@ -22,14 +25,36 @@ if not SRC.exists():
 if not ABOUT_SRC.exists():
     ABOUT_SRC = HERE / "assets" / "about.jpg"
 
-TEAL = (45, 212, 191); GOLD = (230, 185, 79); BG = (6, 10, 20); TEXT = (233, 238, 248); MUTED = (158, 176, 203)
+# Social-card palette: the site's tokens from the November 2026 redesign (:root in index.html).
+INK = (9, 9, 9)              # --bg       #090909
+PAPER = (242, 239, 235)      # --text     #f2efeb
+PAPER_2 = (210, 205, 200)    # --text-2   #d2cdc8
+MUTED = (160, 156, 154)      # --muted    #a09c9a
+LINE = (46, 46, 45)          # --line-2   rgba(242,239,235,.16) over --bg
+RED = (227, 43, 60)          # --accent   #e32b3c: type, rules, corner brackets
+RED_FILL = (207, 34, 51)     # --accent-strong #cf2233: filled shapes
 
-def font(bold=False, size=40):
-    name = "arialbd.ttf" if bold else "arial.ttf"
-    for p in (rf"C:\Windows\Fonts\{name}", name):
-        try: return ImageFont.truetype(p, size)
-        except Exception: pass
-    return ImageFont.load_default()
+def site_font(stem, size, wght=None):
+    """fonts/<stem>.woff2 at `size` px; `wght` sets the weight axis of a variable font (Manrope).
+    Pillow opens WOFF2 itself when its FreeType has Brotli support (the Pillow 12 install this
+    card was built with does). Otherwise the file is decompressed to a plain TTF in a scratch
+    folder outside the repo, which needs: pip install fonttools brotli."""
+    path = FONTS / f"{stem}.woff2"
+    try:
+        f = ImageFont.truetype(str(path), size)
+    except OSError:
+        f = ImageFont.truetype(str(_woff2_as_ttf(path)), size)
+    if wght is not None:
+        f.set_variation_by_axes([wght])
+    return f
+
+def _woff2_as_ttf(path):
+    from fontTools.ttLib import TTFont
+    out = pathlib.Path(tempfile.gettempdir()) / "portfolio-card-fonts" / f"{path.stem}.ttf"
+    if not out.exists() or out.stat().st_mtime < path.stat().st_mtime:
+        out.parent.mkdir(parents=True, exist_ok=True)
+        ttf = TTFont(str(path)); ttf.flavor = None; ttf.save(str(out))
+    return out
 
 def make_portrait():
     im = Image.open(SRC).convert("RGB")
@@ -90,62 +115,96 @@ def make_cyber_portrait():
     print(f"  portrait-cyber.jpg / .webp  ({W}x{H})")
 
 
-def circle_crop(im, d):
-    w, h = im.size; s = min(w, h)
-    im = im.crop(((w-s)//2, int((h-s)*0.12), (w+s)//2, int((h-s)*0.12)+s)).resize((d, d), Image.LANCZOS)
-    mask = Image.new("L", (d, d), 0); ImageDraw.Draw(mask).ellipse((0, 0, d, d), fill=255)
-    return im, mask
+def circle_crop(im, d, side=0.86, top=0.03):
+    """Head-and-shoulders disc of diameter d, shaded like the hero photo's frame: darker toward
+    the rim, fading into the background at the bottom. portrait.jpg has white side borders, so
+    the square is taken inside them: `side` of the photo's width, starting `top` of its height
+    down. The mask is drawn at 4x and scaled down so the rim is smooth."""
+    content = ImageChops.difference(im, Image.new("RGB", im.size, (255, 255, 255))).convert("L")
+    l, t, r, b = content.point(lambda p: 255 if p > 40 else 0).getbbox() or (0, 0, *im.size)
+    s = round(min(r - l, b - t) * side)
+    x0 = (l + r - s) // 2; y0 = t + round((b - t) * top)
+    im = im.crop((x0, y0, x0 + s, y0 + s)).resize((d, d), Image.LANCZOS)
+    rim = Image.radial_gradient("L").resize((d, d), Image.BILINEAR)    # 0 centre, 255 rim
+    rim = rim.point(lambda v: round(255 * 0.55 * max(0.0, (v / 255 - 0.5) / 0.5) ** 1.6))
+    low = Image.linear_gradient("L").resize((d, d), Image.BILINEAR)    # 0 top, 255 bottom
+    low = low.point(lambda v: round(255 * 0.7 * max(0.0, (v / 255 - 0.62) / 0.38)))
+    im = Image.composite(Image.new("RGB", (d, d), INK), im, ImageChops.screen(rim, low))
+    big = Image.new("L", (4 * d, 4 * d), 0)
+    ImageDraw.Draw(big).ellipse((0, 0, 4 * d - 1, 4 * d - 1), fill=255)
+    return im, big.resize((d, d), Image.LANCZOS)
+
+def radial_glow(size, center, radii, color, alpha, stop=0.7):
+    """CSS radial-gradient(rgba(color, alpha), transparent stop) as an RGBA layer."""
+    rx, ry = radii
+    ramp = Image.radial_gradient("L").resize((2 * rx, 2 * ry), Image.BILINEAR)  # 0 centre, 255 rim
+    mask = Image.new("L", size, 0)
+    mask.paste(ramp.point(lambda v: round(255 * alpha * max(0.0, 1 - v / 255 / stop))),
+               (center[0] - rx, center[1] - ry))
+    layer = Image.new("RGBA", size, color + (0,)); layer.putalpha(mask)
+    return layer
+
+def text_tracked(d, x, baseline, text, fnt, fill, tracking=0.0):
+    """Left-aligned text on a baseline with CSS letter-spacing (`tracking` in em). Returns the end x."""
+    step = tracking * fnt.size
+    for ch in text:
+        d.text((x, baseline), ch, font=fnt, fill=fill, anchor="ls")
+        x += fnt.getlength(ch) + step
+    return x - step
 
 def make_og():
+    """1200x630 share card in the site's look: near-black, off-white type, one red accent.
+    Name in Anton, role in Manrope, small labels in IBM Plex Mono, portrait disc on the right."""
     W, H = 1200, 630
-    og = Image.new("RGB", (W, H), BG)
-    # vertical gradient + teal glow
-    grad = Image.new("RGB", (1, H))
-    for y in range(H):
-        t = y / H
-        grad.putpixel((0, y), (int(6+t*8), int(10+t*12), int(20+t*22)))
-    og.paste(grad.resize((W, H)))
-    glow = Image.new("RGB", (W, H), BG); gd = ImageDraw.Draw(glow)
-    gd.ellipse((720, -180, 1320, 420), fill=(14, 60, 70))
-    og = Image.blend(og, glow, 0.5).filter(ImageFilter.GaussianBlur(60))
-    d = ImageDraw.Draw(og)
+    X0, XR = 64, 1136                      # side margins
+    cx, cy, diam = 960, 325, 320           # portrait disc; its left edge sits at x=800
 
-    # teal accent bar
-    d.rounded_rectangle((80, 150, 90, 480), radius=5, fill=TEAL)
+    # the hero's background: a red glow behind the photo and a faint lift at bottom left
+    card = Image.new("RGBA", (W, H), INK + (255,))
+    card = Image.alpha_composite(card, radial_glow((W, H), (cx, cy), (504, 346), RED, 0.16))
+    card = Image.alpha_composite(card, radial_glow((W, H), (120, H), (720, 252), PAPER, 0.04))
+    card = card.convert("RGB")
+    d = ImageDraw.Draw(card)
 
-    # eyebrow
-    d.text((120, 152), "DETECTION  ·  IDENTITY  ·  GOVERNANCE", font=font(False, 24), fill=TEAL)
-    # name (two lines)
-    d.text((118, 196), "Darshangiri", font=font(True, 86), fill=TEXT)
-    d.text((118, 290), "Goswami", font=font(True, 86), fill=TEXT)
-    # role
-    # Both lines must clear the portrait circle, whose left edge sits at x=800.
-    # At 28pt roughly 47 characters fit, at 24pt roughly 52. Longer strings run
-    # under the photo instead of wrapping, so check the render after editing.
-    d.text((120, 404), "Detection & Response · Cloud · Identity", font=font(False, 28), fill=MUTED)
-    # stack — named tools read as evidence where framework acronyms read as reading
-    d.text((120, 452), "Zeek · Kafka · Wazuh/OpenSearch · MISP · AWS · k3s", font=font(False, 24), fill=GOLD)
-    # url
-    d.text((120, 540), "darshan2209.github.io/darshangiri-goswami", font=font(False, 22), fill=(103, 120, 154))
+    # kicker row: red rule, tracked mono label, hairline under it
+    d.rectangle((X0, 80, X0 + 35, 82), fill=RED)
+    text_tracked(d, X0 + 52, 88, "DETECTION · IDENTITY · GOVERNANCE",
+                 site_font("ibm-plex-mono-500-latin", 20), RED, 0.14)
+    d.line((X0, 118, XR, 118), fill=LINE, width=1)
 
-    # portrait circle on the right with teal ring
+    # name in uppercase Anton like the hero, with the hero's red caret after the surname.
+    # Both text lines must clear the portrait disc, whose left edge sits at x=800 (its
+    # corner brackets start at x=784); at 136px "DARSHANGIRI" ends near x=720. Longer
+    # strings run under the photo instead of wrapping, so check the render after editing.
+    name = site_font("anton-latin", 136)
+    for word, base in (("DARSHANGIRI", 273), ("GOSWAMI", 395)):
+        d.text((X0 - name.getbbox(word, anchor="ls")[0], base), word, font=name, fill=PAPER, anchor="ls")
+    caret_x = d.textbbox((X0 - name.getbbox("GOSWAMI", anchor="ls")[0], 395), "GOSWAMI", font=name, anchor="ls")[2] + 8
+    d.rectangle((caret_x, 395 - 12, caret_x + 57, 395), fill=RED_FILL)
+
+    # role in Manrope; stack in mono (named tools read as evidence where acronyms read as reading)
+    mono = site_font("ibm-plex-mono-400-latin", 20)
+    d.text((X0, 453), "Detection & Response · Cloud · Identity",
+           font=site_font("manrope-latin", 30, wght=600), fill=PAPER_2, anchor="ls")
+    d.text((X0, 493), "Zeek · Kafka · Wazuh/OpenSearch · MISP · AWS · k3s", font=mono, fill=MUTED, anchor="ls")
+
+    # footer row: hairline, then the url
+    d.line((X0, 530, XR, 530), fill=LINE, width=1)
+    d.text((X0, 566), "darshan2209.github.io/darshangiri-goswami", font=mono, fill=MUTED, anchor="ls")
+
+    # portrait disc framed by the hero photo's red corner brackets
     try:
-        src = Image.open(SRC).convert("RGB")
-        diam = 360; cx, cy = 980, 300
-        circ, mask = circle_crop(src, diam)
-        ring = Image.new("RGBA", (W, H), (0, 0, 0, 0)); rd = ImageDraw.Draw(ring)
-        rd.ellipse((cx-diam//2-8, cy-diam//2-8, cx+diam//2+8, cy+diam//2+8), outline=TEAL, width=6)
-        og.paste(circ, (cx-diam//2, cy-diam//2), mask)
-        og.paste(ring, (0, 0), ring)
-        # small gold verified shield badge
-        bx, by = cx+diam//2-50, cy+diam//2-50
-        d.ellipse((bx-34, by-34, bx+34, by+34), fill=BG, outline=GOLD, width=4)
-        d.line((bx-14, by, bx-3, by+12), fill=GOLD, width=6)
-        d.line((bx-3, by+12, bx+16, by-12), fill=GOLD, width=6)
+        disc, mask = circle_crop(Image.open(SRC).convert("RGB"), diam)
+        card.paste(disc, (cx - diam // 2, cy - diam // 2), mask)
+        l, t, r, b = cx - diam // 2 - 16, cy - diam // 2 - 16, cx + diam // 2 + 16, cy + diam // 2 + 16
+        arm, w = 36, 3
+        d.rectangle((l, t, l + arm, t + w - 1), fill=RED); d.rectangle((l, t, l + w - 1, t + arm), fill=RED)
+        d.rectangle((r - arm, b - w + 1, r, b), fill=RED); d.rectangle((r - w + 1, b - arm, r, b), fill=RED)
     except Exception as e:
-        print("  (portrait circle skipped:", e, ")")
+        print("  (portrait disc skipped:", e, ")")
 
-    og.save(ASSETS / "og-image.jpg", "JPEG", quality=88, optimize=True)
+    # 4:4:4 chroma keeps the thin red type and rules crisp
+    card.save(ASSETS / "og-image.jpg", "JPEG", quality=88, optimize=True, subsampling=0)
     print(f"  og-image.jpg  ({W}x{H})")
 
 if __name__ == "__main__":
